@@ -33,4 +33,25 @@ public static class TransformTool
 		obj.localScale = Vector3.one;
 		obj.localRotation = Quaternion.identity;
 	}
+
+	public static void DropTo(this Object obj, Transform to)
+	{
+		if (obj != null && to != null)
+		{
+			if (obj is Transform)
+			{
+				UnsafeDropTo(obj as Transform, to);
+			}
+			else
+			if (obj is GameObject)
+			{
+				UnsafeDropTo((obj as GameObject).transform, to);
+			}
+			else
+			if (obj is MonoBehaviour)
+			{
+				UnsafeDropTo((obj as MonoBehaviour).transform, to);
+			}
+		}
+	}
 }
