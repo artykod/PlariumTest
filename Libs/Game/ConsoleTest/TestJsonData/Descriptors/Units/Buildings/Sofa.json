@@ -1,0 +1,23 @@
+﻿{
+  "ClassId": "Buildings.Sofa",
+  "Id": "unit.sofa",
+  "Name": "Sofa of Developers",
+  "Description": "",
+  "Levels": [
+    {
+      "ViewId": "Sofa",
+      "CostOfObtain": 1000,
+      "HP": 1000
+    },
+    {
+      "ViewId": "Sofa",
+      "CostOfObtain": 2000,
+      "HP": 1100
+    },
+    {
+      "ViewId": "Sofa",
+      "CostOfObtain": 3000,
+      "HP": 1200
+    }
+  ]
+}
