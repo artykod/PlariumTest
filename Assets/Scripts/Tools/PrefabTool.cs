@@ -12,7 +12,7 @@ public class PrefabTool
 				prefabName = prefabType.Name;
 			}
 
-			var prefab = Resources.Load(prefabPath.Path + prefabName);
+			var prefab = Resources.Load(prefabPath.Path + prefabName, typeof(T));
 			if (prefab != null)
 			{
 				var instance = Object.Instantiate(prefab);

@@ -1,13 +1,9 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Game.Descriptors
 {
-	public abstract class Descriptor : Multiton<string, Descriptor>
+	public abstract class Descriptor
 	{
-		private static readonly string assemblyName = typeof(Descriptor).AssemblyQualifiedName.Replace("Game.Descriptors.Descriptor, ", "");
-		private static readonly string descriptorClassTemplate = "Game.Descriptors.{0}, " + assemblyName;
-
 		private class ClassIdReader
 		{
 			[JsonProperty]
@@ -18,6 +14,13 @@ namespace Game.Descriptors
 			}
 		}
 
+		[JsonIgnore]
+		public GameController GameController
+		{
+			get;
+			private set;
+		}
+
 		[JsonProperty]
 		public string Id
 		{
@@ -25,22 +28,29 @@ namespace Game.Descriptors
 			private set;
 		}
 
-		public virtual void Init()
+		[JsonProperty]
+		public string LogicId
 		{
-			SetInstance(Id, this);
+			get;
+			private set;
+		}
+
+		public virtual void Init(GameController gameController)
+		{
+			GameController = gameController;
 		}
 
 		public virtual void PostInit()
 		{
 		}
 
-		public static Descriptor Deserialize(string json)
+		public static Descriptor Parse(string json)
 		{
 			var classIdReader = JsonConvert.DeserializeObject<ClassIdReader>(json);
-			var typeName = string.Format(descriptorClassTemplate, classIdReader.ClassId);
-			var type = Type.GetType(typeName);
-
-			return JsonConvert.DeserializeObject(json, type) as Descriptor;
+			var classId = classIdReader.ClassId;
+			var type = TypeTool.GetTypeByNameFromThisAssembly("Game.Descriptors." + classId + "Descriptor");
+			var descriptor = JsonConvert.DeserializeObject(json, type) as Descriptor;
+			return descriptor;
 		}
 
 		[JsonIgnore]

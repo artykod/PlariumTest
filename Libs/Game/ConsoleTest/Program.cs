@@ -1,77 +1,108 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
-using Game.Descriptors;
+using Game;
+using Game.Logics;
 
 namespace ConsoleTest
 {
 	public class Program
 	{
+		public bool IsDone
+		{
+			get;
+			set;
+		}
+		
 		private string srcPath = AppDomain.CurrentDomain.BaseDirectory + @"/../../TestJsonData/";
 
 		private void Run()
 		{
-			var files = new string[] {
-				"Units/Buildings/Sofa.json",
-				"Units/Buildings/BarracksArchers.json",
-				"Units/Buildings/BarracksWarriors.json",
-				"Units/Buildings/Fountain.json",
-				"Units/Buildings/PortalArchers.json",
-				"Units/Buildings/PortalWarriors.json",
-				"Units/Buildings/PortalBosses.json",
-
-				"Units/Characters/MainCharacter.json",
-				"Units/Characters/MinionArcher.json",
-				"Units/Characters/MinionWarrior.json",
-				"Units/Characters/MobArcher.json",
-				"Units/Characters/MobWarrior.json",
-				"Units/Characters/MobBoss.json",
-
-				"Maps/Forest.json",
-			};
-
-			foreach (var file in files)
+			try
 			{
-				try
+				DebugImpl.Instance = new ConsoleDebug();
+				var timeController = new ConsoleTimeController();
+				TimeControllerImpl.Instance = timeController;
+
+				var files = new string[] {
+					"Units/Buildings/Sofa.json",
+					"Units/Buildings/BarracksArchers.json",
+					"Units/Buildings/BarracksWarriors.json",
+					"Units/Buildings/Fountain.json",
+					"Units/Buildings/PortalArchers.json",
+					"Units/Buildings/PortalWarriors.json",
+					"Units/Buildings/PortalBosses.json",
+
+					"Units/Characters/MainCharacter.json",
+					"Units/Characters/MinionArcher.json",
+					"Units/Characters/MinionWarrior.json",
+					"Units/Characters/MobArcher.json",
+					"Units/Characters/MobWarrior.json",
+					"Units/Characters/MobBoss.json",
+
+					"Maps/Forest.json",
+				};
+
+				var filesContent = new List<string>();
+
+				foreach (var file in files)
 				{
-					using (var reader = new StreamReader(srcPath + @"Descriptors/" + file))
+					try
 					{
-						Debug.Log(file);
-						var descriptor = Descriptor.Deserialize(reader.ReadToEnd());
-						Debug.Log("Deserialized");
-						descriptor.Init();
-						Debug.Log("Done");
+						using (var reader = new StreamReader(srcPath + @"Descriptors/" + file))
+						{
+							var content = reader.ReadToEnd();
+							if (!string.IsNullOrEmpty(content))
+							{
+								filesContent.Add(content);
+							}
+						}
+					}
+					catch (Exception e)
+					{
+						Debug.LogError(e.Message);
 					}
 				}
-				catch (Exception e)
+
+				var gameController = new GameController(filesContent.ToArray());
+				gameController.OnLogicCreate += OnLogicCreate;
+				gameController.OnLogicDestroy += OnLogicDestroy;
+				gameController.RunWithMapId("map.forest");
+				gameController.Map.Fountain.FetchHeroId("unit.main_character");
+
+				while (!IsDone)
 				{
-					Debug.LogError(e.Message);
+					timeController.Update();
+					Thread.Sleep(timeController.FrameDurationMs);
 				}
 			}
-
-			Descriptor.ForEach((desc) =>
+			catch (Exception e)
 			{
-				try
-				{
-					desc.PostInit();
-				}
-				catch (Exception e)
-				{
-					Debug.LogError("{0} {1}", desc.Id, desc.JsonString, e.Message);
-				}
-			});
+				Debug.LogError("Program.Run catch exception");
+				Debug.LogException(e);
+			}
+		}
 
-			Descriptor.ForEach((desc) => Debug.Log("{0}", desc.JsonString));
+		private void OnLogicCreate(Logic logic)
+		{
+			Debug.Log("create logic {0} is {1}", logic, logic.GameController.Map);
+		}
+
+		private void OnLogicDestroy(Logic logic)
+		{
+			Debug.Log("destroy logic {0} is {1}", logic, logic.GameController.Map);
 		}
 
 		private static void Main(string[] args)
 		{
-			DebugImpl.Instance = new ConsoleDebug();
-
 			var program = new Program();
-			program.Run();
-
+			Task.Factory.StartNew(program.Run);
 			Console.ReadKey();
+			program.IsDone = true;
+			//Console.ReadKey();
 		}
 	}
 }

@@ -6,5 +6,10 @@
 		{
 			public const string ALL = "Views/";
 		}
+
+		public class Descriptors
+		{
+			public const string ALL = "DescriptorsData/";
+		}
 	}
 }
