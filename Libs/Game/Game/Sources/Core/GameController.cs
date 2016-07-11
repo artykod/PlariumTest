@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Game
@@ -18,6 +19,12 @@ namespace Game
 		public Action<Logic> OnLogicDestroy;
 
 		public Map Map
+		{
+			get;
+			private set;
+		}
+
+		public bool IsRunned
 		{
 			get;
 			private set;
@@ -52,6 +59,8 @@ namespace Game
 					Debug.LogException(e);
 				}
 			}
+
+			TimeController.StartCoroutine(JustCreatedLogicsTracker());
 		}
 
 		public T FindDescriptorById<T>(string descriptorId) where T : Descriptor
@@ -90,7 +99,35 @@ namespace Game
 			Map = CreateLogicByDescriptor<Map>(FindDescriptorById<MapDescriptor>(mapId));
 			Map.Sofa.OnDestroy += OnGameEnd;
 
+			TimeController.StartCoroutine(WaitGameRun());
+		}
+
+		private IEnumerator WaitGameRun()
+		{
+			yield return new TimeController.WaitForSeconds(2f);
 			Run();
+		}
+
+		private IEnumerator JustCreatedLogicsTracker()
+		{
+			while (true)
+			{
+				yield return null;
+
+				var newLogicsCount = justCreatedLogics.Count;
+				if (newLogicsCount > 0)
+				{
+					for (int i = newLogicsCount - 1; i >= 0; i--)
+					{
+						var logic = justCreatedLogics[i];
+						allLogics.AddLast(logic);
+						logic.OnDestroy += LogicDestroy;
+						logic.Start();
+						OnLogicCreate.SafeInvoke(logic);
+					}
+					justCreatedLogics.Clear();
+				}
+			}
 		}
 
 		public void ForEachLogic<T>(Action<T> action) where T : Logic
@@ -133,23 +170,16 @@ namespace Game
 			}
 		}
 
+		protected override void Start()
+		{
+			base.Start();
+
+			IsRunned = true;
+		}
+
 		protected override void Update()
 		{
 			base.Update();
-
-			var newLogicsCount = justCreatedLogics.Count;
-			if (newLogicsCount > 0)
-			{
-				for (int i = newLogicsCount - 1; i >= 0; i--)
-				{
-					var logic = justCreatedLogics[i];
-					allLogics.AddLast(logic);
-					logic.OnDestroy += LogicDestroy;
-					logic.Start();
-					OnLogicCreate.SafeInvoke(logic);
-				}
-				justCreatedLogics.Clear();
-			}
 
 			foreach (var i in allLogics)
 			{
@@ -208,6 +238,8 @@ namespace Game
 			{
 				i.Destroy();
 			}
+
+			IsRunned = false;
 		}
 	}
 }
