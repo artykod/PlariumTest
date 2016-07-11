@@ -14,12 +14,41 @@ public class Core : MonoBehaviour
 	}
 #endif
 
+	[SerializeField]
+	private new GameCamera camera;
+
 	private Loader loader;
 	private GameController gameController;
 	private Dictionary<Logic, View> logicToViewMap = new Dictionary<Logic, View>();
 
+	private static Core instance;
+	public static Core Instance
+	{
+		get
+		{
+			return instance;
+		}
+	}
+
+	public GameController GameController
+	{
+		get
+		{
+			return gameController;
+		}
+	}
+
+	public View FindViewForLogic(Logic logic)
+	{
+		View result = null;
+		logicToViewMap.TryGetValue(logic, out result);
+		return result;
+	}
+
 	private void Awake()
 	{
+		instance = this;
+
 		DebugImpl.Instance = new DebugUnity();
 		DebugConsole.Instance.Create();
 		TimeControllerImpl.Instance = new TimeControllerUnity();
@@ -29,6 +58,16 @@ public class Core : MonoBehaviour
 		gameController.OnLogicDestroy += OnLogicDestroy;
 		gameController.RunWithMapId("map.forest");
 		gameController.Map.Fountain.FetchHeroId("unit.main_character");
+	}
+
+	private void Update()
+	{
+		TimeController.Update();
+	}
+
+	private void OnDestroy()
+	{
+		instance = null;
 	}
 
 	private void OnLogicCreate(Logic logic)
@@ -65,11 +104,6 @@ public class Core : MonoBehaviour
 				logicToViewMap.Remove(logic);
 			}
 		}
-	}
-
-	private void Update()
-	{
-		TimeController.Update();
 	}
 
 #if UNITY_EDITOR

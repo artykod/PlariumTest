@@ -93,10 +93,29 @@ namespace Game
 			Run();
 		}
 
+		public void ForEachLogic<T>(Action<T> action) where T : Logic
+		{
+			foreach (var i in allLogics)
+			{
+				try
+				{
+					var l = i as T;
+					if (l != null)
+					{
+						action(l);
+					}
+				}
+				catch (Exception e)
+				{
+					Debug.LogException(e);
+				}
+			}
+		}
+
 		private void OnGameEnd(Logic logic)
 		{
 			Debug.Log("Sofa dead. Game end.");
-			
+
 			RunWithMapId(lastPlayedMap);
 		}
 

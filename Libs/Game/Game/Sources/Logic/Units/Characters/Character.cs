@@ -47,12 +47,12 @@
 
 			if (Position.x < 0f && Direction.x < 0f || Position.x > mapDescriptor.Width && Direction.x > 0f)
 			{
-				Direction = new Vec2(-Direction.x, Direction.y);
+				Direction.InvertX();
 			}
 
 			if (Position.y < 0f && Direction.y < 0f || Position.y > mapDescriptor.Height && Direction.y > 0f)
 			{
-				Direction = new Vec2(Direction.x, -Direction.y);
+				Direction.InvertY();
 			}
 
 			if (attackCooldown > 0f)
