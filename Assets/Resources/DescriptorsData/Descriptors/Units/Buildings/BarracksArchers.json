@@ -1,0 +1,29 @@
+﻿{
+  "ClassId": "Buildings.Barracks",
+  "LogicId": "Buildings.Barracks",
+  "Id": "unit.barracks.archer",
+  "Name": "Archers Barracks",
+  "Description": "",
+  "Size": 1.5,
+  "UnitId": "unit.minion.archer",
+  "Levels": [
+    {
+      "ViewId": "BarracksMinionArcher",
+      "CostOfObtain": 100,
+      "UnitsPerSecond": 0.1,
+      "LevelOfUnits": 1
+    },
+    {
+      "ViewId": "BarracksMinionArcher",
+      "CostOfObtain": 200,
+      "UnitsPerSecond": 0.4,
+      "LevelOfUnits": 2
+    },
+    {
+      "ViewId": "BarracksMinionArcher",
+      "CostOfObtain": 300,
+      "UnitsPerSecond": 0.5,
+      "LevelOfUnits": 3
+    }
+  ]
+}

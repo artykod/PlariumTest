@@ -1,0 +1,28 @@
+﻿{
+  "ClassId": "Buildings.Fountain",
+  "LogicId": "Buildings.Fountain",
+  "Id": "unit.fountain",
+  "Name": "Fountain",
+  "Description": "",
+  "Size": 1,
+  "Levels": [
+    {
+      "ViewId": "Fountain",
+      "CostOfObtain": 100,
+      "HealSpeedHero": 10,
+      "HealSpeedMinion": 1
+    },
+    {
+      "ViewId": "Fountain",
+      "CostOfObtain": 200,
+      "HealSpeedHero": 20,
+      "HealSpeedMinion": 2
+    },
+    {
+      "ViewId": "Fountain",
+      "CostOfObtain": 300,
+      "HealSpeedHero": 30,
+      "HealSpeedMinion": 3
+    }
+  ]
+}

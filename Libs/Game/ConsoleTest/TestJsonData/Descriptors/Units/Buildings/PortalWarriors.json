@@ -1,0 +1,29 @@
+﻿{
+  "ClassId": "Buildings.Barracks",
+  "LogicId": "Buildings.Barracks",
+  "Id": "unit.portal.warrior",
+  "Name": "Warriors Portal",
+  "Description": "",
+  "Size": 1,
+  "UnitId": "unit.mob.warrior",
+  "Levels": [
+    {
+      "ViewId": "PortalWarrior",
+      "CostOfObtain": 0,
+      "UnitsPerSecond": 0.6,
+      "LevelOfUnits": 1
+    },
+    {
+      "ViewId": "PortalWarrior",
+      "CostOfObtain": 0,
+      "UnitsPerSecond": 0.7,
+      "LevelOfUnits": 2
+    },
+    {
+      "ViewId": "PortalWarrior",
+      "CostOfObtain": 0,
+      "UnitsPerSecond": 0.8,
+      "LevelOfUnits": 3
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+﻿{
+  "ClassId": "Buildings.Barracks",
+  "LogicId": "Buildings.Barracks",
+  "Id": "unit.barracks.warrior",
+  "Name": "Warriors Barracks",
+  "Description": "",
+  "Size": 1.5,
+  "UnitId": "unit.minion.warrior",
+  "Levels": [
+    {
+      "ViewId": "BarracksMinionWarrior",
+      "CostOfObtain": 100,
+      "UnitsPerSecond": 0.4,
+      "LevelOfUnits": 1
+    },
+    {
+      "ViewId": "BarracksMinionWarrior",
+      "CostOfObtain": 200,
+      "UnitsPerSecond": 0.5,
+      "LevelOfUnits": 2
+    },
+    {
+      "ViewId": "BarracksMinionWarrior",
+      "CostOfObtain": 300,
+      "UnitsPerSecond": 0.7,
+      "LevelOfUnits": 3
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+﻿{
+  "ClassId": "Characters.Hero",
+  "LogicId": "Characters.Hero",
+  "Id": "unit.main_character",
+  "Name": "Main character",
+  "Description": "",
+  "Size": 0.85,
+  "Levels": [
+    {
+      "ViewId": "MainCharacter",
+      "CostOfObtain": 100,
+      "HP": 500,
+      "Armor": 0.1,
+      "Attack": 10,
+      "AttackSpeed": 1.5,
+      "Speed": 1.5,
+      "AttackRange": 0.5,
+      "TargetXP": 100,
+      "RespawnTime": 3
+    },
+    {
+      "ViewId": "MainCharacter",
+      "CostOfObtain": 200,
+      "HP": 600,
+      "Armor": 0.2,
+      "Attack": 15,
+      "AttackSpeed": 2,
+      "Speed": 1.75,
+      "AttackRange": 0.8,
+      "TargetXP": 500,
+      "RespawnTime": 2
+    },
+    {
+      "ViewId": "MainCharacter",
+      "CostOfObtain": 300,
+      "HP": 700,
+      "Armor": 0.3,
+      "Attack": 20,
+      "AttackSpeed": 3,
+      "Speed": 2,
+      "AttackRange": 1,
+      "TargetXP": 1000,
+      "RespawnTime": 1
+    }
+  ]
+}

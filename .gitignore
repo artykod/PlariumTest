@@ -6,6 +6,7 @@
 ._*
 .Spotlight-V100
 .Trashes
+.vs
 ehthumbs.db
 Thumbs.db
 
@@ -42,3 +43,4 @@ FailedAssetImports.txt
 guidmapper
 Assets/UnityVS
 Assets/UnityVS.meta
+TestResults/
