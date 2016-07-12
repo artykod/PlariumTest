@@ -16,6 +16,7 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 	private Canvas canvas;
 	private Vector2 startPos;
 	private Vector2 endPos;
+	private LinkedList<Character> units = new LinkedList<Character>();
 
 	private void Awake()
 	{
@@ -27,53 +28,65 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 
 	void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
 	{
-		selectionPanel.enabled = true;
-		startPos = eventData.position;
+		if (eventData.button == PointerEventData.InputButton.Left)
+		{
+			selectionPanel.enabled = true;
+			startPos = eventData.position;
+		}
 	}
 
 	void IDragHandler.OnDrag(PointerEventData eventData)
 	{
-		endPos = eventData.position;
-		var r = GetDrawingRect(startPos / canvas.scaleFactor, endPos / canvas.scaleFactor);
-		var selectionRT = selectionPanel.rectTransform;
-		selectionRT.anchoredPosition = new Vector2(r.x, Screen.height - r.y);
-		selectionRT.sizeDelta = new Vector2(r.width, r.height);
+		if (eventData.button == PointerEventData.InputButton.Left)
+		{
+			endPos = eventData.position;
+			var r = GetDrawingRect(startPos / canvas.scaleFactor, endPos / canvas.scaleFactor);
+			var selectionRT = selectionPanel.rectTransform;
+			selectionRT.anchoredPosition = new Vector2(r.x, Screen.height - r.y);
+			selectionRT.sizeDelta = new Vector2(r.width, r.height);
+		}
 	}
 
 	void IEndDragHandler.OnEndDrag(PointerEventData eventData)
 	{
-		var units = new LinkedList<Character>();
-		var rect = GetDrawingRect(startPos, endPos);
-		gameController.ForEachLogic<Character>(unit =>
+		if (eventData.button == PointerEventData.InputButton.Left)
 		{
-			if (unit.Team != gameController.Map.Sofa.Team)
+			units.Clear();
+			var rect = GetDrawingRect(startPos, endPos);
+			gameController.ForEachLogic<Character>(unit =>
 			{
+				if (unit.Team != gameController.Map.Sofa.Team)
+				{
+					return false;
+				}
+
+				if (IsUnitInRect(unit, rect))
+				{
+					units.AddLast(unit);
+				}
+
 				return false;
-			}
+			});
 
-			if (IsUnitInRect(unit, rect))
-			{
-				units.AddLast(unit);
-			}
+			gameController.SelectUnits(units.ToArray());
 
-			return false;
-		});
-
-		gameController.SelectUnits(units.ToArray());
-
-		startPos = endPos = Vector2.zero;
-		selectionPanel.rectTransform.sizeDelta = Vector2.zero;
-		selectionPanel.enabled = false;
+			startPos = endPos = Vector2.zero;
+			selectionPanel.rectTransform.sizeDelta = Vector2.zero;
+			selectionPanel.enabled = false;
+		}
 	}
 
 	void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
 	{
+		Character character = null;
+		var clickPoint = eventData.position;
+		var clickArea = new Vector2(30f, 35f);
+		var rect = GetDrawingRect(clickPoint - clickArea, clickPoint + clickArea);
+
 		if (eventData.button == PointerEventData.InputButton.Left)
 		{
-			Character character = null;
-			var clickPoint = eventData.position;
-			var clickArea = new Vector2(30f, 35f);
-			var rect = GetDrawingRect(clickPoint - clickArea, clickPoint + clickArea);
+			units.Clear();
+
 			gameController.ForEachLogic<Character>(unit =>
 			{
 				if (unit.Team != gameController.Map.Sofa.Team)
@@ -91,10 +104,56 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 			});
 
 			gameController.SelectUnits(new Unit[] { character });
+
+			units.AddLast(character);
 		}
 		else
 		{
+			if (units.Count > 0)
+			{
+				gameController.ForEachLogic<Character>(unit =>
+				{
+					if (unit.Team == gameController.Map.Sofa.Team)
+					{
+						return false;
+					}
 
+					if (IsUnitInRect(unit, rect))
+					{
+						character = unit;
+						return true;
+					}
+
+					return false;
+				});
+
+				if (units.Count < 2 && character == null)
+				{
+					if (units.First.Value is Hero)
+					{
+						var clickPointScreen = Camera.main.ScreenToViewportPoint(clickPoint);
+						var rayToWorld = Camera.main.ViewportPointToRay(clickPointScreen);
+						var groundPlane = new Plane(Vector3.up, Vector3.zero);
+						var rayDistance = 0f;
+						if (groundPlane.Raycast(rayToWorld, out rayDistance))
+						{
+							var worldPoint = rayToWorld.GetPoint(rayDistance);
+							var hero = units.First.Value as Hero;
+							hero.MoveTo(new Vec2(worldPoint.x, worldPoint.z));
+						}
+					}
+				}
+				else
+				{
+					if (character != null)
+					{
+						foreach (var i in units)
+						{
+							i.SetTargetUnit(character);
+						}
+					}
+				}
+			}
 		}
 	}
 

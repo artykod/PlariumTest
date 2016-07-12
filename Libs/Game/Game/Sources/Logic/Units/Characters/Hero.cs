@@ -5,6 +5,8 @@
 
 	public class Hero : Character
 	{
+		private MoveTarget moveTarget;
+
 		public new HeroDescriptor Descriptor
 		{
 			get
@@ -23,6 +25,14 @@
 
 		public Hero(GameController gameController, Descriptor descriptor) : base(gameController, descriptor)
 		{
+			moveTarget = new MoveTarget(gameController, Descriptor);
+			SetTargetUnit(null);
+		}
+
+		public void MoveTo(Vec2 position)
+		{
+			moveTarget.Position = position;
+			SetTargetUnit(moveTarget);
 		}
 	}
 }

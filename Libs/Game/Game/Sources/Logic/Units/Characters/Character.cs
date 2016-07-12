@@ -1,8 +1,9 @@
-﻿namespace Game.Logics.Characters
+﻿using System;
+
+namespace Game.Logics.Characters
 {
 	using Descriptors;
 	using Maps;
-	using Buildings;
 
 	public abstract class Character : Unit
 	{
@@ -26,12 +27,31 @@
 		private float newTargetSearchCooldown;
 		private float targetDirectionOffset;
 		private float directionOffsetLerp;
+		private bool needAutoSearchTarget;
 
 		public Character(GameController gameController, Descriptor descriptor) : base(gameController, descriptor)
 		{
 			map = GameController.Map;
 			mapDescriptor = map.Descriptor;
 			IsImmortal = false;
+			needAutoSearchTarget = true;
+		}
+
+		public void SetTargetUnit(Unit target)
+		{
+			ChangeTargetUnit(target, false);
+		}
+
+		private void ChangeTargetUnit(Unit target, bool isAutoSearch)
+		{
+			needAutoSearchTarget = isAutoSearch;
+			targetUnit = target;
+			targetDirectionOffset = GameRandom.Range(-0.5f, 0.5f);
+
+			if (!needAutoSearchTarget)
+			{
+				newTargetSearchCooldown = 0f;
+			}
 		}
 
 		protected override void LevelChanged(int previousLevel, int newLevel)
@@ -45,14 +65,11 @@
 		{
 			base.Update(dt);
 
-			if (Position.x < 0f && Direction.x < 0f || Position.x > mapDescriptor.Width && Direction.x > 0f)
+			if (Position.x < 0f || Position.y < 0f || Position.x > mapDescriptor.Width || Position.y > mapDescriptor.Height)
 			{
-				Direction.InvertX();
-			}
-
-			if (Position.y < 0f && Direction.y < 0f || Position.y > mapDescriptor.Height && Direction.y > 0f)
-			{
-				Direction.InvertY();
+				Position = new Vec2(
+					Math.Max(0f, Math.Min(mapDescriptor.Width, Position.x)),
+					Math.Max(0f, Math.Min(mapDescriptor.Height, Position.y)));
 			}
 
 			if (attackCooldown > 0f)
@@ -62,21 +79,27 @@
 
 			if (targetUnit != null)
 			{
-				if (targetUnit.HP <= 0)
+				if (!targetUnit.IsImmortal && targetUnit.HP <= 0)
 				{
-					targetUnit = null;
+					ChangeTargetUnit(null, true);
 					newTargetSearchCooldown = 0f;
 				}
 
-				if (newTargetSearchCooldown <= 0f)
+				if (needAutoSearchTarget)
 				{
-					targetUnit = map.FindClosestEnemyUnit(this);
-					newTargetSearchCooldown = GameRandom.Range(1f, 5f);
-					targetDirectionOffset = GameRandom.Range(-0.5f, 0.5f);
-				}
-				else
-				{
-					newTargetSearchCooldown -= dt;
+					if (newTargetSearchCooldown <= 0f)
+					{
+						var found = map.FindClosestEnemyUnit(this);
+						if (found != null)
+						{
+							ChangeTargetUnit(found, false);
+							newTargetSearchCooldown = GameRandom.Range(1f, 5f);
+						}
+					}
+					else
+					{
+						newTargetSearchCooldown -= dt;
+					}
 				}
 			}
 
@@ -85,9 +108,9 @@
 			var targetDistance = 1f;
 			if (targetUnit != null)
 			{
-				targetDistance = CurrentLevel.AttackRange + targetUnit.Descriptor.Size + Descriptor.Size;
+				targetDistance = CurrentLevel.AttackRange + (targetUnit.IsImmortal ? 0f : targetUnit.Descriptor.Size + Descriptor.Size);
 			}
-			else
+			else if (map.Fountain.Team == Team)
 			{
 				targetUnit = map.Fountain;
 			}
@@ -106,9 +129,9 @@
 					Direction += perp;
 				}
 
-				if (!CanMove && !(targetUnit is Fountain))
+				if (!CanMove && targetUnit != map.Fountain)
 				{
-					if (attackCooldown <= 0f)
+					if (attackCooldown <= 0f && !targetUnit.IsImmortal)
 					{
 						targetUnit.TakeDamage(CurrentLevel.Attack);
 						attackCooldown = 1f / CurrentLevel.AttackSpeed;
