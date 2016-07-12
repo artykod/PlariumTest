@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Game.Logics.Maps
 {
@@ -8,6 +9,10 @@ namespace Game.Logics.Maps
 	public class Map : Logic
 	{
 		private List<Unit> hpUnits = new List<Unit>();
+		private List<MobPortal> mobPortals = new List<MobPortal>();
+		private bool isBattleDone;
+
+		public event Action<bool> OnBattleDone;
 
 		public new MapDescriptor Descriptor
 		{
@@ -57,9 +62,24 @@ namespace Game.Logics.Maps
 				if (unit is Sofa)
 				{
 					Sofa = unit as Sofa;
+					Sofa.OnDestroy += OnSofaDestroy;
+				}
+
+				if (unit is MobPortal)
+				{
+					mobPortals.Add(unit as MobPortal);
 				}
 
 				unit.AttachToTeam(marker.Team);
+			}
+		}
+
+		private void OnSofaDestroy(Logic logic)
+		{
+			if (!isBattleDone)
+			{
+				isBattleDone = true;
+				OnBattleDone.SafeInvoke(false);
 			}
 		}
 
@@ -86,10 +106,49 @@ namespace Game.Logics.Maps
 			return result;
 		}
 
+		protected override void Update(float dt)
+		{
+			base.Update(dt);
+
+			if (!isBattleDone)
+			{
+				var allPortalsEnds = true;
+				for (int i = 0, l = mobPortals.Count; i < l; i++)
+				{
+					if (!mobPortals[i].IsWavesEnds)
+					{
+						allPortalsEnds = false;
+						break;
+					}
+				}
+
+				if (allPortalsEnds)
+				{
+					var hasAnyEnemy = false;
+					for (int i = 0, l = hpUnits.Count; i < l; i++)
+					{
+						if (hpUnits[i].Team != Sofa.Team)
+						{
+							hasAnyEnemy = true;
+							break;
+						}
+					}
+
+					if (!hasAnyEnemy)
+					{
+						isBattleDone = true;
+						OnBattleDone.SafeInvoke(true);
+					}
+				}
+			}
+		}
+
 		private void OnUnitDestroy(Logic logic)
 		{
+			var unit = logic as Unit;
+
 			logic.OnDestroy -= OnUnitDestroy;
-			hpUnits.Remove(logic as Unit);
+			hpUnits.Remove(unit);
 		}
 	}
 }

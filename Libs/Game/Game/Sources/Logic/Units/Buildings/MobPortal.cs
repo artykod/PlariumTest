@@ -7,6 +7,12 @@
 		private float waveTime;
 		private float timeBetweenWaves;
 
+		public bool IsWavesEnds
+		{
+			get;
+			private set;
+		}
+
 		public MobPortal(GameController gameController, Descriptor descriptor) : base(gameController, descriptor)
 		{
 			Level = 0;
@@ -16,6 +22,11 @@
 		protected override void Update(float dt)
 		{
 			base.Update(dt);
+
+			if (IsWavesEnds)
+			{
+				return;
+			}
 
 			if (waveTime > 0f)
 			{
@@ -46,7 +57,7 @@
 					}
 					else
 					{
-						// waves end.
+						IsWavesEnds = true;
 					}
 				}
 				else

@@ -72,9 +72,10 @@ public class Core : MonoBehaviour
 		StartNewBattle();
 	}
 
-	private void OnGameEnd()
+	private void OnGameEnd(bool isPlayerWin)
 	{
-		UIDialogText.Show().Build("Game Over", "Sofa of Developers destroyed! You lose.").AddButton("Retry", StartNewBattle);
+		var message = isPlayerWin ? "All enemies died! You win" : "Sofa of Developers destroyed! You lose";
+		UIDialogText.Show().Build("Game Over", message).AddButton("Retry", StartNewBattle);
 	}
 
 	private void StartNewBattle()

@@ -16,10 +16,10 @@ namespace Game
 		private float preGameTimeout;
 		private bool isPreInitDone;
 
-		public Action<Logic> OnLogicCreate;
-		public Action<Logic> OnLogicDestroy;
-		public Action OnGameStart;
-		public Action OnGameEnd;
+		public event Action<Logic> OnLogicCreate;
+		public event Action<Logic> OnLogicDestroy;
+		public event Action OnGameStart;
+		public event Action<bool> OnGameEnd;
 
 		public Map Map
 		{
@@ -100,12 +100,19 @@ namespace Game
 			}
 
 			Map = CreateLogicByDescriptor<Map>(FindDescriptorById<MapDescriptor>(mapId));
-			Map.Sofa.OnDestroy += OnSofaDead;
+			Map.OnBattleDone += OnBattleDone;
 
 			preGameTimeout = 10f;
 			IsBattleStarted = false;
 
 			Run();
+		}
+
+		private void OnBattleDone(bool isPlayerWin)
+		{
+			IsBattleStarted = false;
+			Stop();
+			OnGameEnd.SafeInvoke(isPlayerWin);
 		}
 
 		public void ForEachLogic<T>(Func<T, bool> func) where T : Logic
@@ -149,20 +156,6 @@ namespace Game
 					i.IsSelected = true;
 					selectedUnits.AddLast(i);
 				}
-			}
-		}
-
-		private void OnSofaDead(Logic logic)
-		{
-			if (IsRunned)
-			{
-				IsBattleStarted = false;
-
-				Debug.Log("Sofa dead. Game end.");
-
-				Stop();
-
-				OnGameEnd.SafeInvoke();
 			}
 		}
 
