@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Game;
 using Game.Logics;
+using Game.Logics.Buildings;
 using Game.Logics.Characters;
 
 public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
@@ -28,6 +29,11 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 
 	void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
 	{
+		if (!gameController.IsBattleStarted)
+		{
+			return;
+		}
+
 		if (eventData.button == PointerEventData.InputButton.Left)
 		{
 			selectionPanel.enabled = true;
@@ -37,6 +43,11 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 
 	void IDragHandler.OnDrag(PointerEventData eventData)
 	{
+		if (!gameController.IsBattleStarted)
+		{
+			return;
+		}
+
 		if (eventData.button == PointerEventData.InputButton.Left)
 		{
 			endPos = eventData.position;
@@ -49,6 +60,11 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 
 	void IEndDragHandler.OnEndDrag(PointerEventData eventData)
 	{
+		if (!gameController.IsBattleStarted)
+		{
+			return;
+		}
+
 		if (eventData.button == PointerEventData.InputButton.Left)
 		{
 			units.Clear();
@@ -78,10 +94,29 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 
 	void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
 	{
-		Character character = null;
 		var clickPoint = eventData.position;
 		var clickArea = new Vector2(30f, 35f);
 		var rect = GetDrawingRect(clickPoint - clickArea, clickPoint + clickArea);
+
+		if (!gameController.IsBattleStarted)
+		{
+			if (eventData.button == PointerEventData.InputButton.Left)
+			{
+				gameController.ForEachLogic<MinionBarracks>(barracks =>
+				{
+					if (IsUnitInRect(barracks, rect))
+					{
+						return true;
+					}
+
+					return false;
+				});
+			}
+
+			return;
+		}
+
+		Character character = null;
 
 		if (eventData.button == PointerEventData.InputButton.Left)
 		{
@@ -127,9 +162,13 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 					return false;
 				});
 
-				if (units.Count < 2 && character == null)
+				foreach (var i in units)
 				{
-					if (units.First.Value is Hero)
+					if (character != null)
+					{
+						i.SetTargetUnit(character);
+					}
+					else if (i is Hero)
 					{
 						var clickPointScreen = Camera.main.ScreenToViewportPoint(clickPoint);
 						var rayToWorld = Camera.main.ViewportPointToRay(clickPointScreen);
@@ -140,16 +179,6 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 							var worldPoint = rayToWorld.GetPoint(rayDistance);
 							var hero = units.First.Value as Hero;
 							hero.MoveTo(new Vec2(worldPoint.x, worldPoint.z));
-						}
-					}
-				}
-				else
-				{
-					if (character != null)
-					{
-						foreach (var i in units)
-						{
-							i.SetTargetUnit(character);
 						}
 					}
 				}

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Game.Logics;
+using Game.Logics.Characters;
 
 public class UnitView : View {
 	protected UnitSelection selection;
@@ -27,6 +28,19 @@ public class UnitView : View {
 
 		selection.Scale = Logic.Descriptor.Size * 2.5f;
 		selection.IsVisible = false;
+
+		if (Logic is Hero)
+		{
+			selection.SelectionType = UnitSelection.SelectionTypes.Hero;
+		}
+		else if (Logic.Team != Core.Instance.GameController.Map.Sofa.Team)
+		{
+			selection.SelectionType = UnitSelection.SelectionTypes.Enemy;
+		}
+		else
+		{
+			selection.SelectionType = UnitSelection.SelectionTypes.Minion;
+		}
 
 		Logic.OnDestroy += OnLogicDestroy;
 		Logic.OnSelection += OnSelectionUnit;
@@ -74,5 +88,19 @@ public class UnitView : View {
 		base.Update();
 
 		SyncTransform();
+	}
+
+	private void OnDrawGizmos()
+	{
+		var color = Color.red;
+		color.a = 0.5f;
+		Gizmos.color = color;
+
+		var character = Logic as Character;
+		if (selection.IsVisible && character != null && character.TargetUnit != null)
+		{
+			var targetPos = character.TargetUnit.Position;
+			Gizmos.DrawSphere(new Vector3(targetPos.x, 0f, targetPos.y), Mathf.Max(0.1f, character.TargetUnit.Descriptor.Size));
+		}
 	}
 }

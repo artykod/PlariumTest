@@ -1,6 +1,6 @@
 ﻿{
   "ClassId": "Buildings.Barracks",
-  "LogicId": "Buildings.Barracks",
+  "LogicId": "Buildings.MobPortal",
   "Id": "unit.portal.warrior",
   "Name": "Warriors Portal",
   "Description": "",

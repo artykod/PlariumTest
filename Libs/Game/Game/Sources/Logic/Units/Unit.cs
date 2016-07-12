@@ -56,6 +56,12 @@
 			protected set;
 		}
 
+		public int TotalHP
+		{
+			get;
+			protected set;
+		}
+
 		public bool IsImmortal
 		{
 			get;
@@ -104,7 +110,7 @@
 		public Unit(GameController gameController, Descriptor descriptor) : base(gameController, descriptor)
 		{
 			IsImmortal = true;
-			HP = int.MaxValue;
+			TotalHP = HP = int.MaxValue;
 			CanMove = true;
 			Level = 0;
 		}
@@ -122,6 +128,18 @@
 				if (HP <= 0)
 				{
 					Destroy();
+				}
+			}
+		}
+
+		public void Heal(int healValue)
+		{
+			if (!IsImmortal)
+			{
+				HP += healValue;
+				if (HP >= TotalHP)
+				{
+					HP = TotalHP;
 				}
 			}
 		}

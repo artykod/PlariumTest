@@ -20,6 +20,14 @@ namespace Game.Logics.Characters
 			get;
 		}
 
+		public Unit TargetUnit
+		{
+			get
+			{
+				return targetUnit;
+			}
+		}
+
 		private Map map;
 		private MapDescriptor mapDescriptor;
 		private float attackCooldown;
@@ -58,7 +66,7 @@ namespace Game.Logics.Characters
 		{
 			base.LevelChanged(previousLevel, newLevel);
 
-			HP = CurrentLevel.HP;
+			TotalHP = HP = CurrentLevel.HP;
 		}
 
 		protected override void Update(float dt)
@@ -77,29 +85,29 @@ namespace Game.Logics.Characters
 				attackCooldown -= dt;
 			}
 
+			if (needAutoSearchTarget)
+			{
+				if (newTargetSearchCooldown <= 0f)
+				{
+					var found = map.FindClosestEnemyUnit(this);
+					if (found != null)
+					{
+						ChangeTargetUnit(found, true);
+						newTargetSearchCooldown = GameRandom.Range(1f, 5f);
+					}
+				}
+				else
+				{
+					newTargetSearchCooldown -= dt;
+				}
+			}
+
 			if (targetUnit != null)
 			{
 				if (!targetUnit.IsImmortal && targetUnit.HP <= 0)
 				{
 					ChangeTargetUnit(null, true);
 					newTargetSearchCooldown = 0f;
-				}
-
-				if (needAutoSearchTarget)
-				{
-					if (newTargetSearchCooldown <= 0f)
-					{
-						var found = map.FindClosestEnemyUnit(this);
-						if (found != null)
-						{
-							ChangeTargetUnit(found, false);
-							newTargetSearchCooldown = GameRandom.Range(1f, 5f);
-						}
-					}
-					else
-					{
-						newTargetSearchCooldown -= dt;
-					}
 				}
 			}
 
@@ -108,11 +116,17 @@ namespace Game.Logics.Characters
 			var targetDistance = 1f;
 			if (targetUnit != null)
 			{
-				targetDistance = CurrentLevel.AttackRange + (targetUnit.IsImmortal ? 0f : targetUnit.Descriptor.Size + Descriptor.Size);
+				targetDistance = (targetUnit.Team != Team ? CurrentLevel.AttackRange : 0f) + 
+					(targetUnit is MoveTarget ? 0f : targetUnit.Descriptor.Size + Descriptor.Size);
 			}
 			else if (map.Fountain.Team == Team)
 			{
 				targetUnit = map.Fountain;
+			}
+			else
+			{
+				CanMove = false;
+				ChangeTargetUnit(null, true);
 			}
 
 			if (targetUnit != null)

@@ -22,7 +22,7 @@
 		{
 			base.LevelChanged(previousLevel, newLevel);
 
-			HP = Descriptor.Levels[Level].HP;
+			TotalHP = HP = Descriptor.Levels[Level].HP;
 		}
 	}
 }

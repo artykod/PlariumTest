@@ -15,7 +15,15 @@ public struct Vec2
 	{
 		get
 		{
-			return (float)Math.Sqrt(x * x + y * y);
+			return (float)Math.Sqrt(LengthSqr);
+		}
+	}
+
+	public float LengthSqr
+	{
+		get
+		{
+			return x * x + y * y;
 		}
 	}
 

@@ -11,17 +11,25 @@ namespace Game
 			void Update(float dt);
 		}
 
+		public bool IsRunned
+		{
+			get;
+			private set;
+		}
+
 		private List<IUpdatable> updatables = new List<IUpdatable>(100);
 		private TimeController.Coroutine updateRoutine;
 
 		public void Run()
 		{
+			IsRunned = true;
 			Start();
 			updateRoutine = TimeController.StartCoroutine(UpdateRoutine());
 		}
 
 		public void Stop()
 		{
+			IsRunned = false;
 			if (updateRoutine != null)
 			{
 				TimeController.StopCoroutine(updateRoutine);

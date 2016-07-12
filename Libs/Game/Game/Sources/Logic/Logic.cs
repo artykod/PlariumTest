@@ -33,6 +33,7 @@
 		{
 			GameController.RemoveUpdatable(this);
 			OnDestroy.SafeInvoke(this);
+			OnDestroy = null;
 		}
 
 		protected virtual void Update(float dt)

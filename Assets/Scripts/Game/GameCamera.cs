@@ -12,11 +12,23 @@ public class GameCamera : MonoBehaviour
 	private const float LERP_SPEED = 0.1f;
 	private const float CAMERA_OFFSET = 5f;
 
-	private Modes mode = Modes.FreeMove;
+	private Modes mode = Modes.FollowMainCharacter;
 	private Vector3 startPosition;
 	private float zoom = 0f;
 	private float zoomMinMax = 10f;
 	private GameController gameController;
+
+	public Modes Mode
+	{
+		get
+		{
+			return mode;
+		}
+		set
+		{
+			mode = value;
+		}
+	}
 
 	private void Awake()
 	{

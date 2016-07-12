@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace Game
@@ -14,10 +13,13 @@ namespace Game
 		private List<Logic> justCreatedLogics = new List<Logic>();
 		private LinkedList<Logic> allLogics = new LinkedList<Logic>();
 		private LinkedList<Unit> selectedUnits = new LinkedList<Unit>();
-		private string lastPlayedMap;
+		private float preGameTimeout;
+		private bool isPreInitDone;
 
 		public Action<Logic> OnLogicCreate;
 		public Action<Logic> OnLogicDestroy;
+		public Action OnGameStart;
+		public Action OnGameEnd;
 
 		public Map Map
 		{
@@ -25,7 +27,7 @@ namespace Game
 			private set;
 		}
 
-		public bool IsRunned
+		public bool IsBattleStarted
 		{
 			get;
 			private set;
@@ -60,8 +62,6 @@ namespace Game
 					Debug.LogException(e);
 				}
 			}
-
-			TimeController.StartCoroutine(JustCreatedLogicsTracker());
 		}
 
 		public T FindDescriptorById<T>(string descriptorId) where T : Descriptor
@@ -94,41 +94,18 @@ namespace Game
 
 		public void RunWithMapId(string mapId)
 		{
-			Stop();
-
-			lastPlayedMap = mapId;
-			Map = CreateLogicByDescriptor<Map>(FindDescriptorById<MapDescriptor>(mapId));
-			Map.Sofa.OnDestroy += OnGameEnd;
-
-			TimeController.StartCoroutine(WaitGameRun());
-		}
-
-		private IEnumerator WaitGameRun()
-		{
-			yield return new TimeController.WaitForSeconds(2f);
-			Run();
-		}
-
-		private IEnumerator JustCreatedLogicsTracker()
-		{
-			while (true)
+			if (IsRunned)
 			{
-				yield return null;
-
-				var newLogicsCount = justCreatedLogics.Count;
-				if (newLogicsCount > 0)
-				{
-					for (int i = newLogicsCount - 1; i >= 0; i--)
-					{
-						var logic = justCreatedLogics[i];
-						allLogics.AddLast(logic);
-						logic.OnDestroy += LogicDestroy;
-						logic.Start();
-						OnLogicCreate.SafeInvoke(logic);
-					}
-					justCreatedLogics.Clear();
-				}
+				return;
 			}
+
+			Map = CreateLogicByDescriptor<Map>(FindDescriptorById<MapDescriptor>(mapId));
+			Map.Sofa.OnDestroy += OnSofaDead;
+
+			preGameTimeout = 10f;
+			IsBattleStarted = false;
+
+			Run();
 		}
 
 		public void ForEachLogic<T>(Func<T, bool> func) where T : Logic
@@ -175,11 +152,18 @@ namespace Game
 			}
 		}
 
-		private void OnGameEnd(Logic logic)
+		private void OnSofaDead(Logic logic)
 		{
-			Debug.Log("Sofa dead. Game end.");
+			if (IsRunned)
+			{
+				IsBattleStarted = false;
 
-			RunWithMapId(lastPlayedMap);
+				Debug.Log("Sofa dead. Game end.");
+
+				Stop();
+
+				OnGameEnd.SafeInvoke();
+			}
 		}
 
 		private void LogicDestroy(Logic logic)
@@ -204,53 +188,80 @@ namespace Game
 		protected override void Start()
 		{
 			base.Start();
-
-			IsRunned = true;
 		}
 
 		protected override void Update()
 		{
-			base.Update();
-
-			foreach (var i in allLogics)
+			if (preGameTimeout < 0f)
 			{
-				foreach (var j in allLogics)
+				base.Update();
+			}
+			else
+			{
+				preGameTimeout -= TimeController.deltaTime;
+				if (preGameTimeout < 0f)
 				{
-					if (i != j)
+					IsBattleStarted = true;
+					OnGameStart.SafeInvoke();
+				}
+			}
+
+			if (!isPreInitDone)
+			{
+				isPreInitDone = true;
+			}
+			else
+			{
+				var newLogicsCount = justCreatedLogics.Count;
+				if (newLogicsCount > 0)
+				{
+					for (int i = newLogicsCount - 1; i >= 0; i--)
 					{
-						var unit1 = i as Unit;
-						var unit2 = j as Unit;
-						if (unit1 != null && unit2 != null)
+						var logic = justCreatedLogics[i];
+						allLogics.AddLast(logic);
+						logic.OnDestroy += LogicDestroy;
+						logic.Start();
+						OnLogicCreate.SafeInvoke(logic);
+					}
+					justCreatedLogics.Clear();
+				}
+
+				foreach (var i in allLogics)
+				{
+					foreach (var j in allLogics)
+					{
+						if (i != j)
 						{
-							var d = unit1.Position - unit2.Position;
-							var len = 0f;
-							if (Math.Abs(d.x) > 0.001f || Math.Abs(d.y) > 0.001f)
+							var unit1 = i as Unit;
+							var unit2 = j as Unit;
+							if (unit1 != null && unit2 != null)
 							{
-								len = d.Length;
-							}
-							var size = unit1.Descriptor.Size + unit2.Descriptor.Size;
+								var d = unit1.Position - unit2.Position;
+								var len = d.LengthSqr;
+								var size = unit1.Descriptor.Size + unit2.Descriptor.Size;
 
-							if (len < size)
-							{
-								var mult = (size - len);
-								if (!unit1.IsStatic && !unit2.IsStatic)
+								if (len < size * size)
 								{
-									mult *= 0.5f;
-								}
-								if (len > 0f)
-								{
-									mult /= len;
-								}
-								d *= mult;
+									len = (float)Math.Sqrt(len);
+									var mult = (size - len);
+									if (!unit1.IsStatic && !unit2.IsStatic)
+									{
+										mult *= 0.5f;
+									}
+									if (len > 0f)
+									{
+										mult /= len;
+									}
+									d *= mult;
 
-								if (!unit1.IsStatic)
-								{
-									unit1.Position += d;
-								}
-
-								if (!unit2.IsStatic)
-								{
-									unit2.Position -= d;
+									if (!unit1.IsStatic)
+									{
+										unit1.Position += d;
+									}
+									if (!unit2.IsStatic)
+									{
+										unit2.Position -= d;
+									}
 								}
 							}
 						}
@@ -264,13 +275,15 @@ namespace Game
 			base.End();
 
 			var toRemove = new LinkedList<Logic>(allLogics);
+
 			allLogics = new LinkedList<Logic>();
+			justCreatedLogics.Clear();
+			selectedUnits.Clear();
+
 			foreach (var i in toRemove)
 			{
 				i.Destroy();
 			}
-
-			IsRunned = false;
 		}
 	}
 }

@@ -1,17 +1,30 @@
-﻿namespace Game.Logics.Buildings
+﻿using System.Collections.Generic;
+
+namespace Game.Logics.Buildings
 {
 	using Descriptors;
+	using Descriptors.Buildings;
 	using Logics.Characters;
 
 	public class Fountain : Building
 	{
+		private Descriptor heroDescriptor;
+		private float respawnTime;
+		private float healTime;
+
+		public new FountainDescriptor Descriptor
+		{
+			get
+			{
+				return base.Descriptor as FountainDescriptor;
+			}
+		}
+
 		public Hero Hero
 		{
 			get;
 			private set;
 		}
-
-		private Descriptor heroDescriptor;
 
 		public Fountain(GameController gameController, Descriptor descriptor) : base(gameController, descriptor)
 		{
@@ -35,17 +48,52 @@
 		{
 			if (logic == Hero)
 			{
-				var respawnTime = Hero.Descriptor.Levels[Hero.Level].RespawnTime;
+				respawnTime = Hero.Descriptor.Levels[Hero.Level].RespawnTime;
 				Hero.OnDestroy -= OnHeroDie;
 				Hero = null;
-				TimeController.StartCoroutine(WaitForHeroEmit(respawnTime));
 			}
 		}
 
-		private System.Collections.IEnumerator WaitForHeroEmit(float delay)
+		protected override void Update(float dt)
 		{
-			yield return new TimeController.WaitForSeconds(delay);
-			EmitHero();
+			base.Update(dt);
+
+			if (Hero == null)
+			{
+				if (respawnTime < 0f)
+				{
+					EmitHero();
+				}
+				else
+				{
+					respawnTime -= dt;
+				}
+			}
+
+			if (healTime < 0f)
+			{
+				healTime = 1f;
+
+				var closestUnits = new LinkedList<Unit>();
+				GameController.ForEachLogic<Unit>(unit =>
+				{
+					if (unit.Team == Team)
+					{
+						var distanceSqr = (Position - unit.Position).LengthSqr;
+						var needDistance = (Descriptor.Size + unit.Descriptor.Size) * 1.5f;
+						if (distanceSqr <= needDistance * needDistance)
+						{
+							unit.Heal(unit is Hero ? Descriptor.Levels[Level].HealSpeedHero : Descriptor.Levels[Level].HealSpeedMinion);
+						}
+					}
+
+					return false;
+				});
+			}
+			else
+			{
+				healTime -= dt;
+			}
 		}
 	}
 }

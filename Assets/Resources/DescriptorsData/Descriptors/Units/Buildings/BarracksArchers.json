@@ -1,6 +1,6 @@
 ﻿{
   "ClassId": "Buildings.Barracks",
-  "LogicId": "Buildings.Barracks",
+  "LogicId": "Buildings.MinionBarracks",
   "Id": "unit.barracks.archer",
   "Name": "Archers Barracks",
   "Description": "",

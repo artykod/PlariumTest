@@ -7,15 +7,10 @@ using Game.Logics.Maps;
 
 public class Core : MonoBehaviour
 {
-#if UNITY_EDITOR
-	static Core()
-	{
-		DebugImpl.Instance = new DebugUnity();
-	}
-#endif
-
 	[SerializeField]
 	private new GameCamera camera;
+	[SerializeField]
+	private UIGame gameUI;
 
 	private Loader loader;
 	private GameController gameController;
@@ -38,6 +33,22 @@ public class Core : MonoBehaviour
 		}
 	}
 
+	public GameCamera Camera
+	{
+		get
+		{
+			return camera;
+		}
+	}
+
+	public UIGame GameUI
+	{
+		get
+		{
+			return gameUI;
+		}
+	}
+
 	public View FindViewForLogic(Logic logic)
 	{
 		View result = null;
@@ -56,6 +67,18 @@ public class Core : MonoBehaviour
 		gameController = new GameController(new Loader().LoadDescriptorsFromGameResources(Constants.Paths.Descriptors.ALL));
 		gameController.OnLogicCreate += OnLogicCreate;
 		gameController.OnLogicDestroy += OnLogicDestroy;
+		gameController.OnGameEnd += OnGameEnd;
+
+		StartNewBattle();
+	}
+
+	private void OnGameEnd()
+	{
+		UIDialogText.Show().Build("Game Over", "Sofa of Developers destroyed! You lose.").AddButton("Retry", StartNewBattle);
+	}
+
+	private void StartNewBattle()
+	{
 		gameController.RunWithMapId("map.forest");
 		gameController.Map.Fountain.FetchHeroId("unit.main_character");
 	}
@@ -106,7 +129,14 @@ public class Core : MonoBehaviour
 		}
 	}
 
+	#region Editor tools
+
 #if UNITY_EDITOR
+	static Core()
+	{
+		DebugImpl.Instance = new DebugUnity();
+	}
+
 	[UnityEditor.MenuItem("Tools/Copy descriptors from lib project")]
 	private static void CopyDescriptorsDataFromLibProject()
 	{
@@ -136,4 +166,6 @@ public class Core : MonoBehaviour
 		Debug.Log("Copy done.");
 	}
 #endif
+
+	#endregion
 }
