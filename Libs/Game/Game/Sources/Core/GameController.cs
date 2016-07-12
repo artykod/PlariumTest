@@ -13,6 +13,7 @@ namespace Game
 		private Dictionary<string, Descriptor> descriptors = new Dictionary<string, Descriptor>();
 		private List<Logic> justCreatedLogics = new List<Logic>();
 		private LinkedList<Logic> allLogics = new LinkedList<Logic>();
+		private LinkedList<Unit> selectedUnits = new LinkedList<Unit>();
 		private string lastPlayedMap;
 
 		public Action<Logic> OnLogicCreate;
@@ -130,7 +131,7 @@ namespace Game
 			}
 		}
 
-		public void ForEachLogic<T>(Action<T> action) where T : Logic
+		public void ForEachLogic<T>(Func<T, bool> func) where T : Logic
 		{
 			foreach (var i in allLogics)
 			{
@@ -139,12 +140,37 @@ namespace Game
 					var l = i as T;
 					if (l != null)
 					{
-						action(l);
+						if (func(l))
+						{
+							break;
+						}
 					}
 				}
 				catch (Exception e)
 				{
 					Debug.LogException(e);
+				}
+			}
+		}
+
+		public void SelectUnits(Unit[] units)
+		{
+			foreach (var i in selectedUnits)
+			{
+				if (i != null)
+				{
+					i.IsSelected = false;
+				}
+			}
+
+			selectedUnits.Clear();
+
+			foreach (var i in units)
+			{
+				if (i != null)
+				{
+					i.IsSelected = true;
+					selectedUnits.AddLast(i);
 				}
 			}
 		}
@@ -166,6 +192,11 @@ namespace Game
 				if (allLogics.Count > 0)
 				{
 					allLogics.Remove(logic);
+				}
+
+				if (logic is Unit)
+				{
+					selectedUnits.Remove(logic as Unit);
 				}
 			}
 		}

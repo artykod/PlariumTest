@@ -2,6 +2,8 @@
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
+using System.Linq;
+using Game;
 using Game.Logics;
 using Game.Logics.Characters;
 
@@ -10,6 +12,7 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 	[SerializeField]
 	private Image selectionPanel;
 
+	private GameController gameController;
 	private Canvas canvas;
 	private Vector2 startPos;
 	private Vector2 endPos;
@@ -18,6 +21,8 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 	{
 		canvas = GetComponentInParent<Canvas>();
 		selectionPanel.enabled = false;
+
+		gameController = Core.Instance.GameController;
 	}
 
 	void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
@@ -38,20 +43,23 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 	void IEndDragHandler.OnEndDrag(PointerEventData eventData)
 	{
 		var units = new LinkedList<Character>();
-
 		var rect = GetDrawingRect(startPos, endPos);
-		Core.Instance.GameController.ForEachLogic<Character>(unit =>
+		gameController.ForEachLogic<Character>(unit =>
 		{
+			if (unit.Team != gameController.Map.Sofa.Team)
+			{
+				return false;
+			}
+
 			if (IsUnitInRect(unit, rect))
 			{
 				units.AddLast(unit);
 			}
+
+			return false;
 		});
 
-		foreach (var i in units)
-		{
-			i.Destroy();
-		}
+		gameController.SelectUnits(units.ToArray());
 
 		startPos = endPos = Vector2.zero;
 		selectionPanel.rectTransform.sizeDelta = Vector2.zero;
@@ -60,22 +68,33 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 
 	void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
 	{
-		var units = new LinkedList<Character>();
-
-		var clickPoint = eventData.position;
-		var clickArea = new Vector2(30f, 35f);
-		var rect = GetDrawingRect(clickPoint - clickArea, clickPoint + clickArea);
-		Core.Instance.GameController.ForEachLogic<Character>(unit =>
+		if (eventData.button == PointerEventData.InputButton.Left)
 		{
-			if (IsUnitInRect(unit, rect))
+			Character character = null;
+			var clickPoint = eventData.position;
+			var clickArea = new Vector2(30f, 35f);
+			var rect = GetDrawingRect(clickPoint - clickArea, clickPoint + clickArea);
+			gameController.ForEachLogic<Character>(unit =>
 			{
-				units.AddLast(unit);
-			}
-		});
+				if (unit.Team != gameController.Map.Sofa.Team)
+				{
+					return false;
+				}
 
-		foreach (var i in units)
+				if (IsUnitInRect(unit, rect))
+				{
+					character = unit;
+					return true;
+				}
+
+				return false;
+			});
+
+			gameController.SelectUnits(new Unit[] { character });
+		}
+		else
 		{
-			i.Destroy();
+
 		}
 	}
 

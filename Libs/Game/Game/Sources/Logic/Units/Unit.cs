@@ -7,6 +7,9 @@
 		private TimeController.Coroutine updater;
 		protected int currentLevel;
 		private Vec2 direction;
+		private bool isSelected;
+
+		public event System.Action<Unit, bool> OnSelection;
 
 		public Vec2 Position
 		{
@@ -69,6 +72,19 @@
 		{
 			get;
 			protected set;
+		}
+
+		public bool IsSelected
+		{
+			get
+			{
+				return isSelected;
+			}
+			set
+			{
+				isSelected = value;
+				OnSelection.SafeInvoke(this, isSelected);
+			}
 		}
 
 		protected bool CanMove

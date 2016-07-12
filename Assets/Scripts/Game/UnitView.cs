@@ -2,6 +2,8 @@
 using Game.Logics;
 
 public class UnitView : View {
+	protected UnitSelection selection;
+
 	public new Unit Logic
 	{
 		get
@@ -22,6 +24,29 @@ public class UnitView : View {
 	{
 		base.FetchLogic(logic);
 		SyncTransform();
+
+		selection.Scale = Logic.Descriptor.Size * 2.5f;
+		selection.IsVisible = false;
+
+		Logic.OnDestroy += OnLogicDestroy;
+		Logic.OnSelection += OnSelectionUnit;
+	}
+
+	private void OnLogicDestroy(Logic logic)
+	{
+		Logic.OnDestroy -= OnLogicDestroy;
+		Logic.OnSelection -= OnSelectionUnit;
+	}
+
+	private void OnSelectionUnit(Unit unit, bool isSelected)
+	{
+		if (unit == Logic)
+		{
+			if (selection != null)
+			{
+				selection.IsVisible = isSelected;
+			}
+		}
 	}
 
 	protected void SyncTransform()
@@ -34,6 +59,14 @@ public class UnitView : View {
 				transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0f, Mathf.Atan2(-Logic.Direction.y, Logic.Direction.x) * 180f / Mathf.PI + 90f, 0f), RotationLerpSpeed);
 			}
 		}
+	}
+
+	protected override void Awake()
+	{
+		base.Awake();
+
+		selection = PrefabTool.CreateInstance<UnitSelection>();
+		selection.DropTo(transform);
 	}
 
 	protected override void Update()
