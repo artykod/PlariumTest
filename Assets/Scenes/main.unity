@@ -307,7 +307,7 @@ Prefab:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11432030, guid: 38f003d4be34d6140a2249802625ba73, type: 2}
-      propertyPath: camera
+      propertyPath: gameCamera
       value: 
       objectReference: {fileID: 460514121}
     - target: {fileID: 11432030, guid: 38f003d4be34d6140a2249802625ba73, type: 2}
