@@ -8,7 +8,7 @@ using Game.Logics.Maps;
 public class Core : MonoBehaviour
 {
 	[SerializeField]
-	private new GameCamera camera;
+	private GameCamera gameCamera;
 	[SerializeField]
 	private UIGame gameUI;
 
@@ -37,7 +37,7 @@ public class Core : MonoBehaviour
 	{
 		get
 		{
-			return camera;
+			return gameCamera;
 		}
 	}
 

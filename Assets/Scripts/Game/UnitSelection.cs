@@ -6,7 +6,7 @@ public class UnitSelection : MonoBehaviour
 	[SerializeField]
 	private Transform model;
 	[SerializeField]
-	private new MeshRenderer renderer;
+	private MeshRenderer meshRenderer;
 	[SerializeField]
 	private Material heroSelectionMaterial;
 	[SerializeField]
@@ -46,7 +46,7 @@ public class UnitSelection : MonoBehaviour
 			default:
 				break;
 			}
-			renderer.sharedMaterial = selectionMaterial;
+			meshRenderer.sharedMaterial = selectionMaterial;
 		}
 	}
 
