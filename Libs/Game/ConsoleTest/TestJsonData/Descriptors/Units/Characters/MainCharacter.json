@@ -8,7 +8,7 @@
   "Levels": [
     {
       "ViewId": "MainCharacter",
-      "CostOfObtain": 100,
+      "CostOfObtain": 0,
       "HP": 500,
       "Armor": 0.1,
       "Attack": 10,
@@ -20,7 +20,7 @@
     },
     {
       "ViewId": "MainCharacter",
-      "CostOfObtain": 200,
+      "CostOfObtain": 50,
       "HP": 600,
       "Armor": 0.2,
       "Attack": 15,

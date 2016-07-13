@@ -89,18 +89,4 @@ public class UnitView : View {
 
 		SyncTransform();
 	}
-
-	private void OnDrawGizmos()
-	{
-		var color = Color.red;
-		color.a = 0.5f;
-		Gizmos.color = color;
-
-		var character = Logic as Character;
-		if (selection.IsVisible && character != null && character.TargetUnit != null)
-		{
-			var targetPos = character.TargetUnit.Position;
-			Gizmos.DrawSphere(new Vector3(targetPos.x, 0f, targetPos.y), Mathf.Max(0.1f, character.TargetUnit.Descriptor.Size));
-		}
-	}
 }

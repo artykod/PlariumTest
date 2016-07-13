@@ -28,6 +28,20 @@ namespace Game.Logics.Buildings
 			private set;
 		}
 
+		public float HeroRespawnTimer
+		{
+			get
+			{
+				return respawnTime;
+			}
+		}
+
+		public float HeroTotalRespawnTime
+		{
+			get;
+			private set;
+		}
+
 		public Fountain(GameController gameController, Descriptor descriptor) : base(gameController, descriptor)
 		{
 		}
@@ -54,7 +68,7 @@ namespace Game.Logics.Buildings
 			{
 				lastHeroLevel = Hero.Level;
 				lastHeroXP = Hero.XP;
-				respawnTime = Hero.Descriptor.Levels[Hero.Level].RespawnTime;
+				HeroTotalRespawnTime = respawnTime = Hero.Descriptor.Levels[Hero.Level].RespawnTime;
 				Hero.OnDestroy -= OnHeroDie;
 				Hero = null;
 			}
