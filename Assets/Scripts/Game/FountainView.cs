@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using Game.Logics.Buildings;
+﻿using Game.Logics.Buildings;
 using Game.Logics;
 
 public class FountainView : UnitView {
@@ -15,9 +14,13 @@ public class FountainView : UnitView {
 	{
 		base.FetchLogic(logic);
 
-		var cameraPosition = transform.position;
-		cameraPosition.y += 30f;
-		cameraPosition.z -= 5f;
-		Camera.main.transform.position = cameraPosition;
+		var camera = Core.Instance.Camera;
+		var position = transform.position;
+		var cameraPosition = camera.transform.position;
+
+		cameraPosition.x = position.x;
+		cameraPosition.y = position.y + 30f;
+		cameraPosition.z = position.z - 5f;
+		camera.transform.position = cameraPosition;
 	}
 }

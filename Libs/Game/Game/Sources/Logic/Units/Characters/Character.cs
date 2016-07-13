@@ -69,6 +69,20 @@ namespace Game.Logics.Characters
 			TotalHP = HP = CurrentLevel.HP;
 		}
 
+		protected override int ComputeDamage(int damageValue)
+		{
+			var damage = base.ComputeDamage(damageValue);
+
+			damage -= (int)(damage * CurrentLevel.Armor);
+
+			if (damage < 0)
+			{
+				damage = 0;
+			}
+
+			return damage;
+		}
+
 		protected override void Update(float dt)
 		{
 			base.Update(dt);
@@ -116,7 +130,7 @@ namespace Game.Logics.Characters
 			var targetDistance = 1f;
 			if (targetUnit != null)
 			{
-				targetDistance = (targetUnit.Team != Team ? CurrentLevel.AttackRange : 0f) + 
+				targetDistance = (targetUnit.Team != Team ? CurrentLevel.AttackRange : 0f) +
 					(targetUnit is MoveTarget ? 0f : targetUnit.Descriptor.Size + Descriptor.Size);
 			}
 			else if (map.Fountain.Team == Team)
@@ -147,8 +161,17 @@ namespace Game.Logics.Characters
 				{
 					if (attackCooldown <= 0f && !targetUnit.IsImmortal)
 					{
-						targetUnit.TakeDamage(CurrentLevel.Attack);
 						attackCooldown = 1f / CurrentLevel.AttackSpeed;
+						if (targetUnit.TakeDamage(CurrentLevel.Attack))
+						{
+							var targetMob = targetUnit as Mob;
+							if (targetMob != null && map.Fountain.Hero != null && Team == map.Fountain.Team)
+							{
+								var mobLevel = targetMob.Descriptor.Levels[targetMob.Level];
+								map.Fountain.Hero.AddXP(mobLevel.XP);
+								//mobLevel.Gold
+							}
+						}
 					}
 				}
 			}

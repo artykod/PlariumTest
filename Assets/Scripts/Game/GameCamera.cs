@@ -10,12 +10,12 @@ public class GameCamera : MonoBehaviour
 	}
 
 	private const float LERP_SPEED = 0.1f;
-	private const float CAMERA_OFFSET = 5f;
+	private const float CAMERA_OFFSET = 7f;
 
 	private Modes mode = Modes.FollowMainCharacter;
 	private Vector3 startPosition;
 	private float zoom = 0f;
-	private float zoomMinMax = 10f;
+	private float zoomMinMax = 15f;
 	private GameController gameController;
 
 	public Modes Mode

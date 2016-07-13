@@ -1,4 +1,6 @@
-﻿namespace Game.Logics
+﻿using System;
+
+namespace Game.Logics
 {
 	using Descriptors;
 
@@ -9,7 +11,8 @@
 		private Vec2 direction;
 		private bool isSelected;
 
-		public event System.Action<Unit, bool> OnSelection;
+		public event Action<Unit, bool> OnSelection;
+		public event Action<int, int> OnLevelChanged;
 
 		public Vec2 Position
 		{
@@ -120,16 +123,20 @@
 			Team = team;
 		}
 
-		public void TakeDamage(int damageValue)
+		public bool TakeDamage(int damageValue)
 		{
 			if (!IsImmortal)
 			{
-				HP -= ComputeDamage(damageValue);
+				var damage = ComputeDamage(damageValue);
+				HP -= damage;
 				if (HP <= 0)
 				{
 					Destroy();
+					return true;
 				}
 			}
+
+			return false;
 		}
 
 		public void Heal(int healValue)
@@ -162,6 +169,11 @@
 		protected virtual void LevelChanged(int previousLevel, int newLevel)
 		{
 			Velocity = Descriptor.UnitLevels[Level].Speed;
+
+			if (previousLevel != newLevel)
+			{
+				OnLevelChanged.SafeInvoke(previousLevel, newLevel);
+			}
 		}
 	}
 }

@@ -28,9 +28,9 @@ public class UIProgressBar : MonoBehaviour
 
 	public void SetValue(int current, int total)
 	{
-		var progress = (float)current / total;
+		var progress = total > 0 ? (float)current / total : 1f;
 		progressBar.normalizedValue = progress;
-		valueText.text = string.Format("{0}/{1}", current, total);
+		valueText.text = total > 0 ? string.Format("{0}/{1}", current, total) : "Maximum";
 	}
 
 	protected virtual void Awake()

@@ -50,8 +50,6 @@
 				{
 					if (Level + 1 < Descriptor.Levels.Length)
 					{
-						Debug.Log("Next wave");
-
 						Level++;
 						waveTime = 25f;
 					}

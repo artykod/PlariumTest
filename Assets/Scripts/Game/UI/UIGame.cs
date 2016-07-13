@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Game.Logics;
 using Game.Logics.Characters;
+using Game.Logics.Buildings;
 using System.Collections.Generic;
 
 public class UIGame : MonoBehaviour
@@ -25,8 +26,11 @@ public class UIGame : MonoBehaviour
 	private UIXpBar xpBar;
 	[SerializeField]
 	private GameObject enemyMarker;
+	[SerializeField]
+	private UIBarracksUpgradePanel barracksUpgradePanel;
 
 	private Dictionary<Unit, UnitUI> unitsUI = new Dictionary<Unit, UnitUI>();
+	private Dictionary<Barracks, UIBarracksUpgradePanel> barracksUI = new Dictionary<Barracks, UIBarracksUpgradePanel>();
 
 	private void Start()
 	{
@@ -40,20 +44,32 @@ public class UIGame : MonoBehaviour
 		if (unit != null && !unit.IsImmortal)
 		{
 			var hp = Instantiate(hpBar);
-			hp.transform.SetParent(transform, false);
+			hp.transform.DropTo(transform);
+			hp.transform.SetAsFirstSibling();
 
 			var xp = default(UIProgressBar);
 			if (unit is Hero)
 			{
 				xp = Instantiate(xpBar);
-				xp.transform.SetParent(transform, false);
+				xp.transform.DropTo(transform);
+				xp.transform.SetAsFirstSibling();
 			}
 
 			var marker = Instantiate(enemyMarker);
-			marker.transform.SetParent(transform, false);
+			marker.transform.DropTo(transform);
+			marker.transform.SetAsFirstSibling();
 			marker.gameObject.SetActive(false);
 
 			unitsUI[unit] = new UnitUI(hp, xp, marker);
+		}
+
+		var minionBarracks = logic as MinionBarracks;
+		if (minionBarracks != null)
+		{
+			var barracksPanel = Instantiate(barracksUpgradePanel);
+			barracksPanel.DropTo(transform);
+			barracksUI[minionBarracks] = barracksPanel;
+			barracksPanel.Logic = minionBarracks;
 		}
 	}
 
@@ -80,6 +96,17 @@ public class UIGame : MonoBehaviour
 				unitsUI.Remove(unit);
 			}
 		}
+
+		var barracks = logic as Barracks;
+		if (barracks != null)
+		{
+			var ui = default(UIBarracksUpgradePanel);
+			if (barracksUI.TryGetValue(barracks, out ui))
+			{
+				Destroy(ui.gameObject);
+				barracksUI.Remove(barracks);
+			}
+		}
 	}
 
 	private void Update()
@@ -95,6 +122,12 @@ public class UIGame : MonoBehaviour
 			{
 				ui.hp.transform.position = barsPos;
 				ui.hp.SetValue(unit.HP, unit.TotalHP);
+			}
+
+			if (ui.xp != null && unit is Hero)
+			{
+				var hero = unit as Hero;
+				ui.xp.SetValue(hero.XP, hero.TotalXP);
 			}
 
 			if (ui.xp != null)
@@ -118,7 +151,7 @@ public class UIGame : MonoBehaviour
 		}
 	}
 
-	private Vector3 UnitWorldToScreen(Unit unit, float offsetY)
+	public static Vector3 UnitWorldToScreen(Unit unit, float offsetY)
 	{
 		return Camera.main.WorldToScreenPoint(new Vector3(unit.Position.x, offsetY, unit.Position.y));
 	}

@@ -11,6 +11,8 @@ namespace Game.Logics.Buildings
 		private Descriptor heroDescriptor;
 		private float respawnTime;
 		private float healTime;
+		private int lastHeroLevel;
+		private int lastHeroXP;
 
 		public new FountainDescriptor Descriptor
 		{
@@ -42,12 +44,16 @@ namespace Game.Logics.Buildings
 			Hero.AttachToTeam(Team);
 			Hero.Position = Position + Vec2.FromAngle(GameRandom.Range(0f, 360f)) * (Hero.Descriptor.Size + Descriptor.Size);
 			Hero.OnDestroy += OnHeroDie;
+			Hero.Level = lastHeroLevel;
+			Hero.AddXP(lastHeroXP);
 		}
 
 		private void OnHeroDie(Logic logic)
 		{
 			if (logic == Hero)
 			{
+				lastHeroLevel = Hero.Level;
+				lastHeroXP = Hero.XP;
 				respawnTime = Hero.Descriptor.Levels[Hero.Level].RespawnTime;
 				Hero.OnDestroy -= OnHeroDie;
 				Hero = null;

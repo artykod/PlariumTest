@@ -3,10 +3,20 @@ using Game.Logics;
 
 [PathInResources(Constants.Paths.Views.ALL)]
 public class View : MonoBehaviour {
+	private ComponentCache<Transform> cacheTransform;
+
 	public Logic Logic
 	{
 		get;
 		private set;
+	}
+
+	public new Transform transform
+	{
+		get
+		{
+			return cacheTransform.GetCache(gameObject);
+		}
 	}
 
 	protected virtual void Awake()
