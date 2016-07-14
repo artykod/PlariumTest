@@ -1,4 +1,6 @@
-﻿public class UIButtonCameraModeSwitch : UIButton
+﻿using UnityEngine;
+
+public class UIButtonCameraModeSwitch : UIButton
 {
 	protected override void Start()
 	{
@@ -34,8 +36,16 @@
 			var camera = Core.Instance.Camera;
 			if (camera != null)
 			{
-				Text = "Camera: " + camera.Mode.ToString();
+				Text = "Camera: " + camera.Mode.ToString() + "\nHotkey: SPACE";
 			}
+		}
+	}
+
+	private void Update()
+	{
+		if (Input.GetKeyDown(KeyCode.Space))
+		{
+			OnClickHandler();
 		}
 	}
 }
