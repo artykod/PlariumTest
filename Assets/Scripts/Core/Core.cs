@@ -61,9 +61,10 @@ public class Core : MonoBehaviour
 		instance = this;
 
 		DebugImpl.Instance = new DebugUnity();
-		DebugConsole.Instance.Create();
 		TimeControllerImpl.Instance = new TimeControllerUnity();
 		StorageImpl.Instance = new StorageUnity();
+
+		DebugConsole.Instance.Create();
 
 		gameController = new GameController(new Loader().LoadDescriptorsFromGameResources(Constants.Paths.Descriptors.ALL));
 		gameController.OnLogicCreate += OnLogicCreate;

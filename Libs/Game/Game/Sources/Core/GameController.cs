@@ -269,6 +269,7 @@ namespace Game
 					justCreatedLogics.Clear();
 				}
 
+				// TODO оптимизацию с разбиением
 				foreach (var i in allLogics)
 				{
 					foreach (var j in allLogics)
