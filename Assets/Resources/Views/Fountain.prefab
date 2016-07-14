@@ -161,6 +161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f5fd18f9d92012459bbf40eca010808, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  poolCapacity: 1
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -186,6 +187,10 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: poolCapacity
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

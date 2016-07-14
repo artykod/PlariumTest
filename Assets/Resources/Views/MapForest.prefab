@@ -81,6 +81,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e923f4738f03c624f8c587bf20676531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  poolCapacity: 1
 --- !u!154 &15401278
 TerrainCollider:
   m_ObjectHideFlags: 1
@@ -128,7 +129,11 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: poolCapacity
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 166378}

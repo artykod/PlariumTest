@@ -3487,6 +3487,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9aefed2a27faaa4b9ea4b5b47729ccd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  poolCapacity: 10
 --- !u!137 &13734176
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
@@ -3724,6 +3725,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_LocalScale.z
       value: .75
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: poolCapacity
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

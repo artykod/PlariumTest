@@ -1,4 +1,5 @@
-﻿public class BuildingView : UnitView {
+﻿public class BuildingView : UnitView
+{
 	protected override void Start()
 	{
 		base.Start();

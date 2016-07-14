@@ -2,6 +2,8 @@
 
 public class PrefabTool
 {
+	private static ObjectPool objectPool = new ObjectPool();
+
 	public static T CreateInstance<T>(System.Type prefabType, string prefabName = null) where T : Object
 	{
 		var prefabPath = prefabType.GetAttribute<PathInResources>();
@@ -15,7 +17,18 @@ public class PrefabTool
 			var prefab = Resources.Load(prefabPath.Path + prefabName, typeof(T));
 			if (prefab != null)
 			{
-				var instance = Object.Instantiate(prefab);
+				var instance = default(Object);
+
+				if (prefab is PoolableObject)
+				{
+					var poolablePrefab = prefab as PoolableObject;
+					instance = objectPool.Get(poolablePrefab, prefabName);
+				}
+				else
+				{
+					instance = Object.Instantiate(prefab);
+				}
+
 				if (instance is PrefabLinker)
 				{
 					var obj = (instance as PrefabLinker).CreatedInstance;

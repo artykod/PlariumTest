@@ -2,7 +2,8 @@
 using Game.Logics;
 
 [PathInResources(Constants.Paths.Views.ALL)]
-public class View : MonoBehaviour {
+public class View : PoolableObject
+{
 	private ComponentCache<Transform> cacheTransform;
 
 	public Logic Logic

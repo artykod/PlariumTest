@@ -2,7 +2,8 @@
 using Game.Logics;
 using Game.Logics.Characters;
 
-public class UnitView : View {
+public class UnitView : View
+{
 	protected UnitSelection selection;
 
 	public new Unit Logic

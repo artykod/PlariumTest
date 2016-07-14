@@ -135,8 +135,7 @@ public class Core : MonoBehaviour
 			var map = logic as Map;
 			viewId = map.Descriptor.ViewId;
 		}
-
-		// TODO add instances pool
+		
 		var view = PrefabTool.CreateInstance<View>(viewId);
 		if (view != null)
 		{
@@ -152,7 +151,7 @@ public class Core : MonoBehaviour
 			View view = null;
 			if (logicToViewMap.TryGetValue(logic, out view))
 			{
-				Destroy(view.gameObject);
+				view.ReturnToPool();
 				logicToViewMap.Remove(logic);
 			}
 		}
