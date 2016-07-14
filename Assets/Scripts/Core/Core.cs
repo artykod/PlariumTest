@@ -98,7 +98,7 @@ public class Core : MonoBehaviour
 			{
 				UIDialogGameMenu.Show().Build("Main menu", "")
 					.AddButton("Surrender", GameController.Surrender)
-					.AddButton("Settings", () => UIDialogText.Show().Build("Not implemented", "").AddButton("OK"))
+					.AddButton("Add 1000 gold", () => GameController.GameProgress.AddGold(1000))
 					.AddButton("Clear all progress and quit", ClearAllProgressAndQuit)
 					.AddButton("Quit", Application.Quit);
 			}

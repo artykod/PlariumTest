@@ -32,6 +32,16 @@ public class UIBarracksUpgradePanel : MonoBehaviour
 		Refresh();
 	}
 
+	private void Awake()
+	{
+		Core.Instance.GameController.GameProgress.OnGoldChanged += OnGoldChanged;
+	}
+
+	private void OnGoldChanged(int newGold)
+	{
+		Refresh();
+	}
+
 	private void Start()
 	{
 		upgradeButton.OnClick += OnUpgradeClicked;
@@ -41,7 +51,7 @@ public class UIBarracksUpgradePanel : MonoBehaviour
 	{
 		if (Logic != null)
 		{
-			transform.position = UIGame.UnitWorldToScreen(Logic, 1.5f);
+			transform.position = UIGame.UnitWorldToScreen(Logic, 2.5f);
 		}
 	}
 
@@ -52,10 +62,11 @@ public class UIBarracksUpgradePanel : MonoBehaviour
 			var isMaxLevel = Logic.Level == Logic.Descriptor.Levels.Length - 1;
 			if (!isMaxLevel)
 			{
-				// TODO check coins and decrease after lvl up
-				//var nextLevelCost = Logic.Descriptor.Levels[Logic.Level + 1];
-
-				Logic.Level++;
+				var lvlUpCost = Logic.Descriptor.Levels[Logic.Level + 1].CostOfObtain;
+				if (lvlUpCost > 0 && Core.Instance.GameController.GameProgress.Buy(lvlUpCost))
+				{
+					Logic.Level++;
+				}
 			}
 		}
 	}
@@ -68,10 +79,12 @@ public class UIBarracksUpgradePanel : MonoBehaviour
 
 		if (Logic != null)
 		{
-			level = "Level " + (Logic.Level + 1);
 			var isMaxLevel = Logic.Level == Logic.Descriptor.Levels.Length - 1;
-			isButtonEnabled = !isMaxLevel;
-			nextLevelCost = isMaxLevel ? "Maximum level" : Logic.Descriptor.Levels[Logic.Level + 1].CostOfObtain + " gold for next lvl";
+			var costOfObtain = isMaxLevel ? -1 : Logic.Descriptor.Levels[Logic.Level + 1].CostOfObtain;
+
+			level = "Level " + (Logic.Level + 1);
+			isButtonEnabled = !isMaxLevel && Core.Instance.GameController.GameProgress.Gold >= costOfObtain;
+			nextLevelCost = isMaxLevel ? "Maximum level" : costOfObtain + " gold to lvl up";
 		}
 
 		levelText.text = level;
