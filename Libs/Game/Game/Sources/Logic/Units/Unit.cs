@@ -178,12 +178,17 @@ namespace Game.Logics
 
 		protected virtual void LevelChanged(int previousLevel, int newLevel)
 		{
-			Velocity = Descriptor.Levels[Level].Speed;
+			UpdateStats();
 
 			if (previousLevel != newLevel)
 			{
 				OnLevelChanged.SafeInvoke(previousLevel, newLevel);
 			}
+		}
+
+		protected virtual void UpdateStats()
+		{
+			Velocity = Descriptor.Levels[Level].Speed;
 		}
 	}
 }

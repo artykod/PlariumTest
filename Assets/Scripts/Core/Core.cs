@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Game;
 using Game.Logics;
@@ -64,6 +63,7 @@ public class Core : MonoBehaviour
 		DebugImpl.Instance = new DebugUnity();
 		DebugConsole.Instance.Create();
 		TimeControllerImpl.Instance = new TimeControllerUnity();
+		StorageImpl.Instance = new StorageUnity();
 
 		gameController = new GameController(new Loader().LoadDescriptorsFromGameResources(Constants.Paths.Descriptors.ALL));
 		gameController.OnLogicCreate += OnLogicCreate;
@@ -98,6 +98,7 @@ public class Core : MonoBehaviour
 				UIDialogGameMenu.Show().Build("Main menu", "")
 					.AddButton("Surrender", GameController.Surrender)
 					.AddButton("Settings", () => UIDialogText.Show().Build("Not implemented", "").AddButton("OK"))
+					.AddButton("Clear all progress and quit", ClearAllProgressAndQuit)
 					.AddButton("Quit", Application.Quit);
 			}
 			else if (UIDialogGameMenu.CurrentInstance != null)
@@ -110,6 +111,13 @@ public class Core : MonoBehaviour
 	private void OnDestroy()
 	{
 		instance = null;
+	}
+
+	private void ClearAllProgressAndQuit()
+	{
+		PlayerPrefs.DeleteAll();
+		PlayerPrefs.Save();
+		Application.Quit();
 	}
 
 	private void OnLogicCreate(Logic logic)
@@ -127,6 +135,7 @@ public class Core : MonoBehaviour
 			viewId = map.Descriptor.ViewId;
 		}
 
+		// TODO add instances pool
 		var view = PrefabTool.CreateInstance<View>(viewId);
 		if (view != null)
 		{
@@ -147,44 +156,4 @@ public class Core : MonoBehaviour
 			}
 		}
 	}
-
-	#region Editor tools
-
-#if UNITY_EDITOR
-	static Core()
-	{
-		DebugImpl.Instance = new DebugUnity();
-	}
-
-	[UnityEditor.MenuItem("Tools/Copy descriptors from lib project")]
-	private static void CopyDescriptorsDataFromLibProject()
-	{
-		var inAssetsPath = Application.dataPath + @"/Resources/DescriptorsData";
-		var inLibPath = Application.dataPath + @"/../Libs/Game/ConsoleTest/TestJsonData";
-
-		Debug.Log("Copy descriptors data from {0} to {1}", inLibPath, inAssetsPath);
-
-		if (Directory.Exists(inAssetsPath))
-		{
-			Directory.Delete(inAssetsPath, true);
-		}
-
-		foreach (string dirPath in Directory.GetDirectories(inLibPath, "*", SearchOption.AllDirectories))
-		{
-			Directory.CreateDirectory(dirPath.Replace(inLibPath, inAssetsPath));
-		}
-
-		foreach (string newPath in Directory.GetFiles(inLibPath, "*.*", SearchOption.AllDirectories))
-		{
-			File.Copy(newPath, newPath.Replace(inLibPath, inAssetsPath), true);
-		}
-
-		UnityEditor.AssetDatabase.Refresh();
-		UnityEditor.AssetDatabase.SaveAssets();
-
-		Debug.Log("Copy done.");
-	}
-#endif
-
-	#endregion
 }

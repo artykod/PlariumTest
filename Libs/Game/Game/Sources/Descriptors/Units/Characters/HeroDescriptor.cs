@@ -2,6 +2,8 @@
 
 namespace Game.Descriptors.Characters
 {
+	using Abilities;
+
 	public class HeroDescriptor : CharacterDescriptor
 	{
 		public new class Level : CharacterDescriptor.Level
@@ -28,9 +30,34 @@ namespace Game.Descriptors.Characters
 			private set;
 		}
 
+		[JsonProperty]
+		private string[] AbilitiesIds
+		{
+			get;
+			set;
+		}
+
+		[JsonIgnore]
+		public AbilityDescriptor[] Abilities
+		{
+			get;
+			private set;
+		}
+
 		protected override T[] GetLevelsImpl<T>()
 		{
 			return Levels as T[];
+		}
+
+		public override void PostInit()
+		{
+			base.PostInit();
+
+			Abilities = new AbilityDescriptor[AbilitiesIds.Length];
+			for (int i = 0; i < Abilities.Length; i++)
+			{
+				Abilities[i] = GameController.FindDescriptorById<AbilityDescriptor>(AbilitiesIds[i]);
+			}
 		}
 	}
 }

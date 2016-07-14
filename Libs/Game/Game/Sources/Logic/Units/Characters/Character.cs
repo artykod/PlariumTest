@@ -172,7 +172,7 @@ namespace Game.Logics.Characters
 							{
 								var mobLevel = targetMob.Descriptor.Levels[targetMob.Level];
 								map.Fountain.Hero.AddXP(mobLevel.XP);
-								//mobLevel.Gold
+								GameController.GameProgress.AddGold(mobLevel.Gold);
 							}
 						}
 					}

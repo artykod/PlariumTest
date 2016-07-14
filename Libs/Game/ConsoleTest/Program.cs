@@ -43,6 +43,9 @@ namespace ConsoleTest
 					"Units/Characters/MobWarrior.json",
 					"Units/Characters/MobBoss.json",
 
+					"Units/Characters/Abilities/IceBolt.json",
+					"Units/Characters/Abilities/MeteorShower.json",
+
 					"Maps/Forest.json",
 				};
 

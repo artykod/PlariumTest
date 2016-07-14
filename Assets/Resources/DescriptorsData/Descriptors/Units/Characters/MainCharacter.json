@@ -42,5 +42,9 @@
       "TargetXP": 1000,
       "RespawnTime": 1
     }
+  ],
+  "AbilitiesIds": [
+    "ability.ice_bolt",
+    "ability.meteor_shower"
   ]
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Game
 {
@@ -9,6 +10,8 @@ namespace Game
 
 	public class GameController : BaseController
 	{
+		private const string GAME_PROGRESS_KEY = "gameProgress";
+
 		private Dictionary<string, Descriptor> descriptors = new Dictionary<string, Descriptor>();
 		private List<Logic> justCreatedLogics = new List<Logic>();
 		private LinkedList<Logic> allLogics = new LinkedList<Logic>();
@@ -41,6 +44,12 @@ namespace Game
 			}
 		}
 
+		public GameProgress GameProgress
+		{
+			get;
+			private set;
+		}
+
 		public GameController(string[] descriptorsFilesContent)
 		{
 			foreach (var content in descriptorsFilesContent)
@@ -59,6 +68,7 @@ namespace Game
 					Debug.LogException(e);
 				}
 			}
+
 			foreach (var desc in descriptors)
 			{
 				try
@@ -70,6 +80,27 @@ namespace Game
 					Debug.LogException(e);
 				}
 			}
+
+			LoadProgress();
+		}
+
+		public void LoadProgress()
+		{
+			var data = Storage.LoadValueByKey(GAME_PROGRESS_KEY);
+			if (!string.IsNullOrEmpty(data))
+			{
+				GameProgress = JsonConvert.DeserializeObject<GameProgress>(data);
+			}
+			else
+			{
+				GameProgress = new GameProgress();
+			}
+		}
+
+		public void SaveProgress()
+		{
+			var data = JsonConvert.SerializeObject(GameProgress);
+			Storage.SaveValueByKey(GAME_PROGRESS_KEY, data);
 		}
 
 		public T FindDescriptorById<T>(string descriptorId) where T : Descriptor
@@ -130,6 +161,8 @@ namespace Game
 			IsBattleStarted = false;
 			Stop();
 			OnGameEnd.SafeInvoke(isPlayerWin);
+
+			SaveProgress();
 		}
 
 		public void ForEachLogic<T>(Func<T, bool> func) where T : Logic

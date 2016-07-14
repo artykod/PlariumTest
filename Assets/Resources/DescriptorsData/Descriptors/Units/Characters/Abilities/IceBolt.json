@@ -1,0 +1,41 @@
+﻿{
+  "ClassId": "Abilities.Ability",
+  "LogicId": "Abilities.Ability",
+  "Id": "ability.ice_bolt",
+  "Name": "Ice Bolt",
+  "Description": "",
+  "ViewId": "IceBolt",
+  "IconId": "IceBolt",
+  "Levels": [
+    {
+      "Radius": 5,
+      "Cooldown": 5,
+      "Modificators": [
+        {
+          "Kind": "HP",
+          "Type": "Add",
+          "Trigger": "Now",
+          "TriggerTime": 0,
+          "AffectedUnit": "Enemy",
+          "Value": -10
+        },
+        {
+          "Kind": "Speed",
+          "Type": "Percent",
+          "Trigger": "During",
+          "TriggerTime": 5,
+          "AffectedUnit": "Enemy",
+          "Value": -0.1
+        },
+        {
+          "Kind": "AttackSpeed",
+          "Type": "Percent",
+          "Trigger": "During",
+          "TriggerTime": 5,
+          "AffectedUnit": "Enemy",
+          "Value": -0.1
+        }
+      ]
+    }
+  ]
+}
