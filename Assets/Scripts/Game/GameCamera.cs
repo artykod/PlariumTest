@@ -48,7 +48,7 @@ public class GameCamera : MonoBehaviour
 			var position = transform.position;
 			var direction = Vector3.zero;
 			var mousePosition = Input.mousePosition;
-			var screenMoveLimit = 100f;
+			var screenMoveLimit = 10f;
 
 			if (Input.GetKey(KeyCode.A) || mousePosition.x < screenMoveLimit)
 			{
