@@ -23,7 +23,6 @@ namespace Game.Descriptors.Abilities
 		{
 			Now,
 			During,
-			Delay,
 		}
 
 		public enum AffectedUnits

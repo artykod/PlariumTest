@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Game.Logics.Characters
 {
 	using Descriptors;
+	using Descriptors.Abilities;
 	using Maps;
 
 	public abstract class Character : Unit
@@ -40,6 +42,24 @@ namespace Game.Logics.Characters
 		private float directionOffsetLerp;
 		private bool needAutoSearchTarget;
 
+		public float Armor
+		{
+			get;
+			private set;
+		}
+
+		public int Attack
+		{
+			get;
+			private set;
+		}
+
+		public float AttackSpeed
+		{
+			get;
+			private set;
+		}
+
 		public Character(GameController gameController, Descriptor descriptor) : base(gameController, descriptor)
 		{
 			map = GameController.Map;
@@ -67,16 +87,46 @@ namespace Game.Logics.Characters
 
 		protected override void LevelChanged(int previousLevel, int newLevel)
 		{
-			base.LevelChanged(previousLevel, newLevel);
-
 			TotalHP = HP = CurrentLevel.HP;
+
+			base.LevelChanged(previousLevel, newLevel);
+		}
+
+		protected override void UpdateStats()
+		{
+			base.UpdateStats();
+
+			var originalArmor = CurrentLevel.Armor;
+			var originalAttack = CurrentLevel.Attack;
+			var originalAttackSpeed = CurrentLevel.AttackSpeed;
+
+			Armor = originalArmor;
+			Attack = originalAttack;
+			AttackSpeed = originalAttackSpeed;
+
+			foreach (var i in modificators)
+			{
+				switch (i.Modificator.Kind)
+				{
+				case Modificator.Kinds.Armor:
+					Armor = ModifyValue(originalArmor, i.Modificator);
+					break;
+				case Modificator.Kinds.Attack:
+					Attack = (int)ModifyValue(originalAttack, i.Modificator);
+					break;
+				case Modificator.Kinds.AttackSpeed:
+					AttackSpeed = ModifyValue(originalAttackSpeed, i.Modificator);
+					break;
+				}
+			}
+			
 		}
 
 		protected override int ComputeDamage(int damageValue)
 		{
 			var damage = base.ComputeDamage(damageValue);
 
-			damage -= (int)(damage * CurrentLevel.Armor);
+			damage -= (int)(damage * Armor);
 
 			if (damage < 0)
 			{
@@ -164,8 +214,8 @@ namespace Game.Logics.Characters
 				{
 					if (attackCooldown <= 0f && !targetUnit.IsImmortal)
 					{
-						attackCooldown = 1f / CurrentLevel.AttackSpeed;
-						if (targetUnit.TakeDamage(CurrentLevel.Attack))
+						attackCooldown = 1f / AttackSpeed;
+						if (targetUnit.TakeDamage(Attack))
 						{
 							var targetMob = targetUnit as Mob;
 							if (targetMob != null && map.Fountain.Hero != null && Team == map.Fountain.Team)

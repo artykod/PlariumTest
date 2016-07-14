@@ -14,26 +14,26 @@
         {
           "Kind": "HP",
           "Type": "Add",
+          "Value": -10,
           "Trigger": "Now",
           "TriggerTime": 0,
-          "AffectedUnit": "Enemy",
-          "Value": -10
+          "AffectedUnit": "Enemy"
         },
         {
           "Kind": "Speed",
           "Type": "Percent",
+          "Value": 0.1,
           "Trigger": "During",
-          "TriggerTime": 5,
-          "AffectedUnit": "Enemy",
-          "Value": -0.1
+          "TriggerTime": 1,
+          "AffectedUnit": "Enemy"
         },
         {
           "Kind": "AttackSpeed",
           "Type": "Percent",
+          "Value": 0.1,
           "Trigger": "During",
-          "TriggerTime": 5,
-          "AffectedUnit": "Enemy",
-          "Value": -0.1
+          "TriggerTime": 1,
+          "AffectedUnit": "Enemy"
         }
       ]
     }

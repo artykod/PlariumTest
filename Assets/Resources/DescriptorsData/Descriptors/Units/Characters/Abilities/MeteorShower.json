@@ -14,10 +14,10 @@
         {
           "Kind": "HP",
           "Type": "Add",
+          "Value": -26,
           "Trigger": "Now",
           "TriggerTime": 0,
-          "AffectedUnit": "Enemy",
-          "Value": -50
+          "AffectedUnit": "Enemy"
         }
       ]
     }

@@ -3,6 +3,8 @@ using UnityEngine;
 using Game;
 using Game.Logics;
 using Game.Logics.Maps;
+using Game.Logics.Characters;
+using Game.Descriptors.Abilities;
 
 public class Core : MonoBehaviour
 {
@@ -100,11 +102,37 @@ public class Core : MonoBehaviour
 					.AddButton("Surrender", GameController.Surrender)
 					.AddButton("Add 1000 gold", () => GameController.GameProgress.AddGold(1000))
 					.AddButton("Clear all progress and quit", ClearAllProgressAndQuit)
-					.AddButton("Quit", Application.Quit);
+					.AddButton("Quit", Application.Quit)
+					.AddButton("Apply Meteor Shower to all enemies", () => ApplyAbilityToMobs("ability.meteor_shower"))
+					.AddButton("Apply Ice Bolt to all enemies", () => ApplyAbilityToMobs("ability.ice_bolt"));
 			}
 			else if (UIDialogGameMenu.CurrentInstance != null)
 			{
 				UIDialogGameMenu.CurrentInstance.Close();
+			}
+		}
+	}
+
+	private void ApplyAbilityToMobs(string abilityId)
+	{
+		var ability = GameController.FindDescriptorById<AbilityDescriptor>(abilityId);
+		var modificators = ability.Levels[0].Modificators;
+		var mobs = new LinkedList<Mob>();
+
+		GameController.ForEachLogic<Mob>(mob =>
+		{
+			if (mob.Team != GameController.Map.Fountain.Team)
+			{
+				mobs.AddLast(mob);
+			}
+			return false;
+		});
+
+		foreach (var mob in mobs)
+		{
+			for (int i = 0; i < modificators.Length; i++)
+			{
+				mob.AddModificator(modificators[i]);
 			}
 		}
 	}

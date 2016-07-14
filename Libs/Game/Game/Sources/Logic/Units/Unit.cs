@@ -1,15 +1,36 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Game.Logics
 {
 	using Descriptors;
+	using Descriptors.Abilities;
 
 	public abstract class Unit : Logic
 	{
+		protected class ModificatorData {
+			public Modificator Modificator
+			{
+				get;
+				private set;
+			}
+			public float Time
+			{
+				get;
+				set;
+			}
+			public ModificatorData(Modificator modificator)
+			{
+				Modificator = modificator;
+				Time = modificator.Trigger == Modificator.Triggers.Now ? 0f : modificator.TriggerTime;
+			}
+		}
+
 		private TimeController.Coroutine updater;
 		protected int currentLevel;
 		private Vec2 direction;
 		private bool isSelected;
+		protected List<ModificatorData> modificators = new List<ModificatorData>();
 
 		public event Action<Unit, bool> OnSelection;
 		public event Action<int, int> OnLevelChanged;
@@ -133,19 +154,20 @@ namespace Game.Logics
 			Team = team;
 		}
 
+		public void AddModificator(Modificator modificator)
+		{
+			modificators.Add(new ModificatorData(modificator));
+			UpdateStats();
+		}
+
 		public bool TakeDamage(int damageValue)
 		{
 			if (!IsImmortal)
 			{
 				var damage = ComputeDamage(damageValue);
 				HP -= damage;
-				if (HP <= 0)
-				{
-					Destroy();
-					return true;
-				}
+				return CheckHP();
 			}
-
 			return false;
 		}
 
@@ -174,6 +196,23 @@ namespace Game.Logics
 			{
 				Position += Direction * Velocity * dt;
 			}
+
+			var modificatorsChanged = false;
+			for (int i = 0; i < modificators.Count; i++)
+			{
+				var modificator = modificators[i];
+				modificator.Time -= dt;
+				if (modificator.Time <= 0f)
+				{
+					modificators.RemoveAt(i);
+					modificatorsChanged = true;
+					i--;
+				}
+			}
+			if (modificatorsChanged)
+			{
+				UpdateStats();
+			}
 		}
 
 		protected virtual void LevelChanged(int previousLevel, int newLevel)
@@ -188,7 +227,52 @@ namespace Game.Logics
 
 		protected virtual void UpdateStats()
 		{
-			Velocity = Descriptor.Levels[Level].Speed;
+			var originalVelocity = Descriptor.Levels[Level].Speed;
+
+			Velocity = originalVelocity;
+
+			foreach (var i in modificators)
+			{
+				switch (i.Modificator.Kind)
+				{
+				case Modificator.Kinds.Speed:
+					Velocity = ModifyValue(originalVelocity, i.Modificator);
+					break;
+				case Modificator.Kinds.HP:
+					if (!IsImmortal)
+					{
+						HP = (int)ModifyValue(HP, i.Modificator);
+					}
+					break;
+				}
+			}
+
+			CheckHP();
+		}
+
+		protected float ModifyValue(float originalValue, Modificator modificator)
+		{
+			switch (modificator.Type)
+			{
+			case Modificator.Types.Add:
+				originalValue += modificator.Value;
+				break;
+			case Modificator.Types.Percent:
+				originalValue = originalValue * modificator.Value;
+				break;
+			}
+
+			return originalValue;
+		}
+
+		private bool CheckHP()
+		{
+			if (!IsImmortal && HP <= 0)
+			{
+				Destroy();
+				return true;
+			}
+			return false;
 		}
 	}
 }
