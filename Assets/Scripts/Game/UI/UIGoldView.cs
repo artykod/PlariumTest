@@ -3,12 +3,7 @@ using UnityEngine.UI;
 
 public class UIGoldView : MonoBehaviour
 {
-	private Text text;
-
-	private void Awake()
-	{
-		text = GetComponent<Text>();
-	}
+	private ComponentCache<Text> text;
 
 	private void Start()
 	{
@@ -18,6 +13,6 @@ public class UIGoldView : MonoBehaviour
 
 	private void OnGoldChanged(int gold)
 	{
-		text.text = "Gold: " + gold;
+		text.GetCache(gameObject).text = "Gold: " + gold;
 	}
 }
