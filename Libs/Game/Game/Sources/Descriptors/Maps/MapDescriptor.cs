@@ -89,6 +89,13 @@ namespace Game.Descriptors
 			private set;
 		}
 
+		[JsonProperty]
+		public float DelayBeforeGame
+		{
+			get;
+			private set;
+		}
+
 		public override void PostInit()
 		{
 			base.PostInit();

@@ -13,7 +13,7 @@
       "Armor": 0.1,
       "Attack": 10,
       "AttackSpeed": 1.5,
-      "Speed": 1.5,
+      "Speed": 3,
       "AttackRange": 0.5,
       "TargetXP": 100,
       "RespawnTime": 3
@@ -25,7 +25,7 @@
       "Armor": 0.2,
       "Attack": 15,
       "AttackSpeed": 2,
-      "Speed": 1.75,
+      "Speed": 3.25,
       "AttackRange": 0.8,
       "TargetXP": 500,
       "RespawnTime": 2
@@ -37,7 +37,7 @@
       "Armor": 0.3,
       "Attack": 20,
       "AttackSpeed": 3,
-      "Speed": 2,
+      "Speed": 3.5,
       "AttackRange": 1,
       "TargetXP": 1000,
       "RespawnTime": 1

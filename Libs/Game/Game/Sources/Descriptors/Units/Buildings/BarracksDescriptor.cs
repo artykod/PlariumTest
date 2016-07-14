@@ -4,8 +4,46 @@ namespace Game.Descriptors.Buildings
 {
 	using Characters;
 
-	public class BarracksDescriptor : BuildingGenericDescriptor<BarracksLevel>
+	public abstract class BarracksDescriptor : BuildingDescriptor
 	{
+		public new class Level : BuildingDescriptor.Level
+		{
+			[JsonProperty]
+			public float UnitsPerSecond
+			{
+				get;
+				private set;
+			}
+
+			[JsonProperty]
+			private int LevelOfUnits
+			{
+				get;
+				set;
+			}
+
+			[JsonIgnore]
+			public MobDescriptor.Level MobsLevel
+			{
+				get;
+				private set;
+			}
+
+			public void PostInit(BarracksDescriptor barracks)
+			{
+				MobsLevel = barracks.Unit.Levels[LevelOfUnits - 1];
+			}
+		}
+
+		[JsonIgnore]
+		public new Level[] Levels
+		{
+			get
+			{
+				return GetLevelsImpl<Level>();
+			}
+		}
+
 		[JsonProperty]
 		private string UnitId
 		{
@@ -31,34 +69,10 @@ namespace Game.Descriptors.Buildings
 				i.PostInit(this);
 			}
 		}
-	}
 
-	public class BarracksLevel : BuildingLevel
-	{
-		[JsonProperty]
-		public float UnitsPerSecond
+		protected override T[] GetLevelsImpl<T>()
 		{
-			get;
-			private set;
-		}
-
-		[JsonProperty]
-		private int LevelOfUnits
-		{
-			get;
-			set;
-		}
-
-		[JsonIgnore]
-		public MobLevel MobsLevel
-		{
-			get;
-			private set;
-		}
-
-		public void PostInit(BarracksDescriptor barracks)
-		{
-			MobsLevel = barracks.Unit.Levels[LevelOfUnits - 1];
+			return Levels as T[];
 		}
 	}
 }

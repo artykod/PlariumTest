@@ -2,16 +2,10 @@
 
 namespace Game.Descriptors.Buildings
 {
-	public class SofaDescriptor : BuildingDescriptor
+	public class MinionBarracksDescriptor : BarracksDescriptor
 	{
-		public new class Level : BuildingDescriptor.Level
+		public new class Level : BarracksDescriptor.Level
 		{
-			[JsonProperty]
-			public int HP
-			{
-				get;
-				private set;
-			}
 		}
 
 		[JsonProperty]

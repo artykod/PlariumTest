@@ -6,7 +6,7 @@ namespace Game.Logics.Buildings
 	using Descriptors.Buildings;
 	using Characters;
 
-	public class Barracks : Building
+	public abstract class Barracks : Building
 	{
 		protected float mobEmitTimeCurrent;
 		protected float mobEmitFrequency;
@@ -17,6 +17,14 @@ namespace Game.Logics.Buildings
 			get
 			{
 				return base.Descriptor as BarracksDescriptor;
+			}
+		}
+
+		public new BarracksDescriptor.Level CurrentLevel
+		{
+			get
+			{
+				return GetCurrentLevelImpl<BarracksDescriptor.Level>();
 			}
 		}
 

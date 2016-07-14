@@ -13,7 +13,7 @@ namespace Game
 		private List<Logic> justCreatedLogics = new List<Logic>();
 		private LinkedList<Logic> allLogics = new LinkedList<Logic>();
 		private LinkedList<Unit> selectedUnits = new LinkedList<Unit>();
-		private float preGameTimeout;
+		private float beforeGameTime;
 		private bool isPreInitDone;
 
 		public event Action<Logic> OnLogicCreate;
@@ -31,6 +31,14 @@ namespace Game
 		{
 			get;
 			private set;
+		}
+
+		public float BeforeGameTime
+		{
+			get
+			{
+				return beforeGameTime;
+			}
 		}
 
 		public GameController(string[] descriptorsFilesContent)
@@ -102,7 +110,7 @@ namespace Game
 			Map = CreateLogicByDescriptor<Map>(FindDescriptorById<MapDescriptor>(mapId));
 			Map.OnBattleDone += OnBattleDone;
 
-			preGameTimeout = 10f;
+			beforeGameTime = Map.Descriptor.DelayBeforeGame;
 			IsBattleStarted = false;
 
 			Run();
@@ -110,6 +118,7 @@ namespace Game
 
 		private void OnBattleDone(bool isPlayerWin)
 		{
+			Map.OnBattleDone -= OnBattleDone;
 			IsBattleStarted = false;
 			Stop();
 			OnGameEnd.SafeInvoke(isPlayerWin);
@@ -185,14 +194,14 @@ namespace Game
 
 		protected override void Update()
 		{
-			if (preGameTimeout < 0f)
+			if (beforeGameTime < 0f)
 			{
 				base.Update();
 			}
 			else
 			{
-				preGameTimeout -= TimeController.deltaTime;
-				if (preGameTimeout < 0f)
+				beforeGameTime -= TimeController.deltaTime;
+				if (beforeGameTime < 0f)
 				{
 					IsBattleStarted = true;
 					OnGameStart.SafeInvoke();

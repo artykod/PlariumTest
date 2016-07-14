@@ -1,11 +1,33 @@
 ﻿namespace Game.Logics.Buildings
 {
 	using Descriptors;
+	using Descriptors.Buildings;
 
 	public class MobPortal : Barracks
 	{
 		private float waveTime;
 		private float timeBetweenWaves;
+
+		public new MobPortalDescriptor Descriptor
+		{
+			get
+			{
+				return base.Descriptor as MobPortalDescriptor;
+			}
+		}
+
+		public new MobPortalDescriptor.Level CurrentLevel
+		{
+			get
+			{
+				return GetCurrentLevelImpl<MobPortalDescriptor.Level>();
+			}
+		}
+
+		protected override T GetCurrentLevelImpl<T>()
+		{
+			return Descriptor.Levels[Level] as T;
+		}
 
 		public bool IsWavesEnds
 		{
@@ -16,7 +38,13 @@
 		public MobPortal(GameController gameController, Descriptor descriptor) : base(gameController, descriptor)
 		{
 			Level = 0;
-			waveTime = 25f;
+		}
+
+		protected override void LevelChanged(int previousLevel, int newLevel)
+		{
+			base.LevelChanged(previousLevel, newLevel);
+
+			waveTime = Descriptor.Levels[Level].WaveDuration;
 		}
 
 		protected override void Update(float dt)
@@ -30,7 +58,7 @@
 
 			if (waveTime > 0f)
 			{
-				timeBetweenWaves = 60f;
+				timeBetweenWaves = Descriptor.BetweenWavesTime;
 
 				if (mobEmitTimeCurrent <= 0f)
 				{
@@ -51,7 +79,6 @@
 					if (Level + 1 < Descriptor.Levels.Length)
 					{
 						Level++;
-						waveTime = 25f;
 					}
 					else
 					{

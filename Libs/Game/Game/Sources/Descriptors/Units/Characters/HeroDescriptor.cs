@@ -2,25 +2,35 @@
 
 namespace Game.Descriptors.Characters
 {
-	public class HeroDescriptor : CharacterGenericDescriptor<HeroLevel>
+	public class HeroDescriptor : CharacterDescriptor
 	{
-		
-	}
+		public new class Level : CharacterDescriptor.Level
+		{
+			[JsonProperty]
+			public int TargetXP
+			{
+				get;
+				private set;
+			}
 
-	public class HeroLevel : CharacterLevel
-	{
+			[JsonProperty]
+			public float RespawnTime // seconds
+			{
+				get;
+				private set;
+			}
+		}
+
 		[JsonProperty]
-		public int TargetXP
+		public new Level[] Levels
 		{
 			get;
 			private set;
 		}
 
-		[JsonProperty]
-		public float RespawnTime // seconds
+		protected override T[] GetLevelsImpl<T>()
 		{
-			get;
-			private set;
+			return Levels as T[];
 		}
 	}
 }

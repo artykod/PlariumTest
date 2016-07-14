@@ -1,9 +1,23 @@
 ﻿namespace Game.Logics.Buildings
 {
 	using Descriptors;
+	using Descriptors.Buildings;
 
 	public class MinionBarracks : Barracks
 	{
+		public new MinionBarracksDescriptor.Level CurrentLevel
+		{
+			get
+			{
+				return GetCurrentLevelImpl<MinionBarracksDescriptor.Level>();
+			}
+		}
+
+		protected override T GetCurrentLevelImpl<T>()
+		{
+			return Descriptor.Levels[Level] as T;
+		}
+
 		public MinionBarracks(GameController gameController, Descriptor descriptor) : base(gameController, descriptor)
 		{
 		}

@@ -13,6 +13,19 @@
 			}
 		}
 
+		public new SofaDescriptor.Level CurrentLevel
+		{
+			get
+			{
+				return GetCurrentLevelImpl<SofaDescriptor.Level>();
+			}
+		}
+
+		protected override T GetCurrentLevelImpl<T>()
+		{
+			return Descriptor.Levels[Level] as T;
+		}
+
 		public Sofa(GameController gameController, Descriptor descriptor) : base(gameController, descriptor)
 		{
 			IsImmortal = false;

@@ -1,29 +1,33 @@
 ﻿{
-  "ClassId": "Buildings.Barracks",
+  "ClassId": "Buildings.MobPortal",
   "LogicId": "Buildings.MobPortal",
   "Id": "unit.portal.boss",
   "Name": "Boss Portal",
   "Description": "",
   "Size": 1,
   "UnitId": "unit.mob.boss",
+  "BetweenWavesTime": 30,
   "Levels": [
     {
       "ViewId": "PortalBoss",
       "CostOfObtain": 0,
       "UnitsPerSecond": 0.01,
-      "LevelOfUnits": 1
+      "LevelOfUnits": 1,
+      "WaveDuration": 25
     },
     {
       "ViewId": "PortalBoss",
       "CostOfObtain": 0,
       "UnitsPerSecond": 0.2,
-      "LevelOfUnits": 2
+      "LevelOfUnits": 2,
+      "WaveDuration": 25
     },
     {
       "ViewId": "PortalBoss",
       "CostOfObtain": 0,
       "UnitsPerSecond": 0.3,
-      "LevelOfUnits": 3
+      "LevelOfUnits": 3,
+      "WaveDuration": 25
     }
   ]
 }

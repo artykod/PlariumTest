@@ -4,10 +4,37 @@ namespace Game.Descriptors
 {
 	public abstract class UnitDescriptor : Descriptor
 	{
-		[JsonIgnore]
-		public abstract UnitLevel[] UnitLevels
+		public class Level
 		{
-			get;
+			[JsonProperty]
+			public string ViewId
+			{
+				get;
+				private set;
+			}
+
+			[JsonProperty]
+			public int CostOfObtain
+			{
+				get;
+				private set;
+			}
+
+			[JsonProperty]
+			public float Speed
+			{
+				get;
+				private set;
+			}
+		}
+
+		[JsonIgnore]
+		public Level[] Levels
+		{
+			get
+			{
+				return GetLevelsImpl<Level>();
+			}
 		}
 
 		[JsonProperty]
@@ -16,29 +43,7 @@ namespace Game.Descriptors
 			get;
 			private set;
 		}
-	}
 
-	public class UnitLevel
-	{
-		[JsonProperty]
-		public string ViewId
-		{
-			get;
-			private set;
-		}
-
-		[JsonProperty]
-		public int CostOfObtain
-		{
-			get;
-			private set;
-		}
-
-		[JsonProperty]
-		public float Speed
-		{
-			get;
-			private set;
-		}
+		protected abstract T[] GetLevelsImpl<T>() where T : Level;
 	}
 }

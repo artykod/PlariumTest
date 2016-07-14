@@ -2,24 +2,35 @@
 
 namespace Game.Descriptors.Buildings
 {
-	public class FountainDescriptor : BuildingGenericDescriptor<FountainLevel>
+	public class FountainDescriptor : BuildingDescriptor
 	{
-	}
+		public new class Level : BuildingDescriptor.Level
+		{
+			[JsonProperty]
+			public int HealSpeedHero // per second
+			{
+				get;
+				private set;
+			}
 
-	public class FountainLevel : BuildingLevel
-	{
+			[JsonProperty]
+			public int HealSpeedMinion // per second
+			{
+				get;
+				private set;
+			}
+		}
+
 		[JsonProperty]
-		public int HealSpeedHero // per second
+		public new Level[] Levels
 		{
 			get;
 			private set;
 		}
 
-		[JsonProperty]
-		public int HealSpeedMinion // per second
+		protected override T[] GetLevelsImpl<T>()
 		{
-			get;
-			private set;
+			return Levels as T[];
 		}
 	}
 }

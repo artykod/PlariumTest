@@ -6,7 +6,7 @@ public class TimeControllerUnity : ITimeController
 	{
 		get
 		{
-			return Time.deltaTime * 2f;
+			return Time.deltaTime;
 		}
 	}
 

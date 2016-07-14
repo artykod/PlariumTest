@@ -4,6 +4,19 @@ namespace Game.Descriptors.Buildings
 {
 	public abstract class BuildingDescriptor : UnitDescriptor
 	{
+		public new class Level : UnitDescriptor.Level
+		{
+		}
+
+		[JsonIgnore]
+		public new Level[] Levels
+		{
+			get
+			{
+				return GetLevelsImpl<Level>();
+			}
+		}
+
 		[JsonProperty]
 		public string Name
 		{
@@ -17,29 +30,5 @@ namespace Game.Descriptors.Buildings
 			get;
 			private set;
 		}
-	}
-
-	public abstract class BuildingGenericDescriptor<TLevel> : BuildingDescriptor where TLevel : BuildingLevel
-	{
-		[JsonProperty]
-		public TLevel[] Levels
-		{
-			get;
-			set;
-		}
-
-		[JsonIgnore]
-		public override UnitLevel[] UnitLevels
-		{
-			get
-			{
-				return Levels as UnitLevel[];
-			}
-		}
-	}
-
-	public class BuildingLevel : UnitLevel
-	{
-
 	}
 }

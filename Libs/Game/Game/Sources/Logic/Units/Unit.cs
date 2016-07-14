@@ -110,6 +110,16 @@ namespace Game.Logics
 			}
 		}
 
+		public UnitDescriptor.Level CurrentLevel
+		{
+			get
+			{
+				return GetCurrentLevelImpl<UnitDescriptor.Level>();
+			}
+		}
+
+		protected abstract T GetCurrentLevelImpl<T>() where T : UnitDescriptor.Level;
+
 		public Unit(GameController gameController, Descriptor descriptor) : base(gameController, descriptor)
 		{
 			IsImmortal = true;
@@ -168,7 +178,7 @@ namespace Game.Logics
 
 		protected virtual void LevelChanged(int previousLevel, int newLevel)
 		{
-			Velocity = Descriptor.UnitLevels[Level].Speed;
+			Velocity = Descriptor.Levels[Level].Speed;
 
 			if (previousLevel != newLevel)
 			{

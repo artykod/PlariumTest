@@ -15,12 +15,17 @@
 			}
 		}
 
-		public override CharacterLevel CurrentLevel
+		public new HeroDescriptor.Level CurrentLevel
 		{
 			get
 			{
-				return Descriptor.Levels[Level];
+				return GetCurrentLevelImpl<HeroDescriptor.Level>();
 			}
+		}
+
+		protected override T GetCurrentLevelImpl<T>()
+		{
+			return Descriptor.Levels[Level] as T;
 		}
 
 		public int XP

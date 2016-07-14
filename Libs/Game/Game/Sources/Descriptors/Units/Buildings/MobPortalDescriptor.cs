@@ -2,16 +2,23 @@
 
 namespace Game.Descriptors.Buildings
 {
-	public class SofaDescriptor : BuildingDescriptor
+	public class MobPortalDescriptor : BarracksDescriptor
 	{
-		public new class Level : BuildingDescriptor.Level
+		public new class Level : BarracksDescriptor.Level
 		{
 			[JsonProperty]
-			public int HP
+			public float WaveDuration
 			{
 				get;
 				private set;
 			}
+		}
+
+		[JsonProperty]
+		public float BetweenWavesTime
+		{
+			get;
+			private set;
 		}
 
 		[JsonProperty]

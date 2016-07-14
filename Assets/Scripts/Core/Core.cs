@@ -17,6 +17,7 @@ public class Core : MonoBehaviour
 	private Dictionary<Logic, View> logicToViewMap = new Dictionary<Logic, View>();
 
 	private static Core instance;
+
 	public static Core Instance
 	{
 		get
@@ -101,7 +102,7 @@ public class Core : MonoBehaviour
 		if (logic is Unit)
 		{
 			var unit = logic as Unit;
-			viewId = unit.Descriptor.UnitLevels[unit.Level].ViewId;
+			viewId = unit.Descriptor.Levels[unit.Level].ViewId;
 		}
 		else if (logic is Map)
 		{

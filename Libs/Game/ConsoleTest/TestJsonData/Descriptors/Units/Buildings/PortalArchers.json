@@ -1,29 +1,33 @@
 ﻿{
-  "ClassId": "Buildings.Barracks",
+  "ClassId": "Buildings.MobPortal",
   "LogicId": "Buildings.MobPortal",
   "Id": "unit.portal.archer",
   "Name": "Archers Portal",
   "Description": "",
   "Size": 1,
   "UnitId": "unit.mob.archer",
+  "BetweenWavesTime": 30,
   "Levels": [
     {
       "ViewId": "PortalArcher",
       "CostOfObtain": 0,
       "UnitsPerSecond": 0.05,
-      "LevelOfUnits": 1
+      "LevelOfUnits": 1,
+      "WaveDuration": 25
     },
     {
       "ViewId": "PortalArcher",
       "CostOfObtain": 0,
       "UnitsPerSecond": 0.6,
-      "LevelOfUnits": 2
+      "LevelOfUnits": 2,
+      "WaveDuration": 25
     },
     {
       "ViewId": "PortalArcher",
       "CostOfObtain": 0,
       "UnitsPerSecond": 0.7,
-      "LevelOfUnits": 3
+      "LevelOfUnits": 3,
+      "WaveDuration": 25
     }
   ]
 }

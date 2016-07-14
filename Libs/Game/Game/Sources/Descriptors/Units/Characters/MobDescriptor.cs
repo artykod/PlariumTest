@@ -2,24 +2,34 @@
 
 namespace Game.Descriptors.Characters
 {
-	public class MobDescriptor : CharacterGenericDescriptor<MobLevel>
+	public class MobDescriptor : CharacterDescriptor
 	{
-		
-	}
+		public new class Level : CharacterDescriptor.Level
+		{
+			[JsonProperty]
+			public int Gold
+			{
+				get;
+				private set;
+			}
+			[JsonProperty]
+			public int XP
+			{
+				get;
+				private set;
+			}
+		}
 
-	public class MobLevel : CharacterLevel
-	{
 		[JsonProperty]
-		public int Gold
+		public new Level[] Levels
 		{
 			get;
 			private set;
 		}
-		[JsonProperty]
-		public int XP
+
+		protected override T[] GetLevelsImpl<T>()
 		{
-			get;
-			private set;
+			return Levels as T[];
 		}
 	}
 }

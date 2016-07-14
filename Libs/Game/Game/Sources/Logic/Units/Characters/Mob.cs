@@ -13,12 +13,17 @@
 			}
 		}
 
-		public override CharacterLevel CurrentLevel
+		public new MobDescriptor.Level CurrentLevel
 		{
 			get
 			{
-				return Descriptor.Levels[Level];
+				return GetCurrentLevelImpl<MobDescriptor.Level>();
 			}
+		}
+
+		protected override T GetCurrentLevelImpl<T>()
+		{
+			return Descriptor.Levels[Level] as T;
 		}
 
 		public Mob(GameController gameController, Descriptor descriptor) : base(gameController, descriptor)

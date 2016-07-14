@@ -15,9 +15,12 @@ namespace Game.Logics.Characters
 			}
 		}
 
-		public abstract CharacterLevel CurrentLevel
+		public new CharacterDescriptor.Level CurrentLevel
 		{
-			get;
+			get
+			{
+				return GetCurrentLevelImpl<CharacterDescriptor.Level>();
+			}
 		}
 
 		public Unit TargetUnit

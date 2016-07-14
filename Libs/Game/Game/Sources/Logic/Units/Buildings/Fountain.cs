@@ -22,6 +22,19 @@ namespace Game.Logics.Buildings
 			}
 		}
 
+		public new FountainDescriptor.Level CurrentLevel
+		{
+			get
+			{
+				return GetCurrentLevelImpl<FountainDescriptor.Level>();
+			}
+		}
+
+		protected override T GetCurrentLevelImpl<T>()
+		{
+			return Descriptor.Levels[Level] as T;
+		}
+
 		public Hero Hero
 		{
 			get;
@@ -95,7 +108,7 @@ namespace Game.Logics.Buildings
 				healTime = 1f;
 
 				var closestUnits = new LinkedList<Unit>();
-				GameController.ForEachLogic<Unit>(unit =>
+				GameController.ForEachLogic<Unit>((System.Func<Unit, bool>)(unit =>
 				{
 					if (unit.Team == Team)
 					{
@@ -103,12 +116,12 @@ namespace Game.Logics.Buildings
 						var needDistance = (Descriptor.Size + unit.Descriptor.Size) * 1.5f;
 						if (distanceSqr <= needDistance * needDistance)
 						{
-							unit.Heal(unit is Hero ? Descriptor.Levels[Level].HealSpeedHero : Descriptor.Levels[Level].HealSpeedMinion);
+							unit.Heal((int)(unit is Hero ? Descriptor.Levels[Level].HealSpeedHero : Descriptor.Levels[Level].HealSpeedMinion));
 						}
 					}
 
 					return false;
-				});
+				}));
 			}
 			else
 			{
