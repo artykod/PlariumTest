@@ -116,6 +116,14 @@ namespace Game
 			Run();
 		}
 
+		public void Surrender()
+		{
+			if (IsRunned)
+			{
+				OnBattleDone(false);
+			}
+		}
+
 		private void OnBattleDone(bool isPlayerWin)
 		{
 			Map.OnBattleDone -= OnBattleDone;

@@ -2,7 +2,7 @@
 
 public abstract class UIDialogGeneric<T> : UIDialogBase where T : UIDialogBase
 {
-	public static T CurrentDialog
+	public static T CurrentInstance
 	{
 		get;
 		private set;
@@ -15,31 +15,34 @@ public abstract class UIDialogGeneric<T> : UIDialogBase where T : UIDialogBase
 			DestroyCurrent();
 		}
 
-		var prefab = Resources.Load<T>("UI/Dialogs/" + typeof(T).Name);
+		var type = typeof(T);
+		var pathAttribute = type.GetAttribute<PathInResources>();
+		var prefabName = pathAttribute != null ? pathAttribute.Path : type.Name;
+		var prefab = Resources.Load<T>("UI/Dialogs/" + prefabName);
 		if (prefab != null)
 		{
-			CurrentDialog = Instantiate(prefab);
+			CurrentInstance = Instantiate(prefab);
 		}
 
-		return CurrentDialog;
+		return CurrentInstance;
 	}
 
 	public static void DestroyCurrent()
 	{
-		if (CurrentDialog != null)
+		if (CurrentInstance != null)
 		{
-			var current = CurrentDialog;
-			CurrentDialog = null;
+			var current = CurrentInstance;
+			CurrentInstance = null;
 			Destroy(current.gameObject);
 		}
 	}
 
 	public static void CloseCurrent()
 	{
-		if (CurrentDialog != null)
+		if (CurrentInstance != null)
 		{
-			var current = CurrentDialog;
-			CurrentDialog = null;
+			var current = CurrentInstance;
+			CurrentInstance = null;
 			current.Close();
 		}
 	}

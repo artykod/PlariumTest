@@ -76,7 +76,9 @@ public class Core : MonoBehaviour
 	private void OnGameEnd(bool isPlayerWin)
 	{
 		var message = isPlayerWin ? "All enemies died! You win" : "Sofa of Developers destroyed! You lose";
-		UIDialogText.Show().Build("Game Over", message).AddButton("Retry", StartNewBattle);
+		UIDialogText.Show().Build("Game Over", message)
+			.AddButton("Retry", StartNewBattle)
+			.AddButton("Quit", Application.Quit);
 	}
 
 	private void StartNewBattle()
@@ -88,6 +90,21 @@ public class Core : MonoBehaviour
 	private void Update()
 	{
 		TimeController.Update();
+
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			if (UIDialogBase.CurrentDialog == null)
+			{
+				UIDialogGameMenu.Show().Build("Main menu", "")
+					.AddButton("Surrender", GameController.Surrender)
+					.AddButton("Settings", () => UIDialogText.Show().Build("Not implemented", "").AddButton("OK"))
+					.AddButton("Quit", Application.Quit);
+			}
+			else if (UIDialogGameMenu.CurrentInstance != null)
+			{
+				UIDialogGameMenu.CurrentInstance.Close();
+			}
+		}
 	}
 
 	private void OnDestroy()

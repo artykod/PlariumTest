@@ -1,8 +1,15 @@
 ﻿using UnityEngine;
 using System;
 
+[PathInResources("DialogBase")]
 public class UIDialogBase : MonoBehaviour
 {
+	public static UIDialogBase CurrentDialog
+	{
+		get;
+		private set;
+	}
+
 	public event Action<UIDialogBase> OnClose;
 
 	public virtual void Close()
@@ -13,9 +20,14 @@ public class UIDialogBase : MonoBehaviour
 
 	protected virtual void Awake()
 	{
+		CurrentDialog = this;
 	}
 
 	protected virtual void OnDestroy()
 	{
+		if (CurrentDialog == this)
+		{
+			CurrentDialog = null;
+		}
 	}
 }

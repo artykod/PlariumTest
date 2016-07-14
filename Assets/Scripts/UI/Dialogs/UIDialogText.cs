@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class UIDialogText : UIDialogGeneric<UIDialogText>
+public abstract class UIDialogTextBase<T> : UIDialogGeneric<T> where T : UIDialogTextBase<T>
 {
 	[SerializeField]
 	private Text titleText;
@@ -12,16 +12,16 @@ public class UIDialogText : UIDialogGeneric<UIDialogText>
 	[SerializeField]
 	private UIButton buttonTemplate;
 
-	public UIDialogText Build(string title, string message)
+	public T Build(string title, string message)
 	{
 		titleText.text = title;
 		messageText.text = message;
 		buttonTemplate.gameObject.SetActive(false);
 
-		return this;
+		return this as T;
 	}
 
-	public UIDialogText AddButton(string text, System.Action onClick = null)
+	public T AddButton(string text, System.Action onClick = null)
 	{
 		var newButton = Instantiate(buttonTemplate);
 		newButton.Text = text;
@@ -30,6 +30,12 @@ public class UIDialogText : UIDialogGeneric<UIDialogText>
 		TransformTool.DropTo(newButton, buttonsRoot);
 		newButton.gameObject.SetActive(true);
 
-		return this;
+		return this as T;
 	}
+}
+
+[PathInResources("Text")]
+public class UIDialogText : UIDialogTextBase<UIDialogText>
+{
+
 }
