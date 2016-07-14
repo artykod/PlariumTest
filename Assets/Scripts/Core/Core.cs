@@ -68,7 +68,22 @@ public class Core : MonoBehaviour
 
 		DebugConsole.Instance.Create();
 
-		gameController = new GameController(new Loader().LoadDescriptorsFromGameResources(Constants.Paths.Descriptors.ALL));
+		var jsons = default(string[]);
+		try
+		{
+			jsons = new Loader().LoadDescriptorsFromExternalFiles(Constants.Paths.Descriptors.ALL);
+			if (jsons.Length < 1)
+			{
+				throw new System.Exception();
+			}
+		}
+		catch
+		{
+			Debug.LogWarning("Cannot find descriptors in external storage. Use built-in data.");
+			jsons = new Loader().LoadDescriptorsFromGameResources(Constants.Paths.Descriptors.ALL);
+		}
+
+		gameController = new GameController(jsons);
 		gameController.OnLogicCreate += OnLogicCreate;
 		gameController.OnLogicDestroy += OnLogicDestroy;
 		gameController.OnGameEnd += OnGameEnd;
