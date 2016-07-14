@@ -47,27 +47,29 @@ public class GameCamera : MonoBehaviour
 		{
 			var position = transform.position;
 			var direction = Vector3.zero;
+			var mousePosition = Input.mousePosition;
+			var screenMoveLimit = 100f;
 
-			if (Input.GetKey(KeyCode.A))
+			if (Input.GetKey(KeyCode.A) || mousePosition.x < screenMoveLimit)
 			{
 				direction += Vector3.left;
 			}
-			if (Input.GetKey(KeyCode.D))
+			if (Input.GetKey(KeyCode.D) || mousePosition.x > Screen.width - screenMoveLimit)
 			{
 				direction += Vector3.right;
 			}
-			if (Input.GetKey(KeyCode.W))
+			if (Input.GetKey(KeyCode.W) || mousePosition.y > Screen.height - screenMoveLimit)
 			{
 				direction += Vector3.forward;
 			}
-			if (Input.GetKey(KeyCode.S))
+			if (Input.GetKey(KeyCode.S) || mousePosition.y < screenMoveLimit)
 			{
 				direction += Vector3.back;
 			}
 
 			direction.Normalize();
 
-			position += direction * 100f * Time.deltaTime;
+			position += direction * 200f * Time.deltaTime;
 			position.x = Mathf.Max(0f, Mathf.Min(gameController.Map.Descriptor.Width, position.x));
 			position.y = startPosition.y;
 			position.z = Mathf.Max(-CAMERA_OFFSET, Mathf.Min(gameController.Map.Descriptor.Height - CAMERA_OFFSET, position.z));
