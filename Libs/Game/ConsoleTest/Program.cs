@@ -26,6 +26,7 @@ namespace ConsoleTest
 				DebugImpl.Instance = new ConsoleDebug();
 				var timeController = new ConsoleTimeController();
 				TimeControllerImpl.Instance = timeController;
+				StorageImpl.Instance = new ConsoleStorage();
 
 				var files = new string[] {
 					"Units/Buildings/Sofa.json",

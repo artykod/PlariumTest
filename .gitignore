@@ -11,9 +11,9 @@ ehthumbs.db
 Thumbs.db
 
 *.tmproj
-*.csproj
+./*.csproj
 *.unityproj
-*.sln
+./*.sln
 *.suo
 *.user
 *.pidb
@@ -23,9 +23,8 @@ Thumbs.db
 
 # Build results
 
-[Dd]ebug/
-[Rr]elease/
-x64/
+**/bin/[Dd]ebug/
+**/bin/[Rr]elease/
 [Bb]uild/
 [Ll]ibrary/
 [Tt]emp/
