@@ -18,6 +18,7 @@ public class FountainView : UnitView {
 		var position = transform.position;
 		var cameraPosition = camera.transform.position;
 
+		// изначально камера чуть позади фонтана.
 		cameraPosition.x = position.x;
 		cameraPosition.y = position.y + 30f;
 		cameraPosition.z = position.z - 5f;

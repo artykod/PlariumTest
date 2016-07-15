@@ -11,9 +11,9 @@ ehthumbs.db
 Thumbs.db
 
 *.tmproj
-./*.csproj
+plariumtest**.csproj
 *.unityproj
-./*.sln
+plariumtest**.sln
 *.suo
 *.user
 *.pidb

@@ -142,7 +142,7 @@ namespace Game.Logics.Buildings
 					}
 
 					return false;
-				}));
+				});
 			}
 			else
 			{
