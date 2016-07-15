@@ -3,6 +3,9 @@
 	using Descriptors;
 	using Descriptors.Buildings;
 
+	/// <summary>
+	/// Портал с мобами противника.
+	/// </summary>
 	public class MobPortal : Barracks
 	{
 		private float waveTime;
@@ -51,6 +54,7 @@
 		{
 			base.Update(dt);
 
+			// после завершения всех волн генерации мобов нет.
 			if (IsWavesEnds)
 			{
 				return;
@@ -58,6 +62,8 @@
 
 			if (waveTime > 0f)
 			{
+				// волна активна, нужно генерировать мобов.
+
 				timeBetweenWaves = Descriptor.BetweenWavesTime;
 
 				if (mobEmitTimeCurrent <= 0f)
@@ -74,14 +80,18 @@
 			}
 			else
 			{
+				// волна прошла. отсчет задержки между волнами.
+
 				if (timeBetweenWaves < 0f)
 				{
+					// переход к другой волне после истечения задержки.
 					if (Level + 1 < Descriptor.Levels.Length)
 					{
 						Level++;
 					}
 					else
 					{
+						// если волны все завершены, то портал останавливается.
 						IsWavesEnds = true;
 					}
 				}

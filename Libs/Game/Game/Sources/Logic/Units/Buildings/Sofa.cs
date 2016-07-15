@@ -3,6 +3,9 @@
 	using Descriptors;
 	using Descriptors.Buildings;
 
+	/// <summary>
+	/// Диван разработчиков.
+	/// </summary>
 	public class Sofa : Building
 	{
 		public new SofaDescriptor Descriptor

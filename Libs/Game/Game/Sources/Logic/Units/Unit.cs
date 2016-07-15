@@ -8,12 +8,21 @@ namespace Game.Logics
 
 	public abstract class Unit : Logic
 	{
+		/// <summary>
+		/// Данные наложенного модификатора статов.
+		/// </summary>
 		protected class ModificatorData {
+			/// <summary>
+			/// Дескриптор модификатора.
+			/// </summary>
 			public Modificator Modificator
 			{
 				get;
 				private set;
 			}
+			/// <summary>
+			/// Время его действия.
+			/// </summary>
 			public float Time
 			{
 				get;
@@ -25,22 +34,38 @@ namespace Game.Logics
 				Time = modificator.Trigger == Modificator.Triggers.Now ? 0f : modificator.TriggerTime;
 			}
 		}
-
-		private TimeController.Coroutine updater;
+		
+		/// <summary>
+		/// Текущий уровень прокачки юнита.
+		/// </summary>
 		protected int currentLevel;
+		/// <summary>
+		/// Текущее направление движения юнита.
+		/// </summary>
 		private Vec2 direction;
+		/// <summary>
+		/// Выделен ли юнит игроком.
+		/// </summary>
 		private bool isSelected;
+		/// <summary>
+		/// Список наложенных модификаторов.
+		/// </summary>
 		protected List<ModificatorData> modificators = new List<ModificatorData>();
 
 		public event Action<Unit, bool> OnSelection;
 		public event Action<int, int> OnLevelChanged;
 
+		/// <summary>
+		/// Текущая позиция юнита на карте.
+		/// </summary>
 		public Vec2 Position
 		{
 			get;
 			set;
 		}
-
+		/// <summary>
+		/// Текущий поворот юнита. Оно же направление движения.
+		/// </summary>
 		public Vec2 Direction
 		{
 			get
@@ -53,13 +78,17 @@ namespace Game.Logics
 				direction.Normalize();
 			}
 		}
-
+		/// <summary>
+		/// Текущая скорость передвижения юнита.
+		/// </summary>
 		public float Velocity
 		{
 			get;
 			protected set;
 		}
-
+		/// <summary>
+		/// Номер текущего уровня прокачки юнита (от 0).
+		/// </summary>
 		public int Level
 		{
 			get
@@ -73,37 +102,49 @@ namespace Game.Logics
 				LevelChanged(previous, currentLevel);
 			}
 		}
-
+		/// <summary>
+		/// Текущее значение жизней.
+		/// </summary>
 		public int HP
 		{
 			get;
 			protected set;
 		}
-
+		/// <summary>
+		/// Текущее максимальное кол-во жизней.
+		/// </summary>
 		public int TotalHP
 		{
 			get;
 			protected set;
 		}
-
+		/// <summary>
+		/// Подвержен ли юнит урону.
+		/// </summary>
 		public bool IsImmortal
 		{
 			get;
 			protected set;
 		}
-
+		/// <summary>
+		/// Идентификатор команды юнита.
+		/// </summary>
 		public string Team
 		{
 			get;
 			private set;
 		}
-
+		/// <summary>
+		/// Статичный ли юнит. Например, здание.
+		/// </summary>
 		public bool IsStatic
 		{
 			get;
 			protected set;
 		}
-
+		/// <summary>
+		/// Выделен ли сейчас юнит игроком.
+		/// </summary>
 		public bool IsSelected
 		{
 			get
@@ -117,6 +158,9 @@ namespace Game.Logics
 			}
 		}
 
+		/// <summary>
+		/// Конкретные юниты могут определять когда нужно двигаться, а когда нужно стоять на месте.
+		/// </summary>
 		protected bool CanMove
 		{
 			get;
@@ -149,20 +193,31 @@ namespace Game.Logics
 			Level = 0;
 		}
 
+		/// <summary>
+		/// Привязать юнита к команде.
+		/// </summary>
+		/// <param name="team">ид команды.</param>
 		public void AttachToTeam(string team)
 		{
 			Team = team;
 		}
-
+		/// <summary>
+		/// Наложить модификатор на юнита.
+		/// </summary>
+		/// <param name="modificator">накладываемый модификатор.</param>
 		public void AddModificator(Modificator modificator)
 		{
 			modificators.Add(new ModificatorData(modificator));
 			UpdateStats();
 		}
-
+		/// <summary>
+		/// Нанести урон юниту в соответствии с его статами.
+		/// </summary>
+		/// <param name="damageValue">размер урона.</param>
+		/// <returns>был ли убит юнит в следствие урона.</returns>
 		public bool TakeDamage(int damageValue)
 		{
-			if (!IsImmortal)
+			if (!IsImmortal && damageValue > 0)
 			{
 				var damage = ComputeDamage(damageValue);
 				HP -= damage;
@@ -170,10 +225,13 @@ namespace Game.Logics
 			}
 			return false;
 		}
-
+		/// <summary>
+		/// Восстановить жизни юнита.
+		/// </summary>
+		/// <param name="healValue">на сколько восстановить.</param>
 		public void Heal(int healValue)
 		{
-			if (!IsImmortal)
+			if (!IsImmortal && healValue > 0)
 			{
 				HP += healValue;
 				if (HP >= TotalHP)
@@ -183,6 +241,12 @@ namespace Game.Logics
 			}
 		}
 
+		/// <summary>
+		/// Вычисление наносимого урона.
+		/// Каждый юнит может по своему модифицировать урон.
+		/// </summary>
+		/// <param name="damageValue">размер урона.</param>
+		/// <returns>модифицированное значение.</returns>
 		protected virtual int ComputeDamage(int damageValue)
 		{
 			return damageValue;
@@ -192,11 +256,13 @@ namespace Game.Logics
 		{
 			base.Update(dt);
 
+			// передвижение юнита каждый кадр в зависимости от его скорости.
 			if (CanMove)
 			{
 				Position += Direction * Velocity * dt;
 			}
 
+			// обработка модификаторов. отмена истекших по времени.
 			var modificatorsChanged = false;
 			for (int i = 0; i < modificators.Count; i++)
 			{
@@ -225,6 +291,9 @@ namespace Game.Logics
 			}
 		}
 
+		/// <summary>
+		/// Применение наложенных модификаторов.
+		/// </summary>
 		protected virtual void UpdateStats()
 		{
 			var originalVelocity = Descriptor.Levels[Level].Speed;

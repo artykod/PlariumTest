@@ -38,6 +38,7 @@ namespace Game.Logics.Buildings
 
 			mobEmitTimeCurrent = mobEmitFrequency = 1f / Descriptor.Levels[newLevel].UnitsPerSecond;
 
+			// уровень меняется даже у уже созданных юнитов.
 			foreach (var i in childMobs)
 			{
 				i.Level = Level;

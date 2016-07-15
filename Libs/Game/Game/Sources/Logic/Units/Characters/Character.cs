@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Game.Logics.Characters
 {
@@ -25,6 +24,11 @@ namespace Game.Logics.Characters
 			}
 		}
 
+		/// <summary>
+		/// Юнит, являющийся целью этого юнита.
+		/// Если null, то у юнита нет цели для передвижения к ней.
+		/// В случае миньона он будет двигаться к фонтану.
+		/// </summary>
 		public Unit TargetUnit
 		{
 			get
@@ -42,18 +46,25 @@ namespace Game.Logics.Characters
 		private float directionOffsetLerp;
 		private bool needAutoSearchTarget;
 
+		/// <summary>
+		/// Текущее значение брони.
+		/// </summary>
 		public float Armor
 		{
 			get;
 			private set;
 		}
-
+		/// <summary>
+		/// Текущее значение атаки.
+		/// </summary>
 		public int Attack
 		{
 			get;
 			private set;
 		}
-
+		/// <summary>
+		/// Текущее значение скорости передвижения.
+		/// </summary>
 		public float AttackSpeed
 		{
 			get;
@@ -126,6 +137,7 @@ namespace Game.Logics.Characters
 		{
 			var damage = base.ComputeDamage(damageValue);
 
+			// урон гасится на значение брони.
 			damage -= (int)(damage * Armor);
 
 			if (damage < 0)
@@ -140,6 +152,7 @@ namespace Game.Logics.Characters
 		{
 			base.Update(dt);
 
+			// юниты не могут выйти за пределы карты.
 			if (Position.x < 0f || Position.y < 0f || Position.x > mapDescriptor.Width || Position.y > mapDescriptor.Height)
 			{
 				Position = new Vec2(
@@ -154,6 +167,7 @@ namespace Game.Logics.Characters
 
 			if (needAutoSearchTarget)
 			{
+				// цель ищется не сразу, чтобы куча юнитов синхронно не меняло направление.
 				if (newTargetSearchCooldown <= 0f)
 				{
 					var found = map.FindClosestEnemyUnit(this);
@@ -171,6 +185,7 @@ namespace Game.Logics.Characters
 
 			if (targetUnit != null)
 			{
+				// если целевой юнит умер, то нужно начать поиск новой цели.
 				if (!targetUnit.IsImmortal && targetUnit.HP <= 0)
 				{
 					ChangeTargetUnit(null, true);
@@ -178,30 +193,37 @@ namespace Game.Logics.Characters
 				}
 			}
 
+			// для небольшого смещения направления движения, чтобы юниты не ходили совсем уж ровно по прямой.
 			directionOffsetLerp += (targetDirectionOffset - directionOffsetLerp) * 0.1f;
 
+			// расчет расстояния для атаки цели.
 			var targetDistance = 1f;
 			if (targetUnit != null)
 			{
+				// если цель - произвольная точка на карте, то к ней нужно подойти вплотную.
 				targetDistance = (targetUnit.Team != Team ? CurrentLevel.AttackRange : 0f) +
 					(targetUnit is MoveTarget ? 0f : targetUnit.Descriptor.Size + Descriptor.Size);
 			}
+			// если юнит из команды игрока, то при отсутствии цели он идет к фонтану.
 			else if (map.Fountain.Team == Team)
 			{
 				targetUnit = map.Fountain;
 			}
+			// если цели нет, то юнит стоит на месте.
 			else
 			{
 				CanMove = false;
 				ChangeTargetUnit(null, true);
 			}
 
+			// если есть к чему двигаться.
 			if (targetUnit != null)
 			{
 				var toTarget = targetUnit.Position - Position;
 				Direction = toTarget;
 
 				var currentDistance = toTarget.Length;
+				// подошел ли на нужное расстояние.
 				CanMove = currentDistance > targetDistance;
 
 				if (CanMove)
@@ -212,6 +234,7 @@ namespace Game.Logics.Characters
 
 				if (!CanMove && targetUnit != map.Fountain)
 				{
+					// если подошел к цели, то наносит дамаг ей.
 					if (attackCooldown <= 0f && !targetUnit.IsImmortal)
 					{
 						attackCooldown = 1f / AttackSpeed;
@@ -221,7 +244,9 @@ namespace Game.Logics.Characters
 							if (targetMob != null && map.Fountain.Hero != null && Team == map.Fountain.Team)
 							{
 								var mobLevel = targetMob.Descriptor.Levels[targetMob.Level];
+								// герою опыт.
 								map.Fountain.Hero.AddXP(mobLevel.XP);
+								// игроку голда в прогресс.
 								GameController.GameProgress.AddGold(mobLevel.Gold);
 							}
 						}

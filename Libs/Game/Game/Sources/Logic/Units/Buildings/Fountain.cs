@@ -4,14 +4,23 @@ namespace Game.Logics.Buildings
 {
 	using Descriptors;
 	using Descriptors.Buildings;
-	using Logics.Characters;
+	using Characters;
 
+	/// <summary>
+	/// Фонтан.
+	/// </summary>
 	public class Fountain : Building
 	{
 		private Descriptor heroDescriptor;
 		private float respawnTime;
 		private float healTime;
+		/// <summary>
+		/// Последний уровень героя. Сохраняется между смертями героя в пределах боя.
+		/// </summary>
 		private int lastHeroLevel;
+		/// <summary>
+		/// Последнее значение опыта героя. Сохраняется между смертями героя в пределах боя.
+		/// </summary>
 		private int lastHeroXP;
 
 		public new FountainDescriptor Descriptor
@@ -35,12 +44,17 @@ namespace Game.Logics.Buildings
 			return Descriptor.Levels[Level] as T;
 		}
 
+		/// <summary>
+		/// Активный герой. Если null, то герой умер и еще не зареспаунился.
+		/// </summary>
 		public Hero Hero
 		{
 			get;
 			private set;
 		}
-
+		/// <summary>
+		/// Текущий таймер респауна героя.
+		/// </summary>
 		public float HeroRespawnTimer
 		{
 			get
@@ -48,7 +62,9 @@ namespace Game.Logics.Buildings
 				return respawnTime;
 			}
 		}
-
+		/// <summary>
+		/// Общее время респауна героя.
+		/// </summary>
 		public float HeroTotalRespawnTime
 		{
 			get;
@@ -59,6 +75,10 @@ namespace Game.Logics.Buildings
 		{
 		}
 
+		/// <summary>
+		/// Назначить главного героя.
+		/// </summary>
+		/// <param name="heroId">ид дескриптора героя.</param>
 		public void FetchHeroId(string heroId)
 		{
 			heroDescriptor = GameController.FindDescriptorById<Descriptor>(heroId);
@@ -108,7 +128,8 @@ namespace Game.Logics.Buildings
 				healTime = 1f;
 
 				var closestUnits = new LinkedList<Unit>();
-				GameController.ForEachLogic<Unit>((System.Func<Unit, bool>)(unit =>
+				// проход по всем юнитам такой же команды и восстановление жизней, если те находятся рядом с фонтаном.
+				GameController.ForEachLogic<Unit>(unit =>
 				{
 					if (unit.Team == Team)
 					{

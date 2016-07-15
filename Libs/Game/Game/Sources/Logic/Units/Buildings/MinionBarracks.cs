@@ -3,6 +3,9 @@
 	using Descriptors;
 	using Descriptors.Buildings;
 
+	/// <summary>
+	/// Казарма миньонов.
+	/// </summary>
 	public class MinionBarracks : Barracks
 	{
 		public new MinionBarracksDescriptor.Level CurrentLevel

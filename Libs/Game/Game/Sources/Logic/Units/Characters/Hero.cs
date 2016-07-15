@@ -3,8 +3,15 @@
 	using Descriptors;
 	using Descriptors.Characters;
 
+	/// <summary>
+	/// Главный персонаж.
+	/// </summary>
 	public class Hero : Character
 	{
+		/// <summary>
+		/// Эта цель используется для отправки героя к произвольной точке на карте.
+		/// Объект без дескриптора, чисто для сохранения общей логики движения персонажей.
+		/// </summary>
 		private MoveTarget moveTarget;
 
 		public new HeroDescriptor Descriptor
@@ -28,12 +35,17 @@
 			return Descriptor.Levels[Level] as T;
 		}
 
+		/// <summary>
+		/// Текущий опыт.
+		/// </summary>
 		public int XP
 		{
 			get;
 			private set;
 		}
-
+		/// <summary>
+		/// Максимальный опыт на текущем уровне прокачки.
+		/// </summary>
 		public int TotalXP
 		{
 			get;
@@ -46,12 +58,20 @@
 			SetTargetUnit(null);
 		}
 
+		/// <summary>
+		/// Отправить героя в точку на карте.
+		/// </summary>
+		/// <param name="position">точку, куда должен прийти герой.</param>
 		public void MoveTo(Vec2 position)
 		{
 			moveTarget.Position = position;
 			SetTargetUnit(moveTarget);
 		}
-
+		/// <summary>
+		/// Добавить опыт.
+		/// Если значение будет больше максимального текущего уровня, то уровень будет повышен.
+		/// </summary>
+		/// <param name="xp">значение опыта.</param>
 		public void AddXP(int xp)
 		{
 			if (TotalXP <= 0)
