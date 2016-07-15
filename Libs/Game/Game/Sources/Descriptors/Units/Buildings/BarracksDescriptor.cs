@@ -8,20 +8,27 @@ namespace Game.Descriptors.Buildings
 	{
 		public new class Level : BuildingDescriptor.Level
 		{
+			/// <summary>
+			/// Кол-во производимых юнитов в секунду.
+			/// </summary>
 			[JsonProperty]
 			public float UnitsPerSecond
 			{
 				get;
 				private set;
 			}
-
+			/// <summary>
+			/// Уровень прокачки казармы определяет уровень прокачки юнитов.
+			/// </summary>
 			[JsonProperty]
 			private int LevelOfUnits
 			{
 				get;
 				set;
 			}
-
+			/// <summary>
+			/// Ссылки на дескрипторы уровня прокачки юнита.
+			/// </summary>
 			[JsonIgnore]
 			public MobDescriptor.Level MobsLevel
 			{
@@ -44,13 +51,18 @@ namespace Game.Descriptors.Buildings
 			}
 		}
 
+		/// <summary>
+		/// Идентификатор дескриптора генерируемых юнитов.
+		/// </summary>
 		[JsonProperty]
 		private string UnitId
 		{
 			get;
 			set;
 		}
-
+		/// <summary>
+		/// Ссылка на дескриптор генерируемых юнитов.
+		/// </summary>
 		[JsonIgnore]
 		public MobDescriptor Unit
 		{

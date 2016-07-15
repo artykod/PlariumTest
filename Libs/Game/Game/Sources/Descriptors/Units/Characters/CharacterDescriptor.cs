@@ -6,30 +6,46 @@ namespace Game.Descriptors
 	{
 		public new class Level : UnitDescriptor.Level
 		{
+			/// <summary>
+			/// Кол-во жизней.
+			/// </summary>
 			[JsonProperty]
 			public int HP
 			{
 				get;
 				private set;
 			}
+			/// <summary>
+			/// Значение брони. от 0 до 1.
+			/// Происходит процентное поглащение наносимого урона.
+			/// </summary>
 			[JsonProperty]
-			public float Armor // 0..1
+			public float Armor
 			{
 				get;
 				private set;
 			}
+			/// <summary>
+			/// Наносимый юнитом дамаг.
+			/// </summary>
 			[JsonProperty]
 			public int Attack
 			{
 				get;
 				private set;
 			}
+			/// <summary>
+			/// Кол-во ударов в секунду.
+			/// </summary>
 			[JsonProperty]
-			public float AttackSpeed // per second
+			public float AttackSpeed
 			{
 				get;
 				private set;
 			}
+			/// <summary>
+			/// Дальность атаки.
+			/// </summary>
 			[JsonProperty]
 			public float AttackRange
 			{

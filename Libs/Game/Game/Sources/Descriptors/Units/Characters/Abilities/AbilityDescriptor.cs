@@ -6,20 +6,27 @@ namespace Game.Descriptors.Abilities
 	{
 		public class Level
 		{
+			/// <summary>
+			/// Радиус действия абилки.
+			/// </summary>
 			[JsonProperty]
 			public float Radius
 			{
 				get;
 				private set;
 			}
-
+			/// <summary>
+			/// Время перезарядки абилки в секундах.
+			/// </summary>
 			[JsonProperty]
 			public float Cooldown
 			{
 				get;
 				private set;
 			}
-
+			/// <summary>
+			/// Модификаторы абилки. Будут наложены на целевых юнитов.
+			/// </summary>
 			[JsonProperty]
 			public Modificator[] Modificators
 			{

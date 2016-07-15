@@ -21,6 +21,10 @@ public static class EventTool {
 		SafeInvokeInternalUntyped(action, arg1, arg2, arg3);
 	}
 
+	/// <summary>
+	/// Безопасное вещание события.
+	/// Если в каком-нибудь подписчике произойдет исключение, то все остальные все равно получат событие.
+	/// </summary>
 	public static void SafeInvokeInternalUntyped(Delegate del, params object[] args)
 	{
 		if (del != null)

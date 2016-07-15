@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace Game
 {
+	/// <summary>
+	/// Класс для хранения прогресса в игре.
+	/// </summary>
 	public class GameProgress
 	{
 		[JsonProperty]

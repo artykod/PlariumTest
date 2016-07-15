@@ -8,15 +8,11 @@ namespace Game.Descriptors.Characters
 	{
 		public new class Level : CharacterDescriptor.Level
 		{
+			/// <summary>
+			/// Время респауна героя после смерти (в секундах).
+			/// </summary>
 			[JsonProperty]
-			public int TargetXP
-			{
-				get;
-				private set;
-			}
-
-			[JsonProperty]
-			public float RespawnTime // seconds
+			public float RespawnTime
 			{
 				get;
 				private set;

@@ -6,15 +6,20 @@ namespace Game.Descriptors.Buildings
 	{
 		public new class Level : BuildingDescriptor.Level
 		{
+			/// <summary>
+			/// На сколько восстанавливает жизни игрока в секунду.
+			/// </summary>
 			[JsonProperty]
-			public int HealSpeedHero // per second
+			public int HealSpeedHero
 			{
 				get;
 				private set;
 			}
-
+			/// <summary>
+			/// На сколько восстанавливает жизни миньонов в секунду.
+			/// </summary>
 			[JsonProperty]
-			public int HealSpeedMinion // per second
+			public int HealSpeedMinion
 			{
 				get;
 				private set;

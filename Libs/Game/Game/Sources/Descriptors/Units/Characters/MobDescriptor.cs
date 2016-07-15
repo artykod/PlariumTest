@@ -6,12 +6,18 @@ namespace Game.Descriptors.Characters
 	{
 		public new class Level : CharacterDescriptor.Level
 		{
+			/// <summary>
+			/// Получаемое за убийство золото.
+			/// </summary>
 			[JsonProperty]
 			public int Gold
 			{
 				get;
 				private set;
 			}
+			/// <summary>
+			/// Получаемый за убийство опыт.
+			/// </summary>
 			[JsonProperty]
 			public int XP
 			{

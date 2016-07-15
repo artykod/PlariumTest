@@ -4,13 +4,22 @@ using System.Collections.Generic;
 
 namespace Game
 {
+	/// <summary>
+	/// Базовый класс для контроллеров.
+	/// При старте запускает корутину, в которой обновляет свое состояние на каждый кадр.
+	/// Также обновляет всех своих чилдов.
+	/// </summary>
 	public abstract class BaseController
 	{
+		/// <summary>
+		/// Чилды контроллера должны реализовывать этот интерфейс,
+		/// т.к. обновление вызывается каждый кадр, а по интерфейсу вызовы работают быстрее на мобилках.
+		/// </summary>
 		public interface IUpdatable
 		{
 			void Update(float dt);
 		}
-
+		
 		public bool IsRunned
 		{
 			get;
