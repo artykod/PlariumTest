@@ -3,6 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using Game;
 
+/// <summary>
+/// Контроллер времени игры.
+/// Позволяет получать общее игровое время, время кадра, управлять скоростью игры.
+/// Также позволяет запускать корутины аналогично корутинам в юнити.
+/// </summary>
 public class TimeController
 {
 	public abstract class YieldInstruction

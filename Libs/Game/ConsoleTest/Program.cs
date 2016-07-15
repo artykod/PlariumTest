@@ -9,6 +9,9 @@ using Game.Logics;
 
 namespace ConsoleTest
 {
+	/// <summary>
+	/// Тестовой консольный клиент игры.
+	/// </summary>
 	public class Program
 	{
 		public bool IsDone
