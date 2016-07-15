@@ -17,6 +17,14 @@ namespace Game.Descriptors.Characters
 				get;
 				private set;
 			}
+			/// <summary>
+			/// Значение опыта, необходимое для получения опыта.
+			/// </summary>
+			[JsonProperty]
+			public int TargetXP {
+				get;
+				private set;
+			}
 		}
 
 		[JsonProperty]

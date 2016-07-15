@@ -93,7 +93,7 @@
 		{
 			base.LevelChanged(previousLevel, newLevel);
 
-			TotalXP = Level == Descriptor.Levels.Length - 1 ? 0 : Descriptor.Levels[Level + 1].CostOfObtain;
+			TotalXP = Level == Descriptor.Levels.Length - 1 ? 0 : Descriptor.Levels[Level + 1].TargetXP;
 			XP = 0;
 		}
 	}

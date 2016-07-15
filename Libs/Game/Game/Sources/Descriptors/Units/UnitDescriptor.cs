@@ -19,7 +19,7 @@ namespace Game.Descriptors
 				private set;
 			}
 			/// <summary>
-			/// Стоимость получения уровня (например, кол-во опыта или монет).
+			/// Стоимость получения уровня (например, кол-во монет).
 			/// </summary>
 			[JsonProperty]
 			public int CostOfObtain
