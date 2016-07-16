@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<root>
+<SettingsList FormatVersion = "1" ProductVersion = "2.0.3b">
+<Entries>
+<e text = "Debug:LogWarning" />
+<e text = "Debug:LogWarningF" />
+<e text = "Debug:Log" />
+<e text = "Debug:LogF" />
+<e text = "Debug:LogError" />
+<e text = "Debug:LogErrorF" />
+<e text = "HAPClient.Logger:Log" />
+<e text = "HAPClient.Logger:Warning" />
+<e text = "HAPClient.Logger:Error" />
+<e text = "HAPClient.ClientBase`1:Log" />
+<e text = "HAPClient.ClientBase`1:Warning" />
+<e text = "HAPClient.ClientBase`1:Error" />
+</Entries>
+</SettingsList>
+</root>

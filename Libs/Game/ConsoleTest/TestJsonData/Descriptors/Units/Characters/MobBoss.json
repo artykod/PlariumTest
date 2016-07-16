@@ -1,0 +1,46 @@
+﻿{
+  "ClassId": "Characters.Mob",
+  "LogicId": "Characters.Mob",
+  "Id": "unit.mob.boss",
+  "Name": "Enemy Boss",
+  "Description": "",
+  "Size": 0.5,
+  "Levels": [
+    {
+      "ViewId": "MobBoss",
+      "CostOfObtain": 100,
+      "HP": 500,
+      "Armor": 0.1,
+      "Attack": 14,
+      "AttackSpeed": 1.5,
+      "Speed": 1,
+      "AttackRange": 0.5,
+      "Gold": 10,
+      "XP": 10
+    },
+    {
+      "ViewId": "MobBoss",
+      "CostOfObtain": 200,
+      "HP": 600,
+      "Armor": 0.2,
+      "Attack": 35,
+      "AttackSpeed": 2,
+      "Speed": 0.75,
+      "AttackRange": 0.8,
+      "Gold": 10,
+      "XP": 10
+    },
+    {
+      "ViewId": "MobBoss",
+      "CostOfObtain": 300,
+      "HP": 700,
+      "Armor": 0.3,
+      "Attack": 40,
+      "AttackSpeed": 3,
+      "Speed": 1,
+      "AttackRange": 1,
+      "Gold": 10,
+      "XP": 10
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+﻿{
+  "ClassId": "Buildings.MobPortal",
+  "LogicId": "Buildings.MobPortal",
+  "Id": "unit.portal.warrior",
+  "Name": "Warriors Portal",
+  "Description": "",
+  "Size": 1,
+  "UnitId": "unit.mob.warrior",
+  "BetweenWavesTime": 20,
+  "Levels": [
+    {
+      "ViewId": "PortalWarrior",
+      "CostOfObtain": 0,
+      "UnitsPerSecond": 0.6,
+      "LevelOfUnits": 0,
+      "WaveDuration": 25
+    },
+    {
+      "ViewId": "PortalWarrior",
+      "CostOfObtain": 0,
+      "UnitsPerSecond": 0.7,
+      "LevelOfUnits": 1,
+      "WaveDuration": 25
+    },
+    {
+      "ViewId": "PortalWarrior",
+      "CostOfObtain": 0,
+      "UnitsPerSecond": 0.8,
+      "LevelOfUnits": 2,
+      "WaveDuration": 25
+    }
+  ]
+}

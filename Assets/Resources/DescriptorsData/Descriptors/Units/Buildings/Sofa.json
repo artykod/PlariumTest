@@ -1,0 +1,15 @@
+﻿{
+  "ClassId": "Buildings.Sofa",
+  "LogicId": "Buildings.Sofa",
+  "Id": "unit.sofa",
+  "Name": "Sofa of Developers",
+  "Description": "",
+  "Size": 2.5,
+  "Levels": [
+    {
+      "ViewId": "Sofa",
+      "CostOfObtain": 0,
+      "HP": 5000
+    }
+  ]
+}

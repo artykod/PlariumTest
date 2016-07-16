@@ -6,13 +6,14 @@
 ._*
 .Spotlight-V100
 .Trashes
+.vs
 ehthumbs.db
 Thumbs.db
 
 *.tmproj
-*.csproj
+plariumtest**.csproj
 *.unityproj
-*.sln
+plariumtest**.sln
 *.suo
 *.user
 *.pidb
@@ -22,9 +23,8 @@ Thumbs.db
 
 # Build results
 
-[Dd]ebug/
-[Rr]elease/
-x64/
+**/bin/[Dd]ebug/
+**/bin/[Rr]elease/
 [Bb]uild/
 [Ll]ibrary/
 [Tt]emp/
@@ -42,3 +42,4 @@ FailedAssetImports.txt
 guidmapper
 Assets/UnityVS
 Assets/UnityVS.meta
+TestResults/

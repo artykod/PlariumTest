@@ -1,0 +1,40 @@
+﻿{
+  "ClassId": "Characters.Mob",
+  "LogicId": "Characters.Mob",
+  "Id": "unit.minion.warrior",
+  "Name": "Warrior",
+  "Description": "",
+  "Size": 0.25,
+  "Levels": [
+    {
+      "ViewId": "MinionWarrior",
+      "CostOfObtain": 100,
+      "HP": 100,
+      "Armor": 0.1,
+      "Attack": 15,
+      "AttackSpeed": 1.5,
+      "Speed": 2,
+      "AttackRange": 0.5
+    },
+    {
+      "ViewId": "MinionWarrior",
+      "CostOfObtain": 200,
+      "HP": 110,
+      "Armor": 0.2,
+      "Attack": 15,
+      "AttackSpeed": 2,
+      "Speed": 1.2,
+      "AttackRange": 0.8
+    },
+    {
+      "ViewId": "MinionWarrior",
+      "CostOfObtain": 300,
+      "HP": 120,
+      "Armor": 0.3,
+      "Attack": 20,
+      "AttackSpeed": 3,
+      "Speed": 1.3,
+      "AttackRange": 1
+    }
+  ]
+}

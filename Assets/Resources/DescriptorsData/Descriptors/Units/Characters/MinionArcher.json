@@ -1,0 +1,41 @@
+﻿{
+  "ClassId": "Characters.Mob",
+  "LogicId": "Characters.Mob",
+  "Id": "unit.minion.archer",
+  "Name": "Archer",
+  "Description": "",
+  "Size": 0.25,
+  "IsRangedAttack": true,
+  "Levels": [
+    {
+      "ViewId": "MinionArcher",
+      "CostOfObtain": 100,
+      "HP": 20,
+      "Armor": 0.1,
+      "Attack": 5,
+      "AttackSpeed": 1.5,
+      "Speed": 3,
+      "AttackRange": 10
+    },
+    {
+      "ViewId": "MinionArcher",
+      "CostOfObtain": 200,
+      "HP": 100,
+      "Armor": 0.2,
+      "Attack": 15,
+      "AttackSpeed": 2,
+      "Speed": 1,
+      "AttackRange": 0.8
+    },
+    {
+      "ViewId": "MinionArcher",
+      "CostOfObtain": 300,
+      "HP": 110,
+      "Armor": 0.3,
+      "Attack": 20,
+      "AttackSpeed": 3,
+      "Speed": 1.1,
+      "AttackRange": 1
+    }
+  ]
+}

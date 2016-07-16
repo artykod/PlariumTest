@@ -1,0 +1,55 @@
+﻿{
+  "ClassId": "Maps.Forest",
+  "LogicId": "Maps.Map",
+  "Id": "map.forest",
+  "ViewId": "MapForest",
+  "Name": "Forest Map",
+  "Description": "",
+  "Width": 50,
+  "Height": 50,
+  "DelayBeforeGame": 10,
+  "Markers": [
+    {
+      "X": 25,
+      "Y": 12,
+      "Team": "player",
+      "ObjectId": "unit.sofa"
+    },
+    {
+      "X": 15,
+      "Y": 7,
+      "Team": "player",
+      "ObjectId": "unit.barracks.archer"
+    },
+    {
+      "X": 35,
+      "Y": 7,
+      "Team": "player",
+      "ObjectId": "unit.barracks.warrior"
+    },
+    {
+      "X": 25,
+      "Y": 5,
+      "Team": "player",
+      "ObjectId": "unit.fountain"
+    },
+    {
+      "X": 5,
+      "Y": 40,
+      "Team": "enemy",
+      "ObjectId": "unit.portal.warrior"
+    },
+    {
+      "X": 45,
+      "Y": 40,
+      "Team": "enemy",
+      "ObjectId": "unit.portal.archer"
+    },
+    {
+      "X": 25,
+      "Y": 40,
+      "Team": "enemy",
+      "ObjectId": "unit.portal.boss"
+    }
+  ]
+}

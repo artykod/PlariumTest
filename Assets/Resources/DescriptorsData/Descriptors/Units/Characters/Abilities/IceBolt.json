@@ -1,0 +1,102 @@
+﻿{
+  "ClassId": "Abilities.Ability",
+  "LogicId": "Abilities.IceBolt",
+  "Id": "ability.ice_bolt",
+  "Name": "Ice Bolt",
+  "Description": "",
+  "ViewId": "IceBolt",
+  "IconId": "abilities/ice_bolt",
+  "CursorId": "ice",
+  "Levels": [
+    {
+      "Radius": 5,
+      "Cooldown": 5,
+      "Modifiers": [
+        {
+          "Kind": "HP",
+          "Type": "Add",
+          "Value": -10,
+          "Trigger": "Now",
+          "TriggerTime": 0,
+          "AffectedUnit": "Enemy"
+        },
+        {
+          "Kind": "Speed",
+          "Type": "Percent",
+          "Value": 0.5,
+          "Trigger": "During",
+          "TriggerTime": 3,
+          "AffectedUnit": "Enemy"
+        },
+        {
+          "Kind": "AttackSpeed",
+          "Type": "Percent",
+          "Value": 0.25,
+          "Trigger": "During",
+          "TriggerTime": 3,
+          "AffectedUnit": "Enemy"
+        }
+      ]
+    },
+    {
+      "Radius": 10,
+      "Cooldown": 3,
+      "Modifiers": [
+        {
+          "Kind": "HP",
+          "Type": "Add",
+          "Value": -20,
+          "Trigger": "Now",
+          "TriggerTime": 0,
+          "AffectedUnit": "Enemy"
+        },
+        {
+          "Kind": "Speed",
+          "Type": "Percent",
+          "Value": 0.15,
+          "Trigger": "During",
+          "TriggerTime": 4,
+          "AffectedUnit": "Enemy"
+        },
+        {
+          "Kind": "AttackSpeed",
+          "Type": "Percent",
+          "Value": 0.1,
+          "Trigger": "During",
+          "TriggerTime": 4,
+          "AffectedUnit": "Enemy"
+        }
+      ]
+    },
+    {
+      "Radius": 15,
+      "Cooldown": 2,
+      "Modifiers": [
+        {
+          "Kind": "HP",
+          "Type": "Add",
+          "Value": -30,
+          "Trigger": "Now",
+          "TriggerTime": 0,
+          "AffectedUnit": "Enemy"
+        },
+        {
+          "Kind": "Speed",
+          "Type": "Percent",
+          "Value": 0,
+          "Trigger": "During",
+          "TriggerTime": 5,
+          "AffectedUnit": "Enemy"
+        },
+        {
+          "Kind": "AttackSpeed",
+          "Type": "Percent",
+          "Value": 0,
+          "Trigger": "During",
+          "TriggerTime": 5,
+          "AffectedUnit": "Enemy"
+        }
+      ]
+    }
+  ]
+}

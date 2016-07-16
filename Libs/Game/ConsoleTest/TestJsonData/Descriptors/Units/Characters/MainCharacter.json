@@ -1,0 +1,75 @@
+﻿{
+  "ClassId": "Characters.Hero",
+  "LogicId": "Characters.Hero",
+  "Id": "unit.main_character",
+  "Name": "Main character",
+  "Description": "",
+  "Size": 0.85,
+  "IconId": "main_character",
+  "AbilitiesIds": [
+    "ability.ice_bolt",
+    "ability.meteor_shower"
+  ],
+  "Levels": [
+    {
+      "ViewId": "MainCharacter",
+      "CostOfObtain": 0,
+      "HP": 500,
+      "Armor": 0.1,
+      "Attack": 10,
+      "AttackSpeed": 1.5,
+      "Speed": 3,
+      "AttackRange": 0.5,
+      "TargetXP": 0,
+      "RespawnTime": 3
+    },
+    {
+      "ViewId": "MainCharacter",
+      "CostOfObtain": 2000,
+      "HP": 600,
+      "Armor": 0.2,
+      "Attack": 15,
+      "AttackSpeed": 2,
+      "Speed": 3.25,
+      "AttackRange": 0.8,
+      "TargetXP": 50,
+      "RespawnTime": 2
+    },
+    {
+      "ViewId": "MainCharacter",
+      "CostOfObtain": 3000,
+      "HP": 700,
+      "Armor": 0.3,
+      "Attack": 20,
+      "AttackSpeed": 3,
+      "Speed": 3.5,
+      "AttackRange": 1,
+      "TargetXP": 100,
+      "RespawnTime": 1
+    },
+    {
+      "ViewId": "MainCharacter",
+      "CostOfObtain": 4000,
+      "HP": 1000,
+      "Armor": 0.4,
+      "Attack": 30,
+      "AttackSpeed": 4,
+      "Speed": 3.8,
+      "AttackRange": 1.5,
+      "TargetXP": 500,
+      "RespawnTime": 0.5
+    },
+    {
+      "ViewId": "MainCharacter",
+      "CostOfObtain": 5000,
+      "HP": 1500,
+      "Armor": 0.6,
+      "Attack": 50,
+      "AttackSpeed": 6,
+      "Speed": 4,
+      "AttackRange": 2,
+      "TargetXP": 1000,
+      "RespawnTime": 0.25
+    }
+  ]
+}
