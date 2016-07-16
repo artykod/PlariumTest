@@ -356,6 +356,22 @@ Prefab:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1895691624}
+    - target: {fileID: 22484624, guid: a33b361e781f93a439d9c9149c4a2a72, type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 22484624, guid: a33b361e781f93a439d9c9149c4a2a72, type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 22422620, guid: a33b361e781f93a439d9c9149c4a2a72, type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 22422620, guid: a33b361e781f93a439d9c9149c4a2a72, type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 22417670, guid: a33b361e781f93a439d9c9149c4a2a72, type: 2}
       propertyPath: m_SizeDelta.x
       value: 0
@@ -380,11 +396,11 @@ Prefab:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 22484624, guid: a33b361e781f93a439d9c9149c4a2a72, type: 2}
+    - target: {fileID: 22437610, guid: a33b361e781f93a439d9c9149c4a2a72, type: 2}
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 22484624, guid: a33b361e781f93a439d9c9149c4a2a72, type: 2}
+    - target: {fileID: 22437610, guid: a33b361e781f93a439d9c9149c4a2a72, type: 2}
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}

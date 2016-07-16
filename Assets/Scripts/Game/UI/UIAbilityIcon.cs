@@ -3,11 +3,16 @@ using Game.Logics;
 using Game.Logics.Abilities;
 using Game.Logics.Characters;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIAbilityIcon : UIFillableIcon
 {
 	[SerializeField]
 	private UIButton upgradeButton;
+	[SerializeField]
+	private Text hotKeyText;
+	[SerializeField]
+	private KeyCode hotKeyActivation;
 
 	private UIHeroHUD hud;
 	private Ability ability;
@@ -54,6 +59,7 @@ public class UIAbilityIcon : UIFillableIcon
 	{
 		base.Awake();
 
+		hotKeyText.text = "hotkey: " + hotKeyActivation.ToString().Replace("Alpha", "");
 		upgradeButton.OnClick += OnUpgradeClicked;
 	}
 
@@ -81,10 +87,20 @@ public class UIAbilityIcon : UIFillableIcon
 	{
 		base.OnClick();
 
-		if (!hud.IsAbilitySelected && ability != null && !ability.IsRecharging)
+		if (ability != null && !ability.IsRecharging && (hud.SelectedAbility == null || !hud.SelectedAbility.IsActivated))
 		{
 			ability.Select();
 			Core.Instance.GameController.SelectUnit(ability.Caster);
+		}
+	}
+
+	protected override void Update()
+	{
+		base.Update();
+
+		if (Input.GetKeyDown(hotKeyActivation))
+		{
+			OnClick();
 		}
 	}
 

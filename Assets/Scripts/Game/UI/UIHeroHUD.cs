@@ -13,8 +13,10 @@ public class UIHeroHUD : MonoBehaviour {
 
 	public bool IsAbilitySelected
 	{
-		get;
-		private set;
+		get
+		{
+			return SelectedAbility != null;
+		}
 	}
 
 	public Ability SelectedAbility
@@ -44,13 +46,21 @@ public class UIHeroHUD : MonoBehaviour {
 
 	private void OnChangedSelection(Ability ability, bool isSelected)
 	{
-		SelectedAbility = ability;
-		IsAbilitySelected = isSelected;
+		var prev = SelectedAbility;
+		if (isSelected && prev != null)
+		{
+			prev.Cancel();
+		}
 
+		SelectedAbility = isSelected ? ability : null;
 		areaSelection.IsVisible = IsAbilitySelected;
 		if (IsAbilitySelected)
 		{
 			areaSelection.Scale = SelectedAbility.CurrentLevel.Radius * 2f;
+		}
+		else
+		{
+			SelectedAbility = null;
 		}
 	}
 
