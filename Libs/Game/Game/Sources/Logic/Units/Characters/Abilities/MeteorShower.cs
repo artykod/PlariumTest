@@ -13,8 +13,6 @@ namespace Game.Logics.Abilities
 
 		public override bool Activate(Vec2 point, Unit clickedUnit)
 		{
-			base.Activate(point, clickedUnit);
-
 			if (base.Activate(point, clickedUnit))
 			{
 				IsActivated = true;
@@ -22,6 +20,7 @@ namespace Game.Logics.Abilities
 				var units = new List<Unit>();
 				GameController.ForEachLogic<Character>(unit =>
 				{
+					// поиск живых юнитов врага в радиусе действия абилки относительно точки ее применения.
 					if (unit.HP > 0 && unit.Team != Caster.Team && (unit.Position - point).LengthSqr < radiusSqr)
 					{
 						units.Add(unit);

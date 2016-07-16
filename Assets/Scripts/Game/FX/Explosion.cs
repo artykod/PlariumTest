@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Визуальный эффект взрыва.
+/// </summary>
 [PathInResources(Constants.Paths.Views.ALL + "FX/Explosions/")]
 public class Explosion : PoolableObject
 {
@@ -8,12 +11,19 @@ public class Explosion : PoolableObject
 
 	private float time;
 
+	/// <summary>
+	/// Запустить взрыв в произвольной точке.
+	/// </summary>
+	/// <param name="position">точка, где будет отыгран взрыв.</param>
 	public void Fire(Vector3 position)
 	{
 		transform.position = position;
 
 		var particles = GetComponent<ParticleSystem>();
-		particles.Play();
+		if (particles != null)
+		{
+			particles.Play();
+		}
 	}
 
 	protected override void OnGet()

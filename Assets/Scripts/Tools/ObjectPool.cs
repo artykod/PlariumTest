@@ -1,11 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 public interface IObjectPool
 {
 	void Return(IPoolableObject obj, string listId);
 }
 
+/// <summary>
+/// Класс для создания объектов заранее и хранении их в пуле для 
+/// сокращения времени на создание новых экземпляров из префабов.
+/// </summary>
 public class ObjectPool : IObjectPool
 {
 	private Dictionary<string, LinkedList<IPoolableObject>> pools = new Dictionary<string, LinkedList<IPoolableObject>>();

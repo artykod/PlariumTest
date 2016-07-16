@@ -5,12 +5,16 @@ using Game.Logics;
 using Game.Logics.Maps;
 using Game.Logics.Abilities;
 
+/// <summary>
+/// Ключевой объект игры. Синглетон.
+/// Игра стартует с него, вся связь компонентов также через него.
+/// </summary>
 public class Core : MonoBehaviour
 {
 	[SerializeField]
 	private GameCamera gameCamera;
 	[SerializeField]
-	private UIGame gameUI;
+	private UIGame uiGame;
 
 	private Loader loader;
 	private GameController gameController;
@@ -34,7 +38,7 @@ public class Core : MonoBehaviour
 		}
 	}
 
-	public GameCamera Camera
+	public GameCamera GameCamera
 	{
 		get
 		{
@@ -42,11 +46,11 @@ public class Core : MonoBehaviour
 		}
 	}
 
-	public UIGame GameUI
+	public UIGame UIGame
 	{
 		get
 		{
-			return gameUI;
+			return uiGame;
 		}
 	}
 

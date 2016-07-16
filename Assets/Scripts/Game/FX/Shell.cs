@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using Game.Logics;
 
+/// <summary>
+/// Визуальный эффект для полета снарядов.
+/// </summary>
 [PathInResources(Constants.Paths.Views.ALL + "FX/Shells/")]
 public class Shell : PoolableObject
 {
@@ -10,8 +13,13 @@ public class Shell : PoolableObject
 	private bool isFly;
 	private float time;
 	private float currentTime;
-	private int framesToSkip;
 	private System.Action onFlyEnd;
+
+	/// <summary>
+	/// для нормального отображения партиклов, генерящихся в зависимости от дистанции
+	/// пропускаются кадры перед эмитом частиц.
+	/// </summary>
+	private int framesToSkip;
 
 	private void Awake()
 	{
@@ -22,6 +30,13 @@ public class Shell : PoolableObject
 		}
 	}
 
+	/// <summary>
+	/// Запустить снаряд.
+	/// </summary>
+	/// <param name="from">из какой точки полетит.</param>
+	/// <param name="to">в какую точку прилетит.</param>
+	/// <param name="flyTime">время полета.</param>
+	/// <param name="onFlyEnd">колбек на окончание полета.</param>
 	public void Fire(Vector3 from, Vector3 to, float flyTime, System.Action onFlyEnd = null)
 	{
 		fromPoint = from;
@@ -39,12 +54,25 @@ public class Shell : PoolableObject
 
 		transform.position = from;
 	}
-
+	/// <summary>
+	/// Запустить снаряд от юнита в другого юнита.
+	/// </summary>
+	/// <param name="fromUnit">от какого юнита полетит.</param>
+	/// <param name="toUnit">в какого прилетит.</param>
+	/// <param name="flyTime">время полета.</param>
 	public void Fire(Unit fromUnit, Unit toUnit, float flyTime)
 	{
-		Fire(new Vector3(fromUnit.Position.x, 1f, fromUnit.Position.y), new Vector3(toUnit.Position.x, 1f, toUnit.Position.y), flyTime);
+		if (fromUnit != toUnit)
+		{
+			Fire(new Vector3(fromUnit.Position.x, 1f, fromUnit.Position.y), new Vector3(toUnit.Position.x, 1f, toUnit.Position.y), flyTime);
+		}
 	}
-
+	/// <summary>
+	/// Запустить снаряд от юнита в любую точку.
+	/// </summary>
+	/// <param name="fromUnit">от какого юнита полетит.</param>
+	/// <param name="to">в какую точку прилетит.</param>
+	/// <param name="flyTime">время полета.</param>
 	public void Fire(Unit fromUnit, Vector3 to, float flyTime)
 	{
 		Fire(new Vector3(fromUnit.Position.x, 1f, fromUnit.Position.y), to, flyTime);

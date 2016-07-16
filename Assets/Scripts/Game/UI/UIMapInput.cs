@@ -7,6 +7,9 @@ using Game;
 using Game.Logics;
 using Game.Logics.Characters;
 
+/// <summary>
+/// Класс, управляющий выделением и назначением целей юнитам.
+/// </summary>
 public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
 	[SerializeField]
@@ -14,8 +17,8 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 
 	private GameController gameController;
 	private Canvas canvas;
-	private Vector2 startPos;
-	private Vector2 endPos;
+	private Vector2 leftTopOfSelection;
+	private Vector2 rightBottomOfSelection;
 
 	private void Awake()
 	{
@@ -27,7 +30,7 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 
 	void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
 	{
-		if (!gameController.IsBattleStarted || Core.Instance.GameUI.HeroHUD.IsAbilitySelected)
+		if (!gameController.IsBattleStarted || Core.Instance.UIGame.HeroHUD.IsAbilitySelected)
 		{
 			return;
 		}
@@ -35,21 +38,21 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 		if (eventData.button == PointerEventData.InputButton.Left)
 		{
 			selectionPanel.enabled = true;
-			startPos = eventData.position;
+			leftTopOfSelection = eventData.position;
 		}
 	}
 
 	void IDragHandler.OnDrag(PointerEventData eventData)
 	{
-		if (!gameController.IsBattleStarted || Core.Instance.GameUI.HeroHUD.IsAbilitySelected)
+		if (!gameController.IsBattleStarted || Core.Instance.UIGame.HeroHUD.IsAbilitySelected)
 		{
 			return;
 		}
 
 		if (eventData.button == PointerEventData.InputButton.Left)
 		{
-			endPos = eventData.position;
-			var r = GetDrawingRect(startPos / canvas.scaleFactor, endPos / canvas.scaleFactor);
+			rightBottomOfSelection = eventData.position;
+			var r = GetDrawingRect(leftTopOfSelection / canvas.scaleFactor, rightBottomOfSelection / canvas.scaleFactor);
 			var selectionRT = selectionPanel.rectTransform;
 			selectionRT.anchoredPosition = new Vector2(r.x, Screen.height - r.y);
 			selectionRT.sizeDelta = new Vector2(r.width, r.height);
@@ -58,36 +61,36 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 
 	void IEndDragHandler.OnEndDrag(PointerEventData eventData)
 	{
-		if (!gameController.IsBattleStarted || Core.Instance.GameUI.HeroHUD.IsAbilitySelected)
+		if (!gameController.IsBattleStarted || Core.Instance.UIGame.HeroHUD.IsAbilitySelected)
 		{
 			return;
 		}
 
 		if (eventData.button == PointerEventData.InputButton.Left)
 		{
-			endPos = eventData.position;
+			rightBottomOfSelection = eventData.position;
 			SelectUnitsInCurrentSelection();
 		}
 	}
 
 	void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
 	{
-		if (!gameController.IsBattleStarted || eventData.dragging)
+		if (!gameController.IsBattleStarted || (eventData.dragging && eventData.button == PointerEventData.InputButton.Left))
 		{
 			return;
 		}
 
 		var clickArea = new Vector2(30f, 40f);
-		startPos = eventData.position - clickArea;
-		endPos = eventData.position + clickArea;
+		leftTopOfSelection = eventData.position - clickArea;
+		rightBottomOfSelection = eventData.position + clickArea;
 
 		if (eventData.button == PointerEventData.InputButton.Left)
 		{
-			if (Core.Instance.GameUI.HeroHUD.IsAbilitySelected)
+			if (Core.Instance.UIGame.HeroHUD.IsAbilitySelected)
 			{
 				var groundPosition = UIGame.ScreenToGroundPosition(Input.mousePosition);
 				var units = FindUnitsInCurrentSelection<Unit>();
-				Core.Instance.GameUI.HeroHUD.ClickOnGround(groundPosition, units);
+				Core.Instance.UIGame.HeroHUD.ClickOnGround(groundPosition, units);
 			}
 			else
 			{
@@ -96,9 +99,9 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 		}
 		else
 		{
-			if (Core.Instance.GameUI.HeroHUD.IsAbilitySelected)
+			if (Core.Instance.UIGame.HeroHUD.IsAbilitySelected)
 			{
-				Core.Instance.GameUI.HeroHUD.CancelAbility();
+				Core.Instance.UIGame.HeroHUD.CancelAbility();
 			}
 			else
 			{
@@ -110,7 +113,7 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 	private T[] FindUnitsInCurrentSelection<T>(string teamFilter = null) where T : Unit
 	{
 		var result = new LinkedList<T>();
-		var rect = GetDrawingRect(startPos, endPos);
+		var rect = GetDrawingRect(leftTopOfSelection, rightBottomOfSelection);
 		gameController.ForEachLogic<T>(unit =>
 		{
 			if (teamFilter != null && unit.Team != teamFilter)
@@ -138,7 +141,7 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 		}
 		gameController.SelectUnits(unitsInSelection);
 
-		startPos = endPos = Vector2.zero;
+		leftTopOfSelection = rightBottomOfSelection = Vector2.zero;
 		selectionPanel.rectTransform.sizeDelta = Vector2.zero;
 		selectionPanel.enabled = false;
 	}
@@ -146,11 +149,10 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 	private void UpdateTargetOfUnits()
 	{
 		var selectedUnits = Core.Instance.GameController.SelectedUnits;
-
 		if (selectedUnits.Length > 0)
 		{
 			Character character = null;
-			var rect = GetDrawingRect(startPos, endPos);
+			var rect = GetDrawingRect(leftTopOfSelection, rightBottomOfSelection);
 
 			gameController.ForEachLogic<Character>(unit =>
 			{
@@ -179,8 +181,11 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 					}
 					else if (i is Hero)
 					{
-						var groundPosition = UIGame.ScreenToGroundPosition(startPos);
+						var groundPosition = UIGame.ScreenToGroundPosition(leftTopOfSelection);
 						(i as Hero).MoveTo(new Vec2(groundPosition.x, groundPosition.z));
+						
+						var marker = PrefabTool.CreateInstance<Marker>();
+						marker.Show(groundPosition);
 					}
 				}
 			}

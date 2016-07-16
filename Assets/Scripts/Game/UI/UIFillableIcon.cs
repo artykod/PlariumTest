@@ -2,6 +2,9 @@
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+/// <summary>
+/// Компонент заполняемой иконки (для отображения кулдауна чего-либо).
+/// </summary>
 public abstract class UIFillableIcon : MonoBehaviour, IPointerClickHandler
 {
 	[SerializeField]

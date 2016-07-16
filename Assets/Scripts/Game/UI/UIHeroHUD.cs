@@ -3,6 +3,9 @@ using Game.Logics;
 using Game.Logics.Characters;
 using Game.Logics.Abilities;
 
+/// <summary>
+/// Панель главного персонажа.
+/// </summary>
 public class UIHeroHUD : MonoBehaviour {
 	[SerializeField]
 	private UIHeroAvatar heroIcon;
@@ -19,6 +22,10 @@ public class UIHeroHUD : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Выбранная в текущий момент абилка.
+	/// Если null, то ни одна абилка не выбрана.
+	/// </summary>
 	public Ability SelectedAbility
 	{
 		get;
@@ -86,6 +93,11 @@ public class UIHeroHUD : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Передать абилка нажатие по полю.
+	/// </summary>
+	/// <param name="point">в какой точке поля нажали.</param>
+	/// <param name="units">были ли под курсором юниты.</param>
 	public void ClickOnGround(Vector3 point, Unit[] units)
 	{
 		var firstUnit = units != null && units.Length > 0 ? units[0] : null;

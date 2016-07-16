@@ -2,14 +2,28 @@
 using Game;
 using System.Collections.Generic;
 
+/// <summary>
+/// Игровая камера.
+/// Имеет разные режимы управления.
+/// </summary>
 public class GameCamera : MonoBehaviour
 {
 	public enum Modes
 	{
+		/// <summary>
+		/// Свободное передвижение по карте.
+		/// </summary>
 		FreeMove,
+		/// <summary>
+		/// Следует за главным персонажем, если он жив.
+		/// Иначе свободное работает передвижение.
+		/// </summary>
 		FollowMainCharacter,
 	}
 
+	/// <summary>
+	/// Информация о различных текстурах для отображения курсора в игре.
+	/// </summary>
 	[System.Serializable]
 	public class CursorInfo
 	{
@@ -42,6 +56,10 @@ public class GameCamera : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Сменить игровой курсор.
+	/// </summary>
+	/// <param name="cursorName">уникальное имя курсора.</param>
 	public void ChangeCursor(string cursorName)
 	{
 		var cursor = default(CursorInfo);

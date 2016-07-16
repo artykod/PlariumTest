@@ -7,8 +7,15 @@ public interface IPoolableObject
 	void OnReturn();
 }
 
+/// <summary>
+/// Компонент, от которого должны наследоваться объекты, которые должны храниться в пулах.
+/// </summary>
 public abstract class PoolableObject : MonoBehaviour, IPoolableObject
 {
+	/// <summary>
+	/// Емкость пула для этого класса.
+	/// При нехватке места в пуле будет создано заранее столько объектов сколько емкость.
+	/// </summary>
 	[SerializeField]
 	private int poolCapacity = 1;
 

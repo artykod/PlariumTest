@@ -2,6 +2,13 @@
 
 public static class ResourcesTool
 {
+	/// <summary>
+	/// Загрузка спрайта иконки по имени.
+	/// Если спрайт хранится в коллекции спрайтов одной большой текстуры,
+	/// то автоматически разберет путь на слеши и найдет в нужной текстуре.
+	/// </summary>
+	/// <param name="spriteName"></param>
+	/// <returns></returns>
 	public static Sprite LoadIconByName(string spriteName)
 	{
 		var multiSpriteName = string.Empty;

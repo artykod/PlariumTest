@@ -13,7 +13,7 @@ public class UIButtonCameraModeSwitch : UIButton
 	{
 		base.OnClickHandler();
 
-		var camera = Core.Instance.Camera;
+		var camera = Core.Instance.GameCamera;
 		if (camera != null)
 		{
 			if (camera.Mode == GameCamera.Modes.FollowMainCharacter)
@@ -33,7 +33,7 @@ public class UIButtonCameraModeSwitch : UIButton
 	{
 		if (Core.Instance != null)
 		{
-			var camera = Core.Instance.Camera;
+			var camera = Core.Instance.GameCamera;
 			if (camera != null)
 			{
 				Text = "Camera: " + camera.Mode.ToString() + "\nHotkey: SPACE";

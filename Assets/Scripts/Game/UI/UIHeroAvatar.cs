@@ -2,6 +2,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Иконка героя в панели главного персонажа.
+/// </summary>
 public class UIHeroAvatar : UIFillableIcon
 {
 	[SerializeField]
@@ -43,7 +46,7 @@ public class UIHeroAvatar : UIFillableIcon
 		var hero = Core.Instance.GameController.Map.Fountain.Hero;
 		if (hero != null)
 		{
-			Core.Instance.Camera.Mode = GameCamera.Modes.FollowMainCharacter;
+			Core.Instance.GameCamera.Mode = GameCamera.Modes.FollowMainCharacter;
 			Core.Instance.GameController.SelectUnit(hero);
 		}
 	}

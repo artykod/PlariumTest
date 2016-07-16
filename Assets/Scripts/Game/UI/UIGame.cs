@@ -4,6 +4,9 @@ using Game.Logics.Characters;
 using Game.Logics.Buildings;
 using System.Collections.Generic;
 
+/// <summary>
+/// Игровой интерфейс на поле боя.
+/// </summary>
 public class UIGame : MonoBehaviour
 {
 	private class UnitUI
@@ -49,13 +52,20 @@ public class UIGame : MonoBehaviour
 
 	public static Vector3 ScreenToGroundPosition(Vector2 screenPosition)
 	{
-		var clickViewport = Camera.main.ScreenToViewportPoint(screenPosition);
-		var rayToWorld = Camera.main.ViewportPointToRay(clickViewport);
+		/*var rayToWorld = Camera.main.ScreenPointToRay(screenPosition);
 		var groundPlane = new Plane(Vector3.up, Vector3.zero);
 		var rayDistance = 0f;
 		if (groundPlane.Raycast(rayToWorld, out rayDistance))
 		{
 			return rayToWorld.GetPoint(rayDistance);
+		}
+		return Vector3.zero;*/
+
+		var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		var hit = default(RaycastHit);
+		if (Physics.Raycast(ray, out hit, 1000, LayerMask.NameToLayer("Terrain")))
+		{
+			return hit.point;
 		}
 		return Vector3.zero;
 	}

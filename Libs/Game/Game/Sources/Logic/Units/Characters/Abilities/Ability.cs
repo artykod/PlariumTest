@@ -6,15 +6,39 @@ namespace Game.Logics.Abilities
 	using Descriptors.Abilities;
 	using Characters;
 
+	/// <summary>
+	/// Логика работы абилок.
+	/// </summary>
 	public abstract class Ability : Logic
 	{
+		/// <summary>
+		/// Для оптимизации расчета попаданий в радиус без взятия корня.
+		/// </summary>
 		protected float radiusSqr;
+		/// <summary>
+		/// Текущий уровень прокачки абилки.
+		/// </summary>
 		private int level;
 
+		/// <summary>
+		/// Событие на выбор абилки.
+		/// </summary>
 		public event Action<Ability> OnSelect;
+		/// <summary>
+		/// Событие на отмену выбора абилки.
+		/// </summary>
 		public event Action<Ability> OnCancel;
+		/// <summary>
+		/// Событие на срабатывание абилки.
+		/// </summary>
 		public event Action<Ability> OnExecute;
+		/// <summary>
+		/// Событие на завершение перезарядки абилки.
+		/// </summary>
 		public event Action<Ability> OnRecharged;
+		/// <summary>
+		/// Смена уровня прокачки абилки.
+		/// </summary>
 		public event Action<int, int> OnLevelChanged;
 
 		public new AbilityDescriptor Descriptor
@@ -74,24 +98,33 @@ namespace Game.Logics.Abilities
 			}
 		}
 
+		/// <summary>
+		/// Кто кастует эту абилку.
+		/// </summary>
 		public Character Caster
 		{
 			get;
 			private set;
 		}
-
+		/// <summary>
+		/// Юниты, на которые воздействует абилка.
+		/// </summary>
 		public Unit[] AffectedUnits
 		{
 			get;
 			protected set;
 		}
-
+		/// <summary>
+		/// Была ли абилка активирована.
+		/// </summary>
 		public bool IsActivated
 		{
 			get;
 			protected set;
 		}
-
+		/// <summary>
+		/// Точка активации абилки на поле боя.
+		/// </summary>
 		public Vec2 ActivationPoint
 		{
 			get;
@@ -117,6 +150,9 @@ namespace Game.Logics.Abilities
 			Caster = caster;
 		}
 
+		/// <summary>
+		/// Выбрать абилку.
+		/// </summary>
 		public bool Select()
 		{
 			if (GameController.IsBattleStarted && !IsSelected)
@@ -127,13 +163,24 @@ namespace Game.Logics.Abilities
 			}
 			return false;
 		}
-
+		/// <summary>
+		/// Активировать абилку.
+		/// </summary>
+		/// <param name="point">Точка, где нужно активировать абилку.</param>
+		/// <param name="clickedUnit">Юнит, на которого тыкнули. Если в пустое место, то null.</param>
+		/// <returns></returns>
 		public virtual bool Activate(Vec2 point, Unit clickedUnit)
 		{
+			if (CurrentCooldown > 0f)
+			{
+				return false;
+			}
 			ActivationPoint = point;
 			return true;
 		}
-
+		/// <summary>
+		/// Отменить выбор абилки.
+		/// </summary>
 		public bool Cancel()
 		{
 			IsActivated = false;
@@ -153,13 +200,20 @@ namespace Game.Logics.Abilities
 			Cancel();
 		}
 
+		/// <summary>
+		/// Будет вызван при возможности активировать абилку.
+		/// Допустим, если абилка активируется только на каком-то расстоянии, 
+		/// то будет вызван, когда кастер доберется до нужного расстояния.
+		/// </summary>
 		protected void Execute()
 		{
 			CurrentCooldown = TotalCooldown;
 			if (AffectedUnits != null)
 			{
+				// по всем подверженным абилке юнитам накладываем модификаторы абилки.
 				foreach (var unit in AffectedUnits)
 				{
+					// если юнит еще жив.
 					if (unit != null && unit.HP > 0)
 					{
 						foreach (var modifier in CurrentLevel.Modifiers)
@@ -186,6 +240,7 @@ namespace Game.Logics.Abilities
 		{
 			base.Update(dt);
 
+			// кулдаун на перезарядку абилки.
 			if (CurrentCooldown > 0f)
 			{
 				CurrentCooldown -= dt;

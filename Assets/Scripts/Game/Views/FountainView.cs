@@ -14,7 +14,7 @@ public class FountainView : UnitView {
 	{
 		base.FetchLogic(logic);
 
-		var camera = Core.Instance.Camera;
+		var camera = Core.Instance.GameCamera;
 		var position = transform.position;
 		var cameraPosition = camera.transform.position;
 

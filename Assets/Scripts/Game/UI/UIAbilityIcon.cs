@@ -5,6 +5,9 @@ using Game.Logics.Characters;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Иконка абилки героя.
+/// </summary>
 public class UIAbilityIcon : UIFillableIcon
 {
 	[SerializeField]
@@ -143,13 +146,13 @@ public class UIAbilityIcon : UIFillableIcon
 	private void OnSelect(Ability obj)
 	{
 		OnSelectionChanged.SafeInvoke(ability, true);
-		Core.Instance.Camera.ChangeCursor(ability.Descriptor.CursorId);
+		Core.Instance.GameCamera.ChangeCursor(ability.Descriptor.CursorId);
 	}
 
 	private void OnCancel(Ability obj)
 	{
 		OnSelectionChanged.SafeInvoke(ability, false);
-		Core.Instance.Camera.ChangeCursor(null);
+		Core.Instance.GameCamera.ChangeCursor(null);
 	}
 
 	private void OnExecute(Ability obj)

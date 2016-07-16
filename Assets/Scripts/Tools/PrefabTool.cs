@@ -4,6 +4,15 @@ public class PrefabTool
 {
 	private static ObjectPool objectPool = new ObjectPool();
 
+	/// <summary>
+	/// Создание экземпляра префаба, опираясь на имя и тип создаваемого класса, в котором
+	/// может быть указан путь через аттрибуты.
+	/// Если префаб PoolableObject, то будет брать объект из пула.
+	/// </summary>
+	/// <typeparam name="T">в какой тип нужно кастануть созданный экземпляр.</typeparam>
+	/// <param name="prefabType">тип искомого префаба.</param>
+	/// <param name="prefabName">имя префаба, если null, то возьмет из имени типа префаба.</param>
+	/// <returns>созданный экземпляр префаба.</returns>
 	public static T CreateInstance<T>(System.Type prefabType, string prefabName = null) where T : Object
 	{
 		var prefabPath = prefabType.GetAttribute<PathInResources>();

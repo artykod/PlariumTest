@@ -13,14 +13,16 @@
 
 		public override bool Activate(Vec2 point, Unit clickedUnit)
 		{
-			base.Activate(point, clickedUnit);
-			
-			var character = clickedUnit as Character;
-			if (character != null && character.Team != Caster.Team)
+			if (base.Activate(point, clickedUnit))
 			{
-				targetUnit = character;
-				Caster.SetTargetUnit(targetUnit);
-				IsActivated = true;
+				var character = clickedUnit as Character;
+				// абилка применима только к мобам противника.
+				if (character != null && character.Team != Caster.Team)
+				{
+					targetUnit = character;
+					Caster.SetTargetUnit(targetUnit);
+					IsActivated = true;
+				}
 			}
 
 			return IsActivated;
@@ -34,6 +36,7 @@
 			{
 				if (targetUnit.HP > 0)
 				{
+					// если кастер дальше, чем расстояние для активации абилки, то ждем пока дойдет до него.
 					var distance = (targetUnit.Position - Caster.Position).LengthSqr;
 					if (distance <= radiusSqr)
 					{
