@@ -7,7 +7,7 @@
   "Description": "",
   "Width": 50,
   "Height": 50,
-  "DelayBeforeGame": 1,
+  "DelayBeforeGame": 10,
   "Markers": [
     {
       "X": 25,
