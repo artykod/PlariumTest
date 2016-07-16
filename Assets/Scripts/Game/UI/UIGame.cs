@@ -52,7 +52,7 @@ public class UIGame : MonoBehaviour
 
 	public static Vector3 ScreenToGroundPosition(Vector2 screenPosition)
 	{
-		var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		var ray = Camera.main.ScreenPointToRay(screenPosition);
 		var hit = default(RaycastHit);
 		if (Physics.Raycast(ray, out hit, 1000, LayerMask.NameToLayer("Terrain")))
 		{
