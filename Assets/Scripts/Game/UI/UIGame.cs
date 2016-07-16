@@ -52,15 +52,6 @@ public class UIGame : MonoBehaviour
 
 	public static Vector3 ScreenToGroundPosition(Vector2 screenPosition)
 	{
-		/*var rayToWorld = Camera.main.ScreenPointToRay(screenPosition);
-		var groundPlane = new Plane(Vector3.up, Vector3.zero);
-		var rayDistance = 0f;
-		if (groundPlane.Raycast(rayToWorld, out rayDistance))
-		{
-			return rayToWorld.GetPoint(rayDistance);
-		}
-		return Vector3.zero;*/
-
 		var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		var hit = default(RaycastHit);
 		if (Physics.Raycast(ray, out hit, 1000, LayerMask.NameToLayer("Terrain")))
