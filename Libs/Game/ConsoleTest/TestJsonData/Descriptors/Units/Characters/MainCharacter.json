@@ -6,6 +6,10 @@
   "Description": "",
   "Size": 0.85,
   "IconId": "main_character",
+  "AbilitiesIds": [
+    "ability.ice_bolt",
+    "ability.meteor_shower"
+  ],
   "Levels": [
     {
       "ViewId": "MainCharacter",
@@ -16,7 +20,7 @@
       "AttackSpeed": 1.5,
       "Speed": 3,
       "AttackRange": 0.5,
-      "TargetXP": 100,
+      "TargetXP": 0,
       "RespawnTime": 3
     },
     {
@@ -40,12 +44,20 @@
       "AttackSpeed": 3,
       "Speed": 3.5,
       "AttackRange": 1,
-      "TargetXP": 500,
+      "TargetXP": 100,
       "RespawnTime": 1
+    },
+    {
+      "ViewId": "MainCharacter",
+      "CostOfObtain": 4000,
+      "HP": 1000,
+      "Armor": 0.4,
+      "Attack": 30,
+      "AttackSpeed": 4,
+      "Speed": 3.8,
+      "AttackRange": 1.5,
+      "TargetXP": 500,
+      "RespawnTime": 0.5
     }
-  ],
-  "AbilitiesIds": [
-    "ability.ice_bolt",
-    "ability.meteor_shower"
   ]
 }

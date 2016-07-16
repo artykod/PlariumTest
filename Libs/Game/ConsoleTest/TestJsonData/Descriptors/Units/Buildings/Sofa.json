@@ -8,18 +8,8 @@
   "Levels": [
     {
       "ViewId": "Sofa",
-      "CostOfObtain": 1000,
+      "CostOfObtain": 0,
       "HP": 5000
-    },
-    {
-      "ViewId": "Sofa",
-      "CostOfObtain": 2000,
-      "HP": 5100
-    },
-    {
-      "ViewId": "Sofa",
-      "CostOfObtain": 3000,
-      "HP": 5200
     }
   ]
 }

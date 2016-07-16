@@ -11,18 +11,6 @@
       "CostOfObtain": 100,
       "HealSpeedHero": 10,
       "HealSpeedMinion": 1
-    },
-    {
-      "ViewId": "Fountain",
-      "CostOfObtain": 200,
-      "HealSpeedHero": 20,
-      "HealSpeedMinion": 2
-    },
-    {
-      "ViewId": "Fountain",
-      "CostOfObtain": 300,
-      "HealSpeedHero": 30,
-      "HealSpeedMinion": 3
     }
   ]
 }

@@ -9,13 +9,27 @@
   "CursorId": null,
   "Levels": [
     {
-      "Radius": 10,
+      "Radius": 5,
       "Cooldown": 5,
       "Modifiers": [
         {
           "Kind": "HP",
           "Type": "Add",
-          "Value": -26,
+          "Value": -15,
+          "Trigger": "Now",
+          "TriggerTime": 0,
+          "AffectedUnit": "Enemy"
+        }
+      ]
+    },
+    {
+      "Radius": 7,
+      "Cooldown": 3,
+      "Modifiers": [
+        {
+          "Kind": "HP",
+          "Type": "Add",
+          "Value": -25,
           "Trigger": "Now",
           "TriggerTime": 0,
           "AffectedUnit": "Enemy"
@@ -24,26 +38,12 @@
     },
     {
       "Radius": 10,
-      "Cooldown": 5,
+      "Cooldown": 2,
       "Modifiers": [
         {
           "Kind": "HP",
           "Type": "Add",
-          "Value": -26,
-          "Trigger": "Now",
-          "TriggerTime": 0,
-          "AffectedUnit": "Enemy"
-        }
-      ]
-    },
-    {
-      "Radius": 10,
-      "Cooldown": 5,
-      "Modifiers": [
-        {
-          "Kind": "HP",
-          "Type": "Add",
-          "Value": -26,
+          "Value": -50,
           "Trigger": "Now",
           "TriggerTime": 0,
           "AffectedUnit": "Enemy"

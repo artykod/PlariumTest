@@ -9,20 +9,32 @@
   "Levels": [
     {
       "ViewId": "BarracksMinionWarrior",
-      "CostOfObtain": 100,
+      "CostOfObtain": 0,
       "UnitsPerSecond": 0.2,
       "LevelOfUnits": 1
     },
     {
       "ViewId": "BarracksMinionWarrior",
-      "CostOfObtain": 200,
+      "CostOfObtain": 100,
       "UnitsPerSecond": 0.5,
       "LevelOfUnits": 2
     },
     {
       "ViewId": "BarracksMinionWarrior",
-      "CostOfObtain": 300,
+      "CostOfObtain": 200,
       "UnitsPerSecond": 0.7,
+      "LevelOfUnits": 3
+    },
+    {
+      "ViewId": "BarracksMinionWarrior",
+      "CostOfObtain": 300,
+      "UnitsPerSecond": 0.8,
+      "LevelOfUnits": 3
+    },
+    {
+      "ViewId": "BarracksMinionWarrior",
+      "CostOfObtain": 400,
+      "UnitsPerSecond": 0.9,
       "LevelOfUnits": 3
     }
   ]

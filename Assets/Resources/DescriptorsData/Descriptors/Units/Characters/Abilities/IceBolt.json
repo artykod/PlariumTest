@@ -23,29 +23,29 @@
         {
           "Kind": "Speed",
           "Type": "Percent",
-          "Value": 0.1,
+          "Value": 0.5,
           "Trigger": "During",
-          "TriggerTime": 1,
+          "TriggerTime": 3,
           "AffectedUnit": "Enemy"
         },
         {
           "Kind": "AttackSpeed",
           "Type": "Percent",
-          "Value": 0.1,
+          "Value": 0.25,
           "Trigger": "During",
-          "TriggerTime": 1,
+          "TriggerTime": 3,
           "AffectedUnit": "Enemy"
         }
       ]
     },
     {
-      "Radius": 5,
-      "Cooldown": 5,
+      "Radius": 10,
+      "Cooldown": 3,
       "Modifiers": [
         {
           "Kind": "HP",
           "Type": "Add",
-          "Value": -10,
+          "Value": -20,
           "Trigger": "Now",
           "TriggerTime": 0,
           "AffectedUnit": "Enemy"
@@ -53,9 +53,9 @@
         {
           "Kind": "Speed",
           "Type": "Percent",
-          "Value": 0.1,
+          "Value": 0.15,
           "Trigger": "During",
-          "TriggerTime": 1,
+          "TriggerTime": 4,
           "AffectedUnit": "Enemy"
         },
         {
@@ -63,19 +63,19 @@
           "Type": "Percent",
           "Value": 0.1,
           "Trigger": "During",
-          "TriggerTime": 1,
+          "TriggerTime": 4,
           "AffectedUnit": "Enemy"
         }
       ]
     },
     {
-      "Radius": 5,
-      "Cooldown": 5,
+      "Radius": 15,
+      "Cooldown": 2,
       "Modifiers": [
         {
           "Kind": "HP",
           "Type": "Add",
-          "Value": -10,
+          "Value": -30,
           "Trigger": "Now",
           "TriggerTime": 0,
           "AffectedUnit": "Enemy"
@@ -83,17 +83,17 @@
         {
           "Kind": "Speed",
           "Type": "Percent",
-          "Value": 0.1,
+          "Value": 0,
           "Trigger": "During",
-          "TriggerTime": 1,
+          "TriggerTime": 5,
           "AffectedUnit": "Enemy"
         },
         {
           "Kind": "AttackSpeed",
           "Type": "Percent",
-          "Value": 0.1,
+          "Value": 0,
           "Trigger": "During",
-          "TriggerTime": 1,
+          "TriggerTime": 5,
           "AffectedUnit": "Enemy"
         }
       ]
