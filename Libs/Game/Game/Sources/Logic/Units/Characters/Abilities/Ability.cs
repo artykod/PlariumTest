@@ -33,9 +33,12 @@ namespace Game.Logics.Abilities
 			}
 			set
 			{
-				var prevLevel = level;
-				level = value;
-				OnLevelChange(prevLevel, level);
+				if (value < Descriptor.Levels.Length - 1)
+				{
+					var prevLevel = level;
+					level = value;
+					OnLevelChange(prevLevel, level);
+				}
 			}
 		}
 
@@ -95,6 +98,14 @@ namespace Game.Logics.Abilities
 			protected set;
 		}
 
+		public bool CanUpgradeLevel
+		{
+			get
+			{
+				return Level < Descriptor.Levels.Length - 1;
+			}
+		}
+
 		public Ability(GameController gameController, Descriptor descriptor) : base(gameController, descriptor)
 		{
 			Level = 0;
@@ -133,6 +144,13 @@ namespace Game.Logics.Abilities
 				return true;
 			}
 			return false;
+		}
+
+		public override void Destroy()
+		{
+			base.Destroy();
+
+			Cancel();
 		}
 
 		protected void Execute()

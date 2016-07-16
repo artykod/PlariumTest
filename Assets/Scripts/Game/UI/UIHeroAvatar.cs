@@ -1,9 +1,17 @@
 ﻿using Game.Logics.Characters;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class UIHeroAvatar : UIFillableIcon
 {
+	[SerializeField]
+	private Text upgradesPointsText;
+
+	private Hero hero;
+
 	public void FetchHero(Hero hero)
 	{
+		this.hero = hero;
 		hero.OnLevelChanged += OnLevelChanged;
 		OnLevelChanged(hero.Level, hero.Level);
 		SetIcon(ResourcesTool.LoadIconByName(hero.Descriptor.IconId));
@@ -36,6 +44,16 @@ public class UIHeroAvatar : UIFillableIcon
 		if (hero != null)
 		{
 			Core.Instance.Camera.Mode = GameCamera.Modes.FollowMainCharacter;
+		}
+	}
+
+	protected override void Update()
+	{
+		base.Update();
+
+		if (hero != null)
+		{
+			upgradesPointsText.text = "points: " + hero.UpgradesPoints.ToString();
 		}
 	}
 }

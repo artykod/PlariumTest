@@ -3,6 +3,7 @@
 namespace Game.Logics.Buildings
 {
 	using Descriptors;
+	using Descriptors.Characters;
 	using Descriptors.Buildings;
 	using Characters;
 
@@ -11,17 +12,19 @@ namespace Game.Logics.Buildings
 	/// </summary>
 	public class Fountain : Building
 	{
-		private Descriptor heroDescriptor;
+		private HeroDescriptor heroDescriptor;
+		/// <summary>
+		/// Время респауна главного героя.
+		/// </summary>
 		private float respawnTime;
+		/// <summary>
+		/// Таймер восстановления жизней юнитов рядом с фонтаном.
+		/// </summary>
 		private float healTime;
 		/// <summary>
-		/// Последний уровень героя. Сохраняется между смертями героя в пределах боя.
+		/// Последнее состояние героя, т.к. требуется восстанавливать прокачку героя между его смертями.
 		/// </summary>
-		private int lastHeroLevel;
-		/// <summary>
-		/// Последнее значение опыта героя. Сохраняется между смертями героя в пределах боя.
-		/// </summary>
-		private int lastHeroXP;
+		private Hero previousHeroState;
 
 		public new FountainDescriptor Descriptor
 		{
@@ -81,7 +84,7 @@ namespace Game.Logics.Buildings
 		/// <param name="heroId">ид дескриптора героя.</param>
 		public void FetchHeroId(string heroId)
 		{
-			heroDescriptor = GameController.FindDescriptorById<Descriptor>(heroId);
+			heroDescriptor = GameController.FindDescriptorById<HeroDescriptor>(heroId);
 			EmitHero();
 		}
 
@@ -91,16 +94,18 @@ namespace Game.Logics.Buildings
 			Hero.AttachToTeam(Team);
 			Hero.Position = Position + Vec2.FromAngle(GameRandom.Range(0f, 360f)) * (Hero.Descriptor.Size + Descriptor.Size);
 			Hero.OnDestroy += OnHeroDie;
-			Hero.Level = lastHeroLevel;
-			Hero.AddXP(lastHeroXP);
+
+			if (previousHeroState != null)
+			{
+				Hero.RestoreFromHero(previousHeroState);
+			}
 		}
 
 		private void OnHeroDie(Logic logic)
 		{
 			if (logic == Hero)
 			{
-				lastHeroLevel = Hero.Level;
-				lastHeroXP = Hero.XP;
+				previousHeroState = Hero;
 				HeroTotalRespawnTime = respawnTime = Hero.Descriptor.Levels[Hero.Level].RespawnTime;
 				Hero.OnDestroy -= OnHeroDie;
 				Hero = null;

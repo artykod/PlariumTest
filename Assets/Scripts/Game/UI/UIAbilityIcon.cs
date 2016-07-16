@@ -1,6 +1,7 @@
 ﻿using System;
 using Game.Logics;
 using Game.Logics.Abilities;
+using Game.Logics.Characters;
 using UnityEngine;
 
 public class UIAbilityIcon : UIFillableIcon
@@ -60,9 +61,10 @@ public class UIAbilityIcon : UIFillableIcon
 	{
 		if (ability != null)
 		{
-			if (ability.Level < ability.Descriptor.Levels.Length - 1)
+			var heroCaster = ability.Caster as Hero;
+			if (heroCaster != null)
 			{
-				ability.Level++;
+				heroCaster.UpgradeAbility(ability);
 			}
 		}
 	}
@@ -90,11 +92,19 @@ public class UIAbilityIcon : UIFillableIcon
 	{
 		if (ability != null)
 		{
+			ability.OnDestroy += OnDestroyAbility;
 			ability.OnExecute += OnExecute;
 			ability.OnCancel += OnCancel;
 			ability.OnSelect += OnSelect;
 			ability.OnLevelChanged += OnLevelChanged;
 		}
+	}
+
+	private void OnDestroyAbility(Logic logic)
+	{
+		ability.OnDestroy -= OnDestroyAbility;
+		OnCancel(ability);
+		ability = null;
 	}
 
 	private void OnLevelChanged(int oldLvl, int newLvl)
@@ -106,6 +116,7 @@ public class UIAbilityIcon : UIFillableIcon
 	{
 		if (ability != null)
 		{
+			ability.OnDestroy -= OnDestroyAbility;
 			ability.OnExecute -= OnExecute;
 			ability.OnCancel -= OnCancel;
 			ability.OnSelect -= OnSelect;

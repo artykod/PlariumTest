@@ -52,6 +52,14 @@
 			get;
 			private set;
 		}
+		/// <summary>
+		/// Очки для прокачки абилок.
+		/// </summary>
+		public int UpgradesPoints
+		{
+			get;
+			private set;
+		}
 
 		public Hero(GameController gameController, Descriptor descriptor) : base(gameController, descriptor)
 		{
@@ -64,6 +72,28 @@
 
 			moveTarget = new MoveTarget(gameController, Descriptor);
 			SetTargetUnit(null);
+		}
+
+		public void RestoreFromHero(Hero hero)
+		{
+			Level = hero.Level;
+			XP = hero.XP;
+			UpgradesPoints = hero.UpgradesPoints;
+			for (int i = 0; i < hero.Abilities.Length; i++)
+			{
+				Abilities[i].Level = hero.Abilities[i].Level;
+			}
+		}
+
+		public bool UpgradeAbility(Ability ability)
+		{
+			if (UpgradesPoints > 0 && ability.CanUpgradeLevel)
+			{
+				ability.Level++;
+				UpgradesPoints--;
+				return true;
+			}
+			return false;
 		}
 
 		/// <summary>
@@ -93,6 +123,7 @@
 				{
 					XP = TotalXP;
 					Level++;
+					UpgradesPoints++;
 				}
 			}
 		}
