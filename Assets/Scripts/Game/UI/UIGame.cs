@@ -32,6 +32,8 @@ public class UIGame : MonoBehaviour
 	[SerializeField]
 	private UIBarracksUpgradePanel barracksUpgradePanel;
 	[SerializeField]
+	private RectTransform gameHUDRoot;
+	[SerializeField]
 	private UIHeroHUD heroHUD;
 
 	private static Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
@@ -74,19 +76,19 @@ public class UIGame : MonoBehaviour
 		if (unit != null && !unit.IsImmortal)
 		{
 			var hp = Instantiate(hpBar);
-			hp.transform.DropTo(transform);
+			hp.transform.DropTo(gameHUDRoot);
 			hp.transform.SetAsFirstSibling();
 
 			var xp = default(UIProgressBar);
 			if (unit is Hero)
 			{
 				xp = Instantiate(xpBar);
-				xp.transform.DropTo(transform);
+				xp.transform.DropTo(gameHUDRoot);
 				xp.transform.SetAsFirstSibling();
 			}
 
 			var marker = Instantiate(enemyMarker);
-			marker.transform.DropTo(transform);
+			marker.transform.DropTo(gameHUDRoot);
 			marker.transform.SetAsFirstSibling();
 			marker.gameObject.SetActive(false);
 
@@ -97,7 +99,7 @@ public class UIGame : MonoBehaviour
 		if (minionBarracks != null)
 		{
 			var barracksPanel = Instantiate(barracksUpgradePanel);
-			barracksPanel.DropTo(transform);
+			barracksPanel.DropTo(gameHUDRoot);
 			barracksUI[minionBarracks] = barracksPanel;
 			barracksPanel.Logic = minionBarracks;
 		}

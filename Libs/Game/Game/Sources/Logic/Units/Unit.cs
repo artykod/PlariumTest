@@ -162,10 +162,10 @@ namespace Game.Logics
 		/// <summary>
 		/// Конкретные юниты могут определять когда нужно двигаться, а когда нужно стоять на месте.
 		/// </summary>
-		protected bool CanMove
+		public bool CanMove
 		{
 			get;
-			set;
+			protected set;
 		}
 
 		public new UnitDescriptor Descriptor
