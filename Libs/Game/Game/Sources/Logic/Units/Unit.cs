@@ -11,7 +11,8 @@ namespace Game.Logics
 		/// <summary>
 		/// Данные наложенного модификатора статов.
 		/// </summary>
-		protected class ModifierData {
+		protected class ModifierData
+		{
 			/// <summary>
 			/// Дескриптор модификатора.
 			/// </summary>
@@ -34,7 +35,7 @@ namespace Game.Logics
 				Time = modifier.Trigger == Modifier.Triggers.Now ? 0f : modifier.TriggerTime;
 			}
 		}
-		
+
 		/// <summary>
 		/// Текущий уровень прокачки юнита.
 		/// </summary>
@@ -304,15 +305,15 @@ namespace Game.Logics
 			{
 				switch (i.Modifier.Kind)
 				{
-				case Modifier.Kinds.Speed:
-					Velocity = ModifyValue(originalVelocity, i.Modifier);
-					break;
-				case Modifier.Kinds.HP:
-					if (!IsImmortal)
-					{
-						HP = (int)ModifyValue(HP, i.Modifier);
-					}
-					break;
+					case Modifier.Kinds.Speed:
+						Velocity = ModifyValue(originalVelocity, i.Modifier);
+						break;
+					case Modifier.Kinds.HP:
+						if (!IsImmortal)
+						{
+							TakeDamage(HP - (int)ModifyValue(HP, i.Modifier));
+						}
+						break;
 				}
 			}
 
@@ -323,22 +324,27 @@ namespace Game.Logics
 		{
 			switch (modifier.Type)
 			{
-			case Modifier.Types.Add:
-				originalValue += modifier.Value;
-				break;
-			case Modifier.Types.Percent:
-				originalValue = originalValue * modifier.Value;
-				break;
+				case Modifier.Types.Add:
+					originalValue += modifier.Value;
+					break;
+				case Modifier.Types.Percent:
+					originalValue = originalValue * modifier.Value;
+					break;
 			}
 
 			return originalValue;
+		}
+
+		protected virtual void OnDie()
+		{
+			Destroy();
 		}
 
 		private bool CheckHP()
 		{
 			if (!IsImmortal && HP <= 0)
 			{
-				Destroy();
+				OnDie();
 				return true;
 			}
 			return false;

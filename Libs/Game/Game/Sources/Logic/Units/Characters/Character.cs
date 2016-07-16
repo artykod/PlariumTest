@@ -260,21 +260,26 @@ namespace Game.Logics.Characters
 					if (attackCooldown <= 0f && !targetUnit.IsImmortal)
 					{
 						attackCooldown = 1f / AttackSpeed;
-						if (targetUnit.TakeDamage(Attack))
-						{
-							var targetMob = targetUnit as Mob;
-							if (targetMob != null && map.Fountain.Hero != null && Team == map.Fountain.Team)
-							{
-								var mobLevel = targetMob.Descriptor.Levels[targetMob.Level];
-								// герою опыт.
-								map.Fountain.Hero.AddXP(mobLevel.XP);
-								// игроку голда в прогресс.
-								GameController.GameProgress.AddGold(mobLevel.Gold);
-							}
-						}
+						targetUnit.TakeDamage(Attack);
 						OnAttack.SafeInvoke(this, targetUnit);
 					}
 				}
+			}
+		}
+
+		protected override void OnDie()
+		{
+			base.OnDie();
+
+			// если умирающий юнит моб, то начислить опыт/голду.
+			var mob = this as Mob;
+			if (mob != null && map.Fountain.Hero != null && Team != map.Fountain.Team)
+			{
+				var mobLevel = mob.CurrentLevel;
+				// герою опыт.
+				map.Fountain.Hero.AddXP(mobLevel.XP);
+				// игроку голда в прогресс.
+				GameController.GameProgress.AddGold(mobLevel.Gold);
 			}
 		}
 	}

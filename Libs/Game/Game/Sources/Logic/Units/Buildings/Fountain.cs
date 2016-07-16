@@ -92,8 +92,9 @@ namespace Game.Logics.Buildings
 		{
 			Hero = GameController.CreateLogicByDescriptor<Hero>(heroDescriptor);
 			Hero.AttachToTeam(Team);
-			Hero.Position = Position + Vec2.FromAngle(GameRandom.Range(0f, 360f)) * (Hero.Descriptor.Size + Descriptor.Size);
+			Hero.Position = Position + new Vec2(0f, 2f);
 			Hero.OnDestroy += OnHeroDie;
+			Hero.MoveTo(Hero.Position);
 
 			if (previousHeroState != null)
 			{
