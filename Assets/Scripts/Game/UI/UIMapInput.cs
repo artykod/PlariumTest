@@ -16,7 +16,6 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 	private Canvas canvas;
 	private Vector2 startPos;
 	private Vector2 endPos;
-	//private LinkedList<Character> units = new LinkedList<Character>();
 
 	private void Awake()
 	{
