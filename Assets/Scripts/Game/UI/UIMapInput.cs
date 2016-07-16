@@ -181,7 +181,7 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 					}
 					else if (i is Hero)
 					{
-						var groundPosition = UIGame.ScreenToGroundPosition(leftTopOfSelection);
+						var groundPosition = UIGame.ScreenToGroundPosition(Input.mousePosition);
 						(i as Hero).MoveTo(new Vec2(groundPosition.x, groundPosition.z));
 						
 						var marker = PrefabTool.CreateInstance<Marker>();

@@ -34,6 +34,7 @@ public class UIGame : MonoBehaviour
 	[SerializeField]
 	private UIHeroHUD heroHUD;
 
+	private static Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
 	private Dictionary<Unit, UnitUI> unitsUI = new Dictionary<Unit, UnitUI>();
 	private Dictionary<Barracks, UIBarracksUpgradePanel> barracksUI = new Dictionary<Barracks, UIBarracksUpgradePanel>();
 
@@ -52,11 +53,11 @@ public class UIGame : MonoBehaviour
 
 	public static Vector3 ScreenToGroundPosition(Vector2 screenPosition)
 	{
-		var ray = Camera.main.ScreenPointToRay(screenPosition);
-		var hit = default(RaycastHit);
-		if (Physics.Raycast(ray, out hit, 1000, LayerMask.NameToLayer("Terrain")))
+		var rayToWorld = Camera.main.ScreenPointToRay(screenPosition);
+		var rayDistance = 0f;
+		if (groundPlane.Raycast(rayToWorld, out rayDistance))
 		{
-			return hit.point;
+			return rayToWorld.GetPoint(rayDistance);
 		}
 		return Vector3.zero;
 	}
