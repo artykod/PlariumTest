@@ -44,6 +44,7 @@ public class UIHeroAvatar : UIFillableIcon
 		if (hero != null)
 		{
 			Core.Instance.Camera.Mode = GameCamera.Modes.FollowMainCharacter;
+			Core.Instance.GameController.SelectUnit(hero);
 		}
 	}
 
