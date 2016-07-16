@@ -8,13 +8,14 @@ namespace Game.Logics.Abilities
 
 	public abstract class Ability : Logic
 	{
-		private int level;
 		protected float radiusSqr;
+		private int level;
 
 		public event Action<Ability> OnSelect;
 		public event Action<Ability> OnCancel;
 		public event Action<Ability> OnExecute;
 		public event Action<Ability> OnRecharged;
+		public event Action<int, int> OnLevelChanged;
 
 		public new AbilityDescriptor Descriptor
 		{
@@ -91,7 +92,7 @@ namespace Game.Logics.Abilities
 		public Vec2 ActivationPoint
 		{
 			get;
-			private set;
+			protected set;
 		}
 
 		public Ability(GameController gameController, Descriptor descriptor) : base(gameController, descriptor)
@@ -159,6 +160,8 @@ namespace Game.Logics.Abilities
 		{
 			CurrentLevel = Descriptor.Levels[Level];
 			radiusSqr = CurrentLevel.Radius * CurrentLevel.Radius;
+
+			OnLevelChanged.SafeInvoke(previousLevel, newLevel);
 		}
 
 		protected override void Update(float dt)

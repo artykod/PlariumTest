@@ -1,9 +1,13 @@
 ﻿using System;
 using Game.Logics;
 using Game.Logics.Abilities;
+using UnityEngine;
 
 public class UIAbilityIcon : UIFillableIcon
 {
+	[SerializeField]
+	private UIButton upgradeButton;
+
 	private UIHeroHUD hud;
 	private Ability ability;
 
@@ -24,6 +28,7 @@ public class UIAbilityIcon : UIFillableIcon
 		UnsubscribeFromLogic();
 		this.ability = ability;
 		SubscribeToLogic();
+		OnLevelChanged(ability.Level, ability.Level);
 
 		SetIcon(ResourcesTool.LoadIconByName(ability.Descriptor.IconId));
 	}
@@ -44,6 +49,24 @@ public class UIAbilityIcon : UIFillableIcon
 		}
 	}
 
+	protected override void Awake()
+	{
+		base.Awake();
+
+		upgradeButton.OnClick += OnUpgradeClicked;
+	}
+
+	private void OnUpgradeClicked()
+	{
+		if (ability != null)
+		{
+			if (ability.Level < ability.Descriptor.Levels.Length - 1)
+			{
+				ability.Level++;
+			}
+		}
+	}
+
 	protected override float FillAmount
 	{
 		get
@@ -59,6 +82,7 @@ public class UIAbilityIcon : UIFillableIcon
 		if (!hud.IsAbilitySelected && ability != null && !ability.IsRecharging)
 		{
 			ability.Select();
+			Core.Instance.GameController.SelectUnit(ability.Caster);
 		}
 	}
 
@@ -69,7 +93,13 @@ public class UIAbilityIcon : UIFillableIcon
 			ability.OnExecute += OnExecute;
 			ability.OnCancel += OnCancel;
 			ability.OnSelect += OnSelect;
+			ability.OnLevelChanged += OnLevelChanged;
 		}
+	}
+
+	private void OnLevelChanged(int oldLvl, int newLvl)
+	{
+		SetLevel(newLvl);
 	}
 
 	private void UnsubscribeFromLogic()
@@ -79,27 +109,23 @@ public class UIAbilityIcon : UIFillableIcon
 			ability.OnExecute -= OnExecute;
 			ability.OnCancel -= OnCancel;
 			ability.OnSelect -= OnSelect;
+			ability.OnLevelChanged -= OnLevelChanged;
 		}
 	}
 
 	private void OnSelect(Ability obj)
 	{
 		OnSelectionChanged.SafeInvoke(ability, true);
-		Debug.Log("Select ability " + ability.Descriptor.Name);
-
 		Core.Instance.Camera.ChangeCursor(ability.Descriptor.CursorId);
 	}
 
 	private void OnCancel(Ability obj)
 	{
 		OnSelectionChanged.SafeInvoke(ability, false);
-		Debug.Log("Cancel ability " + ability.Descriptor.Name);
-
 		Core.Instance.Camera.ChangeCursor(null);
 	}
 
 	private void OnExecute(Ability obj)
 	{
-		Debug.Log("Execute ability " + ability.Descriptor.Name);
 	}
 }

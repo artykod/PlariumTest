@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Game.Logics;
 
-[PathInResources(Constants.Paths.Views.ALL + "Shells/")]
+[PathInResources(Constants.Paths.Views.ALL + "FX/Shells/")]
 public class Shell : PoolableObject
 {
 	private ParticleSystem particles;
@@ -11,6 +11,7 @@ public class Shell : PoolableObject
 	private float time;
 	private float currentTime;
 	private int framesToSkip;
+	private System.Action onFlyEnd;
 
 	private void Awake()
 	{
@@ -21,13 +22,14 @@ public class Shell : PoolableObject
 		}
 	}
 
-	public void Fire(Vector3 from, Vector3 to, float flyTime)
+	public void Fire(Vector3 from, Vector3 to, float flyTime, System.Action onFlyEnd = null)
 	{
 		fromPoint = from;
 		toPoint = to;
 		time = currentTime = flyTime;
 		isFly = true;
 		framesToSkip = 1;
+		this.onFlyEnd = onFlyEnd;
 
 		if (particles != null)
 		{
@@ -86,6 +88,7 @@ public class Shell : PoolableObject
 			if (currentTime < 0f)
 			{
 				ReturnToPool();
+				onFlyEnd.SafeInvoke();
 			}
 		}
 	}

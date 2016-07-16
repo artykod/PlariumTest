@@ -14,8 +14,10 @@ public class MeteorShowerView : AbilityView
 			var radius = meteorShower.CurrentLevel.Radius / 2f;
 			for (int i = 0; i < 20; i++)
 			{
+				var to = new Vector3(meteorShower.ActivationPoint.x + GameRandom.Range(-radius, radius),
+					0f, meteorShower.ActivationPoint.y + GameRandom.Range(-radius, radius));
 				var shell = PrefabTool.CreateInstance<Shell>("Fireball");
-				shell.Fire(from, new Vector3(meteorShower.ActivationPoint.x + GameRandom.Range(-radius, radius), 0f, meteorShower.ActivationPoint.y + GameRandom.Range(-radius, radius)), GameRandom.Range(0.25f, 1f));
+				shell.Fire(from, to, GameRandom.Range(0.25f, 1f), () => PrefabTool.CreateInstance<Explosion>().Fire(to));
 			}
 		}
 	}

@@ -47,11 +47,11 @@ public class GameCamera : MonoBehaviour
 		var cursor = default(CursorInfo);
 		if (string.IsNullOrEmpty(cursorName) || !cursors.TryGetValue(cursorName, out cursor))
 		{
-			Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+			Cursor.SetCursor(null, Vector2.zero, CursorMode.ForceSoftware);
 		}
 		else
 		{
-			Cursor.SetCursor(cursor.texture, Vector2.zero, CursorMode.Auto);
+			Cursor.SetCursor(cursor.texture, Vector2.zero, CursorMode.ForceSoftware);
 		}
 	}
 

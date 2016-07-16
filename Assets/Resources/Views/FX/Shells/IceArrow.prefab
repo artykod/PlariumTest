@@ -219,7 +219,7 @@ ParticleSystem:
         rgba: 4294913872
       minMaxState: 2
     startSize:
-      scalar: .25
+      scalar: .5
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1139,6 +1139,14 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: InitialModule.startColor.maxColor.rgba
       value: 4294913872
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: InitialModule.startSize.minCurve.m_Curve.Array.data[0].value
+      value: .400000006
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: InitialModule.startSize.scalar
+      value: .5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

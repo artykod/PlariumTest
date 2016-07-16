@@ -4,7 +4,14 @@ public class UIHeroAvatar : UIFillableIcon
 {
 	public void FetchHero(Hero hero)
 	{
+		hero.OnLevelChanged += OnLevelChanged;
+		OnLevelChanged(hero.Level, hero.Level);
 		SetIcon(ResourcesTool.LoadIconByName(hero.Descriptor.IconId));
+	}
+
+	private void OnLevelChanged(int oldLvl, int newLvl)
+	{
+		SetLevel(newLvl);
 	}
 
 	protected override float FillAmount

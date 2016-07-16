@@ -37,6 +37,7 @@
 					var distance = (targetUnit.Position - Caster.Position).LengthSqr;
 					if (distance <= radiusSqr)
 					{
+						ActivationPoint = targetUnit.Position;
 						AffectedUnits = new Unit[] { targetUnit };
 						targetUnit = null;
 

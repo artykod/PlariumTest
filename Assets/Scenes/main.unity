@@ -356,21 +356,45 @@ Prefab:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1895691624}
+    - target: {fileID: 22453350, guid: a33b361e781f93a439d9c9149c4a2a72, type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 17.1860142
+      objectReference: {fileID: 0}
+    - target: {fileID: 22453350, guid: a33b361e781f93a439d9c9149c4a2a72, type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 17.1860142
+      objectReference: {fileID: 0}
+    - target: {fileID: 22484624, guid: a33b361e781f93a439d9c9149c4a2a72, type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 17.1860142
+      objectReference: {fileID: 0}
+    - target: {fileID: 22484624, guid: a33b361e781f93a439d9c9149c4a2a72, type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 17.1860142
+      objectReference: {fileID: 0}
+    - target: {fileID: 22417670, guid: a33b361e781f93a439d9c9149c4a2a72, type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 17.1860142
+      objectReference: {fileID: 0}
+    - target: {fileID: 22417670, guid: a33b361e781f93a439d9c9149c4a2a72, type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 17.1860142
+      objectReference: {fileID: 0}
     - target: {fileID: 22412140, guid: a33b361e781f93a439d9c9149c4a2a72, type: 2}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 58.0028
       objectReference: {fileID: 0}
     - target: {fileID: 22412140, guid: a33b361e781f93a439d9c9149c4a2a72, type: 2}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 19.3342667
       objectReference: {fileID: 0}
     - target: {fileID: 22441084, guid: a33b361e781f93a439d9c9149c4a2a72, type: 2}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 70.8923111
       objectReference: {fileID: 0}
     - target: {fileID: 22441084, guid: a33b361e781f93a439d9c9149c4a2a72, type: 2}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 73.0405579
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a33b361e781f93a439d9c9149c4a2a72, type: 2}

@@ -16,7 +16,7 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 	private Canvas canvas;
 	private Vector2 startPos;
 	private Vector2 endPos;
-	private LinkedList<Character> units = new LinkedList<Character>();
+	//private LinkedList<Character> units = new LinkedList<Character>();
 
 	private void Awake()
 	{
@@ -131,7 +131,7 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 
 	private void SelectUnitsInCurrentSelection()
 	{
-		units.Clear();
+		var units = new LinkedList<Unit>();
 		var unitsInSelection = FindUnitsInCurrentSelection<Character>(gameController.Map.Sofa.Team);
 		foreach (var i in unitsInSelection)
 		{
@@ -146,7 +146,9 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 
 	private void UpdateTargetOfUnits()
 	{
-		if (units.Count > 0)
+		var selectedUnits = Core.Instance.GameController.SelectedUnits;
+
+		if (selectedUnits.Length > 0)
 		{
 			Character character = null;
 			var rect = GetDrawingRect(startPos, endPos);
@@ -167,13 +169,14 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 				return false;
 			});
 
-			foreach (var i in units)
+			foreach (var i in selectedUnits)
 			{
-				if (i != null)
+				var unitAsCharacter = i as Character;
+				if (unitAsCharacter != null)
 				{
 					if (character != null)
 					{
-						i.SetTargetUnit(character);
+						unitAsCharacter.SetTargetUnit(character);
 					}
 					else if (i is Hero)
 					{

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using System.Linq;
 
 namespace Game
 {
@@ -96,6 +97,16 @@ namespace Game
 		{
 			get;
 			private set;
+		}
+		/// <summary>
+		/// Текущие выделенные юниты.
+		/// </summary>
+		public Unit[] SelectedUnits
+		{
+			get
+			{
+				return selectedUnits.ToArray();
+			}
 		}
 
 		/// <summary>

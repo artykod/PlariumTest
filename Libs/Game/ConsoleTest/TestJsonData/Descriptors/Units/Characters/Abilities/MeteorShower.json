@@ -21,6 +21,34 @@
           "AffectedUnit": "Enemy"
         }
       ]
+    },
+    {
+      "Radius": 10,
+      "Cooldown": 5,
+      "Modifiers": [
+        {
+          "Kind": "HP",
+          "Type": "Add",
+          "Value": -26,
+          "Trigger": "Now",
+          "TriggerTime": 0,
+          "AffectedUnit": "Enemy"
+        }
+      ]
+    },
+    {
+      "Radius": 10,
+      "Cooldown": 5,
+      "Modifiers": [
+        {
+          "Kind": "HP",
+          "Type": "Add",
+          "Value": -26,
+          "Trigger": "Now",
+          "TriggerTime": 0,
+          "AffectedUnit": "Enemy"
+        }
+      ]
     }
   ]
 }

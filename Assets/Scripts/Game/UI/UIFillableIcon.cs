@@ -8,6 +8,8 @@ public abstract class UIFillableIcon : MonoBehaviour, IPointerClickHandler
 	private Image iconImage;
 	[SerializeField]
 	private Image iconTonerImage;
+	[SerializeField]
+	private Text lvlText;
 
 	protected abstract float FillAmount
 	{
@@ -31,5 +33,14 @@ public abstract class UIFillableIcon : MonoBehaviour, IPointerClickHandler
 	protected void SetIcon(Sprite sprite)
 	{
 		iconImage.sprite = iconTonerImage.sprite = sprite;
+	}
+
+	protected void SetLevel(int level)
+	{
+		lvlText.text = "lvl " + (level + 1);
+	}
+
+	protected virtual void Awake()
+	{
 	}
 }
