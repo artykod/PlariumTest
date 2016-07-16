@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using Game.Descriptors.Abilities;
 using Game.Logics;
 using Game.Logics.Characters;
 using Game.Logics.Buildings;
@@ -195,14 +194,12 @@ public class UIGame : MonoBehaviour
 			{
 				if (UIDialogBase.CurrentDialog == null)
 				{
-					var gameController = Core.Instance.GameController;
 					UIDialogGameMenu.Show().Build("Main menu", "")
-						.AddButton("Surrender", gameController.Surrender)
-						.AddButton("Add 1000 gold", () => gameController.GameProgress.AddGold(1000))
+						.AddButton("Surrender", Core.Instance.GameController.Surrender)
+						.AddButton("Add 1000 gold", AddManyCoins)
+						.AddButton("Level up hero", LevelUpHero)
 						.AddButton("Clear all progress and quit", ClearAllProgressAndQuit)
-						.AddButton("Quit", Application.Quit)
-						.AddButton("Apply Meteor Shower to all enemies", () => ApplyAbilityToMobs("ability.meteor_shower"))
-						.AddButton("Apply Ice Bolt to all enemies", () => ApplyAbilityToMobs("ability.ice_bolt"));
+						.AddButton("Quit", Application.Quit);
 				}
 				else if (UIDialogGameMenu.CurrentInstance != null)
 				{
@@ -212,35 +209,24 @@ public class UIGame : MonoBehaviour
 		}
 	}
 
+	private void AddManyCoins()
+	{
+		Core.Instance.GameController.GameProgress.AddGold(1000);
+	}
+
+	private void LevelUpHero()
+	{
+		var hero = Core.Instance.GameController.Map.Fountain.Hero;
+		if (hero != null)
+		{
+			hero.AddXP(hero.TotalXP - hero.XP);
+		}
+	}
+
 	private void ClearAllProgressAndQuit()
 	{
 		PlayerPrefs.DeleteAll();
 		PlayerPrefs.Save();
 		Application.Quit();
-	}
-
-	private void ApplyAbilityToMobs(string abilityId)
-	{
-		var gameController = Core.Instance.GameController;
-		var ability = gameController.FindDescriptorById<AbilityDescriptor>(abilityId);
-		var modifiers = ability.Levels[0].Modifiers;
-		var mobs = new LinkedList<Mob>();
-
-		gameController.ForEachLogic<Mob>(mob =>
-		{
-			if (mob.Team != gameController.Map.Fountain.Team)
-			{
-				mobs.AddLast(mob);
-			}
-			return false;
-		});
-
-		foreach (var mob in mobs)
-		{
-			for (int i = 0; i < modifiers.Length; i++)
-			{
-				mob.AddModifier(modifiers[i]);
-			}
-		}
 	}
 }

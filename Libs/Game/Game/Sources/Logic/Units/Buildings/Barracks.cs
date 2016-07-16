@@ -41,7 +41,7 @@ namespace Game.Logics.Buildings
 			// уровень меняется даже у уже созданных юнитов.
 			foreach (var i in childMobs)
 			{
-				i.Level = Level;
+				i.Level = CurrentLevel.LevelOfUnits;
 			}
 		}
 
@@ -61,7 +61,7 @@ namespace Game.Logics.Buildings
 				mob.AttachToTeam(Team);
 				mob.Position = Position + Vec2.FromAngle(GameRandom.Range(0f, 360f)) * (Descriptor.Size + mob.Descriptor.Size);
 				mob.Direction = new Vec2(GameRandom.value, GameRandom.value);
-				mob.Level = Level;
+				mob.Level = CurrentLevel.LevelOfUnits;
 			}
 		}
 

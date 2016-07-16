@@ -27,6 +27,8 @@ public class View : PoolableObject
 	public virtual void FetchLogic(Logic logic)
 	{
 		Logic = logic;
+		transform.rotation = Quaternion.identity;
+		transform.position = Vector3.zero;
 	}
 
 	protected virtual void Start()

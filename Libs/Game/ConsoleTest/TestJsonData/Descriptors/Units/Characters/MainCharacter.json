@@ -58,6 +58,18 @@
       "AttackRange": 1.5,
       "TargetXP": 500,
       "RespawnTime": 0.5
+    },
+    {
+      "ViewId": "MainCharacter",
+      "CostOfObtain": 5000,
+      "HP": 1500,
+      "Armor": 0.6,
+      "Attack": 50,
+      "AttackSpeed": 6,
+      "Speed": 4,
+      "AttackRange": 2,
+      "TargetXP": 1000,
+      "RespawnTime": 0.25
     }
   ]
 }

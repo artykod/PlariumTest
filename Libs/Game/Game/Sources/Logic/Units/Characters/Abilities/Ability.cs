@@ -33,7 +33,7 @@ namespace Game.Logics.Abilities
 			}
 			set
 			{
-				if (value < Descriptor.Levels.Length - 1)
+				if (value < Descriptor.Levels.Length)
 				{
 					var prevLevel = level;
 					level = value;

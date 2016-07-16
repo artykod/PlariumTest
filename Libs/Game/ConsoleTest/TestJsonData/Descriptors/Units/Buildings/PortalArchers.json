@@ -12,21 +12,21 @@
       "ViewId": "PortalArcher",
       "CostOfObtain": 0,
       "UnitsPerSecond": 0.05,
-      "LevelOfUnits": 1,
+      "LevelOfUnits": 0,
       "WaveDuration": 25
     },
     {
       "ViewId": "PortalArcher",
       "CostOfObtain": 0,
       "UnitsPerSecond": 0.6,
-      "LevelOfUnits": 2,
+      "LevelOfUnits": 1,
       "WaveDuration": 25
     },
     {
       "ViewId": "PortalArcher",
       "CostOfObtain": 0,
       "UnitsPerSecond": 0.7,
-      "LevelOfUnits": 3,
+      "LevelOfUnits": 2,
       "WaveDuration": 25
     }
   ]

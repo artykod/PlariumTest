@@ -56,6 +56,10 @@ public class UIHeroHUD : MonoBehaviour {
 		areaSelection.IsVisible = IsAbilitySelected;
 		if (IsAbilitySelected)
 		{
+			if (!string.IsNullOrEmpty(SelectedAbility.Descriptor.CursorId))
+			{
+				areaSelection.IsVisible = false;
+			}
 			areaSelection.Scale = SelectedAbility.CurrentLevel.Radius * 2f;
 		}
 		else

@@ -12,21 +12,21 @@
       "ViewId": "PortalBoss",
       "CostOfObtain": 0,
       "UnitsPerSecond": 0.01,
-      "LevelOfUnits": 1,
+      "LevelOfUnits": 0,
       "WaveDuration": 25
     },
     {
       "ViewId": "PortalBoss",
       "CostOfObtain": 0,
       "UnitsPerSecond": 0.2,
-      "LevelOfUnits": 2,
+      "LevelOfUnits": 1,
       "WaveDuration": 25
     },
     {
       "ViewId": "PortalBoss",
       "CostOfObtain": 0,
       "UnitsPerSecond": 0.3,
-      "LevelOfUnits": 3,
+      "LevelOfUnits": 2,
       "WaveDuration": 25
     }
   ]

@@ -21,7 +21,7 @@ namespace Game.Descriptors.Buildings
 			/// Уровень прокачки казармы определяет уровень прокачки юнитов.
 			/// </summary>
 			[JsonProperty]
-			private int LevelOfUnits
+			public int LevelOfUnits
 			{
 				get;
 				set;
@@ -30,7 +30,7 @@ namespace Game.Descriptors.Buildings
 			/// Ссылки на дескрипторы уровня прокачки юнита.
 			/// </summary>
 			[JsonIgnore]
-			public MobDescriptor.Level MobsLevel
+			public MobDescriptor.Level LevelOfUnitsDescriptor
 			{
 				get;
 				private set;
@@ -38,7 +38,7 @@ namespace Game.Descriptors.Buildings
 
 			public void PostInit(BarracksDescriptor barracks)
 			{
-				MobsLevel = barracks.Unit.Levels[LevelOfUnits - 1];
+				LevelOfUnitsDescriptor = barracks.Unit.Levels[LevelOfUnits];
 			}
 		}
 
