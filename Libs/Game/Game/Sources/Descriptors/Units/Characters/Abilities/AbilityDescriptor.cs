@@ -28,7 +28,7 @@ namespace Game.Descriptors.Abilities
 			/// Модификаторы абилки. Будут наложены на целевых юнитов.
 			/// </summary>
 			[JsonProperty]
-			public Modificator[] Modificators
+			public Modifier[] Modifiers
 			{
 				get;
 				private set;
@@ -58,6 +58,13 @@ namespace Game.Descriptors.Abilities
 
 		[JsonProperty]
 		public string IconId
+		{
+			get;
+			private set;
+		}
+
+		[JsonProperty]
+		public string CursorId
 		{
 			get;
 			private set;

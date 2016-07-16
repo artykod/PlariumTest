@@ -5,6 +5,7 @@
   "Name": "Main character",
   "Description": "",
   "Size": 0.85,
+  "IconId": "main_character",
   "Levels": [
     {
       "ViewId": "MainCharacter",

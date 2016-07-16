@@ -3,8 +3,7 @@ using UnityEngine;
 using Game;
 using Game.Logics;
 using Game.Logics.Maps;
-using Game.Logics.Characters;
-using Game.Descriptors.Abilities;
+using Game.Logics.Abilities;
 
 public class Core : MonoBehaviour
 {
@@ -108,48 +107,6 @@ public class Core : MonoBehaviour
 	private void Update()
 	{
 		TimeController.Update();
-
-		if (Input.GetKeyDown(KeyCode.Escape))
-		{
-			if (UIDialogBase.CurrentDialog == null)
-			{
-				UIDialogGameMenu.Show().Build("Main menu", "")
-					.AddButton("Surrender", GameController.Surrender)
-					.AddButton("Add 1000 gold", () => GameController.GameProgress.AddGold(1000))
-					.AddButton("Clear all progress and quit", ClearAllProgressAndQuit)
-					.AddButton("Quit", Application.Quit)
-					.AddButton("Apply Meteor Shower to all enemies", () => ApplyAbilityToMobs("ability.meteor_shower"))
-					.AddButton("Apply Ice Bolt to all enemies", () => ApplyAbilityToMobs("ability.ice_bolt"));
-			}
-			else if (UIDialogGameMenu.CurrentInstance != null)
-			{
-				UIDialogGameMenu.CurrentInstance.Close();
-			}
-		}
-	}
-
-	private void ApplyAbilityToMobs(string abilityId)
-	{
-		var ability = GameController.FindDescriptorById<AbilityDescriptor>(abilityId);
-		var modificators = ability.Levels[0].Modificators;
-		var mobs = new LinkedList<Mob>();
-
-		GameController.ForEachLogic<Mob>(mob =>
-		{
-			if (mob.Team != GameController.Map.Fountain.Team)
-			{
-				mobs.AddLast(mob);
-			}
-			return false;
-		});
-
-		foreach (var mob in mobs)
-		{
-			for (int i = 0; i < modificators.Length; i++)
-			{
-				mob.AddModificator(modificators[i]);
-			}
-		}
 	}
 
 	private void OnDestroy()
@@ -157,33 +114,42 @@ public class Core : MonoBehaviour
 		instance = null;
 	}
 
-	private void ClearAllProgressAndQuit()
-	{
-		PlayerPrefs.DeleteAll();
-		PlayerPrefs.Save();
-		Application.Quit();
-	}
-
 	private void OnLogicCreate(Logic logic)
 	{
+		var viewType = typeof(View);
 		var viewId = string.Empty;
 
 		if (logic is Unit)
 		{
 			var unit = logic as Unit;
 			viewId = unit.Descriptor.Levels[unit.Level].ViewId;
+			viewType = typeof(UnitView);
 		}
 		else if (logic is Map)
 		{
 			var map = logic as Map;
 			viewId = map.Descriptor.ViewId;
+			viewType = typeof(MapView);
 		}
-		
-		var view = PrefabTool.CreateInstance<View>(viewId);
-		if (view != null)
+		else if (logic is Ability)
 		{
-			logicToViewMap[logic] = view;
-			view.FetchLogic(logic);
+			var ability = logic as Ability;
+			viewId = ability.Descriptor.ViewId;
+			viewType = typeof(AbilityView);
+		}
+
+		if (!string.IsNullOrEmpty(viewId))
+		{
+			var view = PrefabTool.CreateInstance<View>(viewType, viewId);
+			if (view != null)
+			{
+				logicToViewMap[logic] = view;
+				view.FetchLogic(logic);
+			}
+			else
+			{
+				Debug.LogWarning("Not found view " + viewId);
+			}
 		}
 	}
 

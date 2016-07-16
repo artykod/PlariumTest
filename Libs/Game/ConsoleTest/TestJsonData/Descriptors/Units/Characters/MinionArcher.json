@@ -5,6 +5,7 @@
   "Name": "Archer",
   "Description": "",
   "Size": 0.25,
+  "IsRangedAttack":  true,
   "Levels": [
     {
       "ViewId": "MinionArcher",

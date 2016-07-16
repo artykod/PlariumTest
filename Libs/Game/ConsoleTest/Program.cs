@@ -53,6 +53,18 @@ namespace ConsoleTest
 					"Maps/Forest.json",
 				};
 
+				var p = new Vec2(14.5916f, 25.97259f);
+				var points = new Vec2[] {
+				new Vec2(14.00309f, 25.20187f),
+				new Vec2(12.71903f, 30.84659f),
+				new Vec2(10.74473f, 31.90051f),
+			};
+
+				foreach (var i in points)
+				{
+					Debug.Log("Length = " + (p - i).Length);
+				}
+
 				var filesContent = new List<string>();
 
 				foreach (var file in files)

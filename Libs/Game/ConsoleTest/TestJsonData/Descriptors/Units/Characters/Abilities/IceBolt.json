@@ -1,16 +1,17 @@
 ﻿{
   "ClassId": "Abilities.Ability",
-  "LogicId": "Abilities.Ability",
+  "LogicId": "Abilities.IceBolt",
   "Id": "ability.ice_bolt",
   "Name": "Ice Bolt",
   "Description": "",
   "ViewId": "IceBolt",
-  "IconId": "IceBolt",
+  "IconId": "abilities/ice_bolt",
+  "CursorId": "ice",
   "Levels": [
     {
       "Radius": 5,
       "Cooldown": 5,
-      "Modificators": [
+      "Modifiers": [
         {
           "Kind": "HP",
           "Type": "Add",

@@ -49,7 +49,7 @@
     <Compile Include="Sources\Descriptors\Units\Buildings\MobPortalDescriptor.cs" />
     <Compile Include="Sources\Descriptors\Units\Buildings\SofaDescriptor.cs" />
     <Compile Include="Sources\Descriptors\Units\Characters\Abilities\AbilityDescriptor.cs" />
-    <Compile Include="Sources\Descriptors\Units\Characters\Abilities\Modificator.cs" />
+    <Compile Include="Sources\Descriptors\Units\Characters\Abilities\Modifier.cs" />
     <Compile Include="Sources\Descriptors\Units\Characters\CharacterDescriptor.cs" />
     <Compile Include="Sources\Descriptors\Units\Characters\HeroDescriptor.cs" />
     <Compile Include="Sources\Descriptors\Units\Characters\MobDescriptor.cs" />
@@ -62,6 +62,9 @@
     <Compile Include="Sources\Logic\Units\Buildings\MinionBarracks.cs" />
     <Compile Include="Sources\Logic\Units\Buildings\MobPortal.cs" />
     <Compile Include="Sources\Logic\Units\Buildings\Sofa.cs" />
+    <Compile Include="Sources\Logic\Units\Characters\Abilities\Ability.cs" />
+    <Compile Include="Sources\Logic\Units\Characters\Abilities\IceBolt.cs" />
+    <Compile Include="Sources\Logic\Units\Characters\Abilities\MeteorShower.cs" />
     <Compile Include="Sources\Logic\Units\Characters\Character.cs" />
     <Compile Include="Sources\Logic\Units\Characters\Hero.cs" />
     <Compile Include="Sources\Logic\Units\Characters\Mob.cs" />
@@ -234,6 +237,7 @@
     <Compile Include="ThirdParty\Unity.Json.NET\Utilities\ThreadSafeStore.cs" />
     <Compile Include="ThirdParty\Unity.Json.NET\Utilities\ValidationUtils.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

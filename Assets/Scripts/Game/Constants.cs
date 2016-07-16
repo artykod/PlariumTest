@@ -5,6 +5,7 @@
 		public class Views
 		{
 			public const string ALL = "Views/";
+			public const string ICONS = "Icons/";
 		}
 
 		public class Descriptors

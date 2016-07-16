@@ -1,16 +1,17 @@
 ﻿{
   "ClassId": "Abilities.Ability",
-  "LogicId": "Abilities.Ability",
+  "LogicId": "Abilities.MeteorShower",
   "Id": "ability.meteor_shower",
   "Name": "Meteor Shower",
   "Description": "",
   "ViewId": "MeteorShower",
-  "IconId": "MeteorShower",
+  "IconId": "abilities/meteor_shower",
+  "CursorId": null,
   "Levels": [
     {
       "Radius": 10,
       "Cooldown": 5,
-      "Modificators": [
+      "Modifiers": [
         {
           "Kind": "HP",
           "Type": "Add",

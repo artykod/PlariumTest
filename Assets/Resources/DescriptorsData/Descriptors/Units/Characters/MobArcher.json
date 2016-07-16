@@ -5,6 +5,7 @@
   "Name": "Enemy Archer",
   "Description": "",
   "Size": 0.25,
+  "IsRangedAttack":  true,
   "Levels": [
     {
       "ViewId": "MobArcher",

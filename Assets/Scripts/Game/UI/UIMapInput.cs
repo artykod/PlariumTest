@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Game;
 using Game.Logics;
-using Game.Logics.Buildings;
 using Game.Logics.Characters;
 
 public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
@@ -29,7 +28,7 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 
 	void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
 	{
-		if (!gameController.IsBattleStarted)
+		if (!gameController.IsBattleStarted || Core.Instance.GameUI.HeroHUD.IsAbilitySelected)
 		{
 			return;
 		}
@@ -43,7 +42,7 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 
 	void IDragHandler.OnDrag(PointerEventData eventData)
 	{
-		if (!gameController.IsBattleStarted)
+		if (!gameController.IsBattleStarted || Core.Instance.GameUI.HeroHUD.IsAbilitySelected)
 		{
 			return;
 		}
@@ -60,71 +59,101 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 
 	void IEndDragHandler.OnEndDrag(PointerEventData eventData)
 	{
-		if (!gameController.IsBattleStarted)
+		if (!gameController.IsBattleStarted || Core.Instance.GameUI.HeroHUD.IsAbilitySelected)
 		{
 			return;
 		}
 
 		if (eventData.button == PointerEventData.InputButton.Left)
 		{
-			units.Clear();
-			var rect = GetDrawingRect(startPos, endPos);
-			gameController.ForEachLogic<Character>(unit =>
-			{
-				if (unit.Team != gameController.Map.Sofa.Team)
-				{
-					return false;
-				}
-
-				if (IsUnitInRect(unit, rect))
-				{
-					units.AddLast(unit);
-				}
-
-				return false;
-			});
-
-			gameController.SelectUnits(units.ToArray());
-
-			startPos = endPos = Vector2.zero;
-			selectionPanel.rectTransform.sizeDelta = Vector2.zero;
-			selectionPanel.enabled = false;
+			endPos = eventData.position;
+			SelectUnitsInCurrentSelection();
 		}
 	}
 
 	void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
 	{
-		var clickPoint = eventData.position;
-		var clickArea = new Vector2(30f, 35f);
-		var rect = GetDrawingRect(clickPoint - clickArea, clickPoint + clickArea);
-
-		if (!gameController.IsBattleStarted)
+		if (!gameController.IsBattleStarted || eventData.dragging)
 		{
-			if (eventData.button == PointerEventData.InputButton.Left)
-			{
-				gameController.ForEachLogic<MinionBarracks>(barracks =>
-				{
-					if (IsUnitInRect(barracks, rect))
-					{
-						return true;
-					}
-
-					return false;
-				});
-			}
-
 			return;
 		}
 
-		Character character = null;
+		var clickArea = new Vector2(30f, 40f);
+		startPos = eventData.position - clickArea;
+		endPos = eventData.position + clickArea;
 
 		if (eventData.button == PointerEventData.InputButton.Left)
 		{
-			units.Clear();
+			if (Core.Instance.GameUI.HeroHUD.IsAbilitySelected)
+			{
+				var groundPosition = UIGame.ScreenToGroundPosition(Input.mousePosition);
+				var units = FindUnitsInCurrentSelection<Unit>();
+				Core.Instance.GameUI.HeroHUD.ClickOnGround(groundPosition, units);
+			}
+			else
+			{
+				SelectUnitsInCurrentSelection();
+			}
+		}
+		else
+		{
+			if (Core.Instance.GameUI.HeroHUD.IsAbilitySelected)
+			{
+				Core.Instance.GameUI.HeroHUD.CancelAbility();
+			}
+			else
+			{
+				UpdateTargetOfUnits();
+			}
+		}
+	}
+
+	private T[] FindUnitsInCurrentSelection<T>(string teamFilter = null) where T : Unit
+	{
+		var result = new LinkedList<T>();
+		var rect = GetDrawingRect(startPos, endPos);
+		gameController.ForEachLogic<T>(unit =>
+		{
+			if (teamFilter != null && unit.Team != teamFilter)
+			{
+				return false;
+			}
+
+			if (IsUnitInRect(unit, rect))
+			{
+				result.AddLast(unit);
+			}
+
+			return false;
+		});
+		return result.ToArray();
+	}
+
+	private void SelectUnitsInCurrentSelection()
+	{
+		units.Clear();
+		var unitsInSelection = FindUnitsInCurrentSelection<Character>(gameController.Map.Sofa.Team);
+		foreach (var i in unitsInSelection)
+		{
+			units.AddLast(i);
+		}
+		gameController.SelectUnits(unitsInSelection);
+
+		startPos = endPos = Vector2.zero;
+		selectionPanel.rectTransform.sizeDelta = Vector2.zero;
+		selectionPanel.enabled = false;
+	}
+
+	private void UpdateTargetOfUnits()
+	{
+		if (units.Count > 0)
+		{
+			Character character = null;
+			var rect = GetDrawingRect(startPos, endPos);
 
 			gameController.ForEachLogic<Character>(unit =>
 			{
-				if (unit.Team != gameController.Map.Sofa.Team)
+				if (unit.Team == gameController.Map.Sofa.Team)
 				{
 					return false;
 				}
@@ -138,31 +167,9 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 				return false;
 			});
 
-			gameController.SelectUnits(new Unit[] { character });
-
-			units.AddLast(character);
-		}
-		else
-		{
-			if (units.Count > 0)
+			foreach (var i in units)
 			{
-				gameController.ForEachLogic<Character>(unit =>
-				{
-					if (unit.Team == gameController.Map.Sofa.Team)
-					{
-						return false;
-					}
-
-					if (IsUnitInRect(unit, rect))
-					{
-						character = unit;
-						return true;
-					}
-
-					return false;
-				});
-
-				foreach (var i in units)
+				if (i != null)
 				{
 					if (character != null)
 					{
@@ -170,16 +177,8 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 					}
 					else if (i is Hero)
 					{
-						var clickPointScreen = Camera.main.ScreenToViewportPoint(clickPoint);
-						var rayToWorld = Camera.main.ViewportPointToRay(clickPointScreen);
-						var groundPlane = new Plane(Vector3.up, Vector3.zero);
-						var rayDistance = 0f;
-						if (groundPlane.Raycast(rayToWorld, out rayDistance))
-						{
-							var worldPoint = rayToWorld.GetPoint(rayDistance);
-							var hero = units.First.Value as Hero;
-							hero.MoveTo(new Vec2(worldPoint.x, worldPoint.z));
-						}
+						var groundPosition = UIGame.ScreenToGroundPosition(startPos);
+						(i as Hero).MoveTo(new Vec2(groundPosition.x, groundPosition.z));
 					}
 				}
 			}
@@ -198,7 +197,7 @@ public class UIMapInput : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 
 	private bool IsUnitInRect(Unit unit, Rect rect)
 	{
-		var worldPos = new Vector3(unit.Position.x, 0f, unit.Position.y);
+		var worldPos = new Vector3(unit.Position.x, 1f, unit.Position.y);
 		var screenPos = Camera.main.WorldToViewportPoint(worldPos);
 		screenPos.y = 1f - screenPos.y;
 		screenPos = new Vector3(

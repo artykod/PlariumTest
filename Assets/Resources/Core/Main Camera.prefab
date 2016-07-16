@@ -91,6 +91,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b34c37baecb702840a1ae1ebc01827df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cursorsTextures:
+  - name: ice
+    texture: {fileID: 2800000, guid: 53b292537a7c8984b9e35c2217aef9c0, type: 3}
 --- !u!124 &12463068
 Behaviour:
   m_ObjectHideFlags: 1

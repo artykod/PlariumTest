@@ -67,9 +67,10 @@ namespace Game.Descriptors
 		/// <returns>распарсенный дескриптор.</returns>
 		public static Descriptor Parse(string json)
 		{
+			var descriptorType = typeof(Descriptor);
 			var classIdReader = JsonConvert.DeserializeObject<ClassIdReader>(json);
 			var classId = classIdReader.ClassId;
-			var type = TypeTool.GetTypeByNameFromThisAssembly("Game.Descriptors." + classId + "Descriptor");
+			var type = TypeTool.GetTypeByNameFromThisAssembly(descriptorType.Namespace + "." + classId + descriptorType.Name);
 			var descriptor = JsonConvert.DeserializeObject(json, type) as Descriptor;
 			return descriptor;
 		}

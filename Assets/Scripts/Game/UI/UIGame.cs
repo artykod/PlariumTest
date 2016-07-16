@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Game.Descriptors.Abilities;
 using Game.Logics;
 using Game.Logics.Characters;
 using Game.Logics.Buildings;
@@ -19,7 +20,7 @@ public class UIGame : MonoBehaviour
 			this.targetMarker = targetMarker;
 		}
 	}
-
+	
 	[SerializeField]
 	private UIHpBar hpBar;
 	[SerializeField]
@@ -28,9 +29,37 @@ public class UIGame : MonoBehaviour
 	private GameObject enemyMarker;
 	[SerializeField]
 	private UIBarracksUpgradePanel barracksUpgradePanel;
+	[SerializeField]
+	private UIHeroHUD heroHUD;
 
 	private Dictionary<Unit, UnitUI> unitsUI = new Dictionary<Unit, UnitUI>();
 	private Dictionary<Barracks, UIBarracksUpgradePanel> barracksUI = new Dictionary<Barracks, UIBarracksUpgradePanel>();
+
+	public UIHeroHUD HeroHUD
+	{
+		get
+		{
+			return heroHUD;
+		}
+	}
+
+	public static Vector3 UnitWorldToScreen(Unit unit, float offsetY)
+	{
+		return Camera.main.WorldToScreenPoint(new Vector3(unit.Position.x, offsetY, unit.Position.y));
+	}
+
+	public static Vector3 ScreenToGroundPosition(Vector2 screenPosition)
+	{
+		var clickViewport = Camera.main.ScreenToViewportPoint(screenPosition);
+		var rayToWorld = Camera.main.ViewportPointToRay(clickViewport);
+		var groundPlane = new Plane(Vector3.up, Vector3.zero);
+		var rayDistance = 0f;
+		if (groundPlane.Raycast(rayToWorld, out rayDistance))
+		{
+			return rayToWorld.GetPoint(rayDistance);
+		}
+		return Vector3.zero;
+	}
 
 	private void Start()
 	{
@@ -70,6 +99,12 @@ public class UIGame : MonoBehaviour
 			barracksPanel.DropTo(transform);
 			barracksUI[minionBarracks] = barracksPanel;
 			barracksPanel.Logic = minionBarracks;
+		}
+
+		var hero = logic as Hero;
+		if (hero != null)
+		{
+			heroHUD.FetchHero(hero);
 		}
 	}
 
@@ -149,10 +184,63 @@ public class UIGame : MonoBehaviour
 				}
 			}
 		}
+
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			if (heroHUD.IsAbilitySelected)
+			{
+				heroHUD.CancelAbility();
+			}
+			else
+			{
+				if (UIDialogBase.CurrentDialog == null)
+				{
+					var gameController = Core.Instance.GameController;
+					UIDialogGameMenu.Show().Build("Main menu", "")
+						.AddButton("Surrender", gameController.Surrender)
+						.AddButton("Add 1000 gold", () => gameController.GameProgress.AddGold(1000))
+						.AddButton("Clear all progress and quit", ClearAllProgressAndQuit)
+						.AddButton("Quit", Application.Quit)
+						.AddButton("Apply Meteor Shower to all enemies", () => ApplyAbilityToMobs("ability.meteor_shower"))
+						.AddButton("Apply Ice Bolt to all enemies", () => ApplyAbilityToMobs("ability.ice_bolt"));
+				}
+				else if (UIDialogGameMenu.CurrentInstance != null)
+				{
+					UIDialogGameMenu.CurrentInstance.Close();
+				}
+			}
+		}
 	}
 
-	public static Vector3 UnitWorldToScreen(Unit unit, float offsetY)
+	private void ClearAllProgressAndQuit()
 	{
-		return Camera.main.WorldToScreenPoint(new Vector3(unit.Position.x, offsetY, unit.Position.y));
+		PlayerPrefs.DeleteAll();
+		PlayerPrefs.Save();
+		Application.Quit();
+	}
+
+	private void ApplyAbilityToMobs(string abilityId)
+	{
+		var gameController = Core.Instance.GameController;
+		var ability = gameController.FindDescriptorById<AbilityDescriptor>(abilityId);
+		var modifiers = ability.Levels[0].Modifiers;
+		var mobs = new LinkedList<Mob>();
+
+		gameController.ForEachLogic<Mob>(mob =>
+		{
+			if (mob.Team != gameController.Map.Fountain.Team)
+			{
+				mobs.AddLast(mob);
+			}
+			return false;
+		});
+
+		foreach (var mob in mobs)
+		{
+			for (int i = 0; i < modifiers.Length; i++)
+			{
+				mob.AddModifier(modifiers[i]);
+			}
+		}
 	}
 }

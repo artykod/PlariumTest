@@ -2,6 +2,7 @@
 using Game.Logics;
 using Game.Logics.Characters;
 
+[PathInResources(Constants.Paths.Views.ALL + "Units/")]
 public class UnitView : View
 {
 	protected UnitSelection selection;
@@ -47,7 +48,7 @@ public class UnitView : View
 		Logic.OnSelection += OnSelectionUnit;
 	}
 
-	private void OnLogicDestroy(Logic logic)
+	protected virtual void OnLogicDestroy(Logic logic)
 	{
 		Logic.OnDestroy -= OnLogicDestroy;
 		Logic.OnSelection -= OnSelectionUnit;

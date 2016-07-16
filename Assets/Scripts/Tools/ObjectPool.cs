@@ -24,7 +24,7 @@ public class ObjectPool : IObjectPool
 			{
 				var obj = UnityEngine.Object.Instantiate(prefab) as IPoolableObject;
 				obj.OnCreate(this, listId);
-				list.AddLast(obj);
+				ReturnObject(obj, listId);
 			}
 		}
 
@@ -37,6 +37,11 @@ public class ObjectPool : IObjectPool
 	}
 
 	void IObjectPool.Return(IPoolableObject obj, string listId)
+	{
+		ReturnObject(obj, listId);
+	}
+
+	private void ReturnObject(IPoolableObject obj, string listId)
 	{
 		obj.OnReturn();
 

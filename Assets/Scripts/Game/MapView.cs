@@ -2,6 +2,7 @@
 using Game.Logics.Maps;
 using Game.Logics;
 
+[PathInResources(Constants.Paths.Views.ALL + "Maps/")]
 public class MapView : View {
 	public new Map Logic
 	{

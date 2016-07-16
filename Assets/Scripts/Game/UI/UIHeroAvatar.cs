@@ -1,19 +1,34 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using Game.Logics.Characters;
 
-public class UIHeroAvatar : MonoBehaviour
+public class UIHeroAvatar : UIFillableIcon
 {
-	[SerializeField]
-	private Image avatarTonerImage;
-
-	private void Update()
+	public void FetchHero(Hero hero)
 	{
-		var fillAmount = 0f;
-		var fountain = Core.Instance.GameController.Map.Fountain;
-		if (fountain.Hero == null || fountain.HeroTotalRespawnTime > 0.001f)
+		SetIcon(ResourcesTool.LoadIconByName(hero.Descriptor.IconId));
+	}
+
+	protected override float FillAmount
+	{
+		get
 		{
-			fillAmount = fountain.HeroRespawnTimer / fountain.HeroTotalRespawnTime;
+			var fillAmount = 0f;
+			var fountain = Core.Instance.GameController.Map.Fountain;
+			if (fountain.Hero == null || fountain.HeroTotalRespawnTime > 0.001f)
+			{
+				fillAmount = fountain.HeroRespawnTimer / fountain.HeroTotalRespawnTime;
+			}
+			return fillAmount;
 		}
-		avatarTonerImage.fillAmount = fillAmount;
+	}
+
+	protected override void OnClick()
+	{
+		base.OnClick();
+
+		var hero = Core.Instance.GameController.Map.Fountain.Hero;
+		if (hero != null)
+		{
+			Core.Instance.Camera.Mode = GameCamera.Modes.FollowMainCharacter;
+		}
 	}
 }

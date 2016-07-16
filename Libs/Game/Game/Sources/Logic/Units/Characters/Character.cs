@@ -5,9 +5,21 @@ namespace Game.Logics.Characters
 	using Descriptors;
 	using Descriptors.Abilities;
 	using Maps;
+	using Abilities;
 
 	public abstract class Character : Unit
 	{
+		private Map map;
+		private MapDescriptor mapDescriptor;
+		private float attackCooldown;
+		private Unit targetUnit;
+		private float newTargetSearchCooldown;
+		private float targetDirectionOffset;
+		private float directionOffsetLerp;
+		private bool needAutoSearchTarget;
+
+		public event Action<Character, Unit> OnAttack;
+
 		public new CharacterDescriptor Descriptor
 		{
 			get
@@ -37,15 +49,6 @@ namespace Game.Logics.Characters
 			}
 		}
 
-		private Map map;
-		private MapDescriptor mapDescriptor;
-		private float attackCooldown;
-		private Unit targetUnit;
-		private float newTargetSearchCooldown;
-		private float targetDirectionOffset;
-		private float directionOffsetLerp;
-		private bool needAutoSearchTarget;
-
 		/// <summary>
 		/// Текущее значение брони.
 		/// </summary>
@@ -70,9 +73,18 @@ namespace Game.Logics.Characters
 			get;
 			private set;
 		}
+		/// <summary>
+		/// Абилки персонажа.
+		/// </summary>
+		public Ability[] Abilities
+		{
+			get;
+			protected set;
+		}
 
 		public Character(GameController gameController, Descriptor descriptor) : base(gameController, descriptor)
 		{
+			Abilities = new Ability[0];
 			map = GameController.Map;
 			mapDescriptor = map.Descriptor;
 			IsImmortal = false;
@@ -82,6 +94,16 @@ namespace Game.Logics.Characters
 		public void SetTargetUnit(Unit target)
 		{
 			ChangeTargetUnit(target, false);
+		}
+
+		public override void Destroy()
+		{
+			base.Destroy();
+
+			foreach (var i in Abilities)
+			{
+				i.Destroy();
+			}
 		}
 
 		private void ChangeTargetUnit(Unit target, bool isAutoSearch)
@@ -115,18 +137,18 @@ namespace Game.Logics.Characters
 			Attack = originalAttack;
 			AttackSpeed = originalAttackSpeed;
 
-			foreach (var i in modificators)
+			foreach (var i in modifiers)
 			{
-				switch (i.Modificator.Kind)
+				switch (i.Modifier.Kind)
 				{
-				case Modificator.Kinds.Armor:
-					Armor = ModifyValue(originalArmor, i.Modificator);
+				case Modifier.Kinds.Armor:
+					Armor = ModifyValue(originalArmor, i.Modifier);
 					break;
-				case Modificator.Kinds.Attack:
-					Attack = (int)ModifyValue(originalAttack, i.Modificator);
+				case Modifier.Kinds.Attack:
+					Attack = (int)ModifyValue(originalAttack, i.Modifier);
 					break;
-				case Modificator.Kinds.AttackSpeed:
-					AttackSpeed = ModifyValue(originalAttackSpeed, i.Modificator);
+				case Modifier.Kinds.AttackSpeed:
+					AttackSpeed = ModifyValue(originalAttackSpeed, i.Modifier);
 					break;
 				}
 			}
@@ -250,6 +272,7 @@ namespace Game.Logics.Characters
 								GameController.GameProgress.AddGold(mobLevel.Gold);
 							}
 						}
+						OnAttack.SafeInvoke(this, targetUnit);
 					}
 				}
 			}

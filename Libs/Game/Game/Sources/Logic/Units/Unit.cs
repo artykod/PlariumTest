@@ -11,11 +11,11 @@ namespace Game.Logics
 		/// <summary>
 		/// Данные наложенного модификатора статов.
 		/// </summary>
-		protected class ModificatorData {
+		protected class ModifierData {
 			/// <summary>
 			/// Дескриптор модификатора.
 			/// </summary>
-			public Modificator Modificator
+			public Modifier Modifier
 			{
 				get;
 				private set;
@@ -28,10 +28,10 @@ namespace Game.Logics
 				get;
 				set;
 			}
-			public ModificatorData(Modificator modificator)
+			public ModifierData(Modifier modifier)
 			{
-				Modificator = modificator;
-				Time = modificator.Trigger == Modificator.Triggers.Now ? 0f : modificator.TriggerTime;
+				Modifier = modifier;
+				Time = modifier.Trigger == Modifier.Triggers.Now ? 0f : modifier.TriggerTime;
 			}
 		}
 		
@@ -50,7 +50,7 @@ namespace Game.Logics
 		/// <summary>
 		/// Список наложенных модификаторов.
 		/// </summary>
-		protected List<ModificatorData> modificators = new List<ModificatorData>();
+		protected List<ModifierData> modifiers = new List<ModifierData>();
 
 		public event Action<Unit, bool> OnSelection;
 		public event Action<int, int> OnLevelChanged;
@@ -204,10 +204,10 @@ namespace Game.Logics
 		/// <summary>
 		/// Наложить модификатор на юнита.
 		/// </summary>
-		/// <param name="modificator">накладываемый модификатор.</param>
-		public void AddModificator(Modificator modificator)
+		/// <param name="modifier">накладываемый модификатор.</param>
+		public void AddModifier(Modifier modifier)
 		{
-			modificators.Add(new ModificatorData(modificator));
+			modifiers.Add(new ModifierData(modifier));
 			UpdateStats();
 		}
 		/// <summary>
@@ -263,19 +263,19 @@ namespace Game.Logics
 			}
 
 			// обработка модификаторов. отмена истекших по времени.
-			var modificatorsChanged = false;
-			for (int i = 0; i < modificators.Count; i++)
+			var modifiersChanged = false;
+			for (int i = 0; i < modifiers.Count; i++)
 			{
-				var modificator = modificators[i];
-				modificator.Time -= dt;
-				if (modificator.Time <= 0f)
+				var modifier = modifiers[i];
+				modifier.Time -= dt;
+				if (modifier.Time <= 0f)
 				{
-					modificators.RemoveAt(i);
-					modificatorsChanged = true;
+					modifiers.RemoveAt(i);
+					modifiersChanged = true;
 					i--;
 				}
 			}
-			if (modificatorsChanged)
+			if (modifiersChanged)
 			{
 				UpdateStats();
 			}
@@ -300,17 +300,17 @@ namespace Game.Logics
 
 			Velocity = originalVelocity;
 
-			foreach (var i in modificators)
+			foreach (var i in modifiers)
 			{
-				switch (i.Modificator.Kind)
+				switch (i.Modifier.Kind)
 				{
-				case Modificator.Kinds.Speed:
-					Velocity = ModifyValue(originalVelocity, i.Modificator);
+				case Modifier.Kinds.Speed:
+					Velocity = ModifyValue(originalVelocity, i.Modifier);
 					break;
-				case Modificator.Kinds.HP:
+				case Modifier.Kinds.HP:
 					if (!IsImmortal)
 					{
-						HP = (int)ModifyValue(HP, i.Modificator);
+						HP = (int)ModifyValue(HP, i.Modifier);
 					}
 					break;
 				}
@@ -319,15 +319,15 @@ namespace Game.Logics
 			CheckHP();
 		}
 
-		protected float ModifyValue(float originalValue, Modificator modificator)
+		protected float ModifyValue(float originalValue, Modifier modifier)
 		{
-			switch (modificator.Type)
+			switch (modifier.Type)
 			{
-			case Modificator.Types.Add:
-				originalValue += modificator.Value;
+			case Modifier.Types.Add:
+				originalValue += modifier.Value;
 				break;
-			case Modificator.Types.Percent:
-				originalValue = originalValue * modificator.Value;
+			case Modifier.Types.Percent:
+				originalValue = originalValue * modifier.Value;
 				break;
 			}
 

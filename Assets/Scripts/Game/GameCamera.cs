@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Game;
+using System.Collections.Generic;
 
 public class GameCamera : MonoBehaviour
 {
@@ -9,14 +10,25 @@ public class GameCamera : MonoBehaviour
 		FollowMainCharacter,
 	}
 
+	[System.Serializable]
+	public class CursorInfo
+	{
+		public string name;
+		public Texture2D texture;
+	}
+
 	private const float LERP_SPEED = 0.1f;
 	private const float CAMERA_OFFSET = 7f;
+
+	[SerializeField]
+	private CursorInfo[] cursorsTextures;
 
 	private Modes mode = Modes.FollowMainCharacter;
 	private Vector3 startPosition;
 	private float zoom = 0f;
 	private float zoomMinMax = 15f;
 	private GameController gameController;
+	private Dictionary<string, CursorInfo> cursors = new Dictionary<string, CursorInfo>();
 
 	public Modes Mode
 	{
@@ -30,9 +42,27 @@ public class GameCamera : MonoBehaviour
 		}
 	}
 
+	public void ChangeCursor(string cursorName)
+	{
+		var cursor = default(CursorInfo);
+		if (string.IsNullOrEmpty(cursorName) || !cursors.TryGetValue(cursorName, out cursor))
+		{
+			Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+		}
+		else
+		{
+			Cursor.SetCursor(cursor.texture, Vector2.zero, CursorMode.Auto);
+		}
+	}
+
 	private void Awake()
 	{
 		startPosition = transform.position;
+
+		foreach (var i in cursorsTextures)
+		{
+			cursors.Add(i.name, i);
+		}
 	}
 
 	private void Start()
@@ -48,7 +78,7 @@ public class GameCamera : MonoBehaviour
 			var position = transform.position;
 			var direction = Vector3.zero;
 			var mousePosition = Input.mousePosition;
-			var screenMoveLimit = 10f;
+			var screenMoveLimit = Application.isEditor ? -1f : 10f;
 
 			if (Input.GetKey(KeyCode.A) || mousePosition.x < screenMoveLimit)
 			{

@@ -10,7 +10,7 @@
     {
       "ViewId": "BarracksMinionWarrior",
       "CostOfObtain": 100,
-      "UnitsPerSecond": 0.4,
+      "UnitsPerSecond": 0.2,
       "LevelOfUnits": 1
     },
     {

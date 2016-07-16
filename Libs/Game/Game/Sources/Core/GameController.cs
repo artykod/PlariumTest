@@ -294,6 +294,14 @@ namespace Game
 				}
 			}
 		}
+		/// <summary>
+		/// Выделить юнита.
+		/// </summary>
+		/// <param name="unit">выделяемый юнит.</param>
+		public void SelectUnit(Unit unit)
+		{
+			SelectUnits(new Unit[] { unit });
+		}
 
 		private void LogicDestroy(Logic logic)
 		{

@@ -2,6 +2,7 @@
 {
 	using Descriptors;
 	using Descriptors.Characters;
+	using Abilities;
 
 	/// <summary>
 	/// Главный персонаж.
@@ -54,6 +55,13 @@
 
 		public Hero(GameController gameController, Descriptor descriptor) : base(gameController, descriptor)
 		{
+			Abilities = new Ability[Descriptor.Abilities.Length];
+			for (int i = 0; i < Abilities.Length; i++)
+			{
+				Abilities[i] = gameController.CreateLogicByDescriptor<Ability>(Descriptor.Abilities[i]);
+				Abilities[i].FetchCaster(this);
+			}
+
 			moveTarget = new MoveTarget(gameController, Descriptor);
 			SetTargetUnit(null);
 		}
@@ -93,7 +101,7 @@
 		{
 			base.LevelChanged(previousLevel, newLevel);
 
-			TotalXP = Level == Descriptor.Levels.Length - 1 ? 0 : Descriptor.Levels[Level + 1].TargetXP;
+			TotalXP = (Level == Descriptor.Levels.Length - 1) ? 0 : Descriptor.Levels[Level + 1].TargetXP;
 			XP = 0;
 		}
 	}

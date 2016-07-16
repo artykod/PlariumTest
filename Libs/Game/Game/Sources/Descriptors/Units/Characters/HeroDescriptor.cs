@@ -28,6 +28,13 @@ namespace Game.Descriptors.Characters
 		}
 
 		[JsonProperty]
+		public string IconId
+		{
+			get;
+			private set;
+		}
+
+		[JsonProperty]
 		public new Level[] Levels
 		{
 			get;

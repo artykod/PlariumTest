@@ -76,5 +76,15 @@ namespace Game.Descriptors
 			get;
 			private set;
 		}
+
+		/// <summary>
+		/// Производит ли атаки издали (предметами).
+		/// </summary>
+		[JsonProperty]
+		public bool IsRangedAttack
+		{
+			get;
+			private set;
+		}
 	}
 }

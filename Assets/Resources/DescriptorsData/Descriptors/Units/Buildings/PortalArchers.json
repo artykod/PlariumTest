@@ -6,7 +6,7 @@
   "Description": "",
   "Size": 1,
   "UnitId": "unit.mob.archer",
-  "BetweenWavesTime": 30,
+  "BetweenWavesTime": 20,
   "Levels": [
     {
       "ViewId": "PortalArcher",
