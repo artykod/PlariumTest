@@ -15,7 +15,7 @@ public class EditorCustomMenus
 		var inAssetsPath = Application.dataPath + @"/Resources/DescriptorsData";
 		var inLibPath = Application.dataPath + @"/../Libs/Game/ConsoleTest/TestJsonData";
 
-		Debug.Log("Copy descriptors data from {0} to {1}", inLibPath, inAssetsPath);
+		Debug.Log($"Copy descriptors data from {inLibPath} to {inAssetsPath}");
 
 		if (Directory.Exists(inAssetsPath))
 		{

@@ -4,7 +4,7 @@ using Game;
 /// <summary>
 /// Имя Debug переопределит класс Debug в юнити, что позволит удобно отключать все отладочные логи в случае необходимости.
 /// </summary>
-public class Debug
+internal class Debug
 {
 	public static void Log(string format, params object[] args)
 	{

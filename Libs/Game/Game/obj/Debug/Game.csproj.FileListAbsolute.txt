@@ -1,0 +1,7 @@
+/Users/a.salyakhov/plariumtest/Assets/Scripts/Libs/Game/Game.dll
+/Users/a.salyakhov/plariumtest/Assets/Scripts/Libs/Game/Game.pdb
+/Users/a.salyakhov/plariumtest/Libs/Game/Game/obj/Debug/Game.csproj.AssemblyReference.cache
+/Users/a.salyakhov/plariumtest/Libs/Game/Game/obj/Debug/Game.csproj.CoreCompileInputs.cache
+/Users/a.salyakhov/plariumtest/Libs/Game/Game/obj/Debug/Game.csproj.CopyComplete
+/Users/a.salyakhov/plariumtest/Libs/Game/Game/obj/Debug/Game.dll
+/Users/a.salyakhov/plariumtest/Libs/Game/Game/obj/Debug/Game.pdb
